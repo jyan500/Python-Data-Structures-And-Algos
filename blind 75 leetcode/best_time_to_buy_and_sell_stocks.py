@@ -1,0 +1,35 @@
+'''
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+
+Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+https://www.youtube.com/watch?v=mj7N8pLCJ6w&ab_channel=NickWhiteNickWhiteVerified
+'''
+class Solution:
+	def maxProfit(self, prices: List[int]) -> int:
+		## O(N) time, O(1) space
+		min_val = float('inf')
+        max_val = 0
+        for i in range(len(prices)):
+        	## update min if the current price is less than the min value 
+            if (prices[i] < min_val):
+                min_val = prices[i]
+            else:
+            	## if we're not on a min value (which means the current i value is greater than min)
+            	## calculate the profit to see how much we can make on this day, 
+            	## and see if its greater than the max_val so far
+                max_val = max(max_val, prices[i] - min_val)
+        return max_val
+
+	def bruteForce(self, prices: List[int]) -> int:
+		## brute force O(N^2) approach
+	    max_so_far = 0
+	    for i in range(len(prices)):
+	        lowest = prices[i]
+	        for j in range(i, len(prices)):
+	            cur = prices[j] - prices[i]
+	            if cur > max_so_far:
+	                max_so_far = cur
+	    return max_so_far
