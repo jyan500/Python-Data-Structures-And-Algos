@@ -79,7 +79,7 @@ class Solution:
         return reached[0] and reached[1]
 
 
-## Timothy Chang's more optimal solution in O(M*N)
+## Timothy Chang's more optimal solution in O(M*N) time and O(M*N) space
 class Solution:
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
         M = len(heights)
