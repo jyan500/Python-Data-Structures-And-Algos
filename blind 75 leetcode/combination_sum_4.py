@@ -9,7 +9,7 @@ value off of the number we chose. Then we loop through the list of numbers and c
 a number (which creates the tree) until our target == 0, at that point we have found a combination of numbers. At this point,
 increment the total. The recursion will then backtrack until it can find another point when target == 0
 
-Without optimization, this solution is exponential (O(N^M))
+Without optimization, this solution is exponential (O(N^M)) 
 
 In terms of optimization, we can use memoization to store repeated subproblems. For example, if our target is 1,
 we know that no matter what combination of numbers created this target of 1, the total amount of combinations that can

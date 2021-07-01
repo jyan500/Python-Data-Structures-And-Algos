@@ -24,3 +24,31 @@ class Solution:
         ## the bottom right hand corner will contain the number of paths that lead to the
         ## bottom right hand corner
         return dp[n-1][m-1]
+
+
+    ## Top Down Memoize Solution
+     def uniquePaths(self, m: int, n: int) -> int:
+        memo = dict()
+        return self.search(0,0,m,n,memo)
+    def search(self, i, j, m, n, memo) -> int:
+        ## if we've hit the finish point, we've reached a possible path, return 1 in this case
+        ## print('i,j: ', (i,j))
+        ## print('memo: ', memo)
+        
+        if ((i,j) in memo):
+            return memo[(i,j)]
+        if (i == m-1 and j == n-1):
+            ## print('reached finish')
+            return 1
+        
+        res_right = 0
+        res_down = 0
+        if (0 <= i < m and 0 <= j+1 < n):
+            res_right = self.search(i, j+1, m, n, memo)
+        if (0 <= i+1 < m and 0 <= j < n):
+            res_down = self.search(i+1, j, m, n, memo)
+        ## go down until we hit the boundaries
+        ## mark as not visited
+
+        memo[(i,j)] = res_right + res_down
+        return res_right + res_down
