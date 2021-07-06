@@ -23,5 +23,25 @@ def dfs(g, start_node, end_node):
 			return end_node
 		frontier += g[current_node]
 		explored.add(current_node)
+
 print(dfs(graph, "you", "thom"))
+
+## recursive implementation
+
+def recursiveDfs(g, start_node, end_node):
+	visited = set()
+	return recursiveDfsUtil(g, current_node, end_node, visited)
+
+def recursiveDfsUtil(g, current_node, end_node, visited):
+	if (current_node == end_node):
+		return current_node
+	## mark the current node as visited
+	visited.add(current_node)
+
+	## recur for all the verticies adjacent to this vertex
+	for neighbor in g[current_node]:
+		if neighbor not in visited:
+			recursiveDfsUtil(g, neighbor, end_node, visited)
+
+
 

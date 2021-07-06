@@ -2,7 +2,13 @@
 In general, we need to use a stack for iterative tree traversals in order to keep track of nodes to backtrack and visit nodes
 
 Iterative In Order Tree Traversal
+https://www.youtube.com/watch?v=nzmtCFNae9k&ab_channel=TusharRoy-CodingMadeSimple
 
+Preorder Traversal
+https://www.youtube.com/watch?v=elQcrJrfObg&ab_channel=TusharRoy-CodingMadeSimple
+
+Postorder Traversal
+https://www.youtube.com/watch?v=xLQKdq0Ffjg&ab_channel=TusharRoy-CodingMadeSimple
 '''
 
 class TreeNode:
@@ -47,3 +53,27 @@ def iterativePreorder(root):
 			stack.append(root.right)
 		if (root.left != None):
 			stack.append(root.left)
+
+## postorder is go left, right and then visit node
+## note that this implementation uses 2 stacks (we'll call it S1 and S2)
+## the idea is that you first put the root into S1, pop it and then push it into S2
+## eventually, all the nodes that were visited will be in S2, and if you were to pop off
+## every node in S2, it'd print out in postorder traversal
+
+def iterativePostorder(root):
+	if (not root):
+		return
+	s1 = [root]
+	s2 = []
+
+	while (len(s1) > 0):
+		root = s1.pop()
+		s2.append(root)
+		if (root.left != None):
+			s1.append(root.left)
+		if (root.right != None):
+			s1.append(root.right)
+			
+	while (len(s2) > 0):
+		root = s2.pop()
+		print(root.val)
