@@ -1,6 +1,10 @@
 '''
 https://leetcode.com/problems/longest-increasing-subsequence/solution/
+DP Solution
 https://www.youtube.com/watch?v=CE2b_-XfVDk&t=324s&ab_channel=TusharRoy-CodingMadeSimple
+
+Top Down Solution
+https://www.youtube.com/watch?v=ekKYRYFEm9w&list=PLQdWvigIOnscz0Fgps9PtnymVkvJrZylH&index=5&ab_channel=AnuragVishwa
 '''
 class Solution:
     ## converted from Tushar Roy's java solution
@@ -20,6 +24,34 @@ class Solution:
                     dp[i] = max(dp[i], dp[j] + 1)
         ## by the end, the max of dp array will contain the longest increasing subsequence at that point
         return max(dp)
+
+
+    ## recursive solution using brute force O(2^N)
+    ## https://stackoverflow.com/questions/37561909/does-there-exist-a-top-down-dynamic-programming-solution-for-longest-increasing
+    ## https://www.youtube.com/watch?v=ekKYRYFEm9w&list=PLQdWvigIOnscz0Fgps9PtnymVkvJrZylH&index=5&ab_channel=AnuragVishwa
+    def lengthOfLIS(self, nums: List[int]) -> int:
+    	return self.search(nums, float('-inf'), 0)
+
+    ## the idea mentioned in the youtube video is that at each index
+    ## we have the decision of either including the current item in our current subsequence and continue onto the next item
+    ## OR we can exclude the current item and continue onto the next item
+    ## and we'll recursively repeat this (either including or excluding the current item) and figure out the max between these two decision
+    ## to determine the longest increasing subsequence
+    def search(self, nums: List[int], prev, current) -> int:
+    	## base case, if our current index is the length of the array, return 0
+    	if (current == len(nums)):
+    		return 0
+    	include = 0	
+		## if our current element is greater than our previous element we can make the decision to include it in our
+		## subsequence
+    	if (nums[current] > prev):
+    		## pass in the current element down into prev, and increase the current index
+    		include = 1 + self.search(nums, nums[current], current+1)
+    	## in another recursive call, we'll figure out the total amount if we exclude the current element
+    	exclude = self.search(nums, prev, current+1)
+    	## then we take the max between the two to figure out which total was larger
+    	return max(include, exclude)
+
  
             
         
