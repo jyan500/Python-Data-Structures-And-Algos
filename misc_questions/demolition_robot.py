@@ -11,9 +11,41 @@ Sample Input :
 Sample Output :
 3
 '''
+from collections import deque
+
 class Solution:
 	def robot(self, grid: [[int]]) -> int:
-		return self.dfs(grid, 0,0)
+		## Unknown time solution for dfs? O(M*N) seems unlikely, theres a lot of repeated work
+		## return self.dfs(grid, 0,0)
+		## BFS will be O(M*N) time, where M is the amount of rows and N is the amount of columns
+		## O(min(M,N)) space, where M or N is depending on how many nodes are in the queue
+		return self.bfs(grid)
+
+	def to_add(self, i, j, row, col, grid, visited):
+		return 0 <= i < row and 0 <= j < col and grid[i][j] != 0 and (i,j) not in visited
+
+	def bfs(self, grid: [[int]]) -> int:
+		frontier = deque()
+		## start at the top left corner
+		frontier.append((0,0,0))
+		visited = [(0,0)]
+
+		directions = [(1,0),(-1,0),(0,1),(0,-1)]
+		while (frontier):
+			## the key is that we store the distance that we've currently traveled along with the current index within our tuple
+			i, j, dist = frontier.popleft()
+			if (grid[i][j] == 9):
+				return dist
+			## get the neighbors of this (i,j), which are the nodes immediately to the left,right,up,down
+			## if the grid's value is not 0 or grid value not in visited, add to the frontier
+			else:
+				for x,y in directions:
+					if (self.to_add(i+x,j+y, len(grid), len(grid[0]), grid, visited)):
+						neighbor = (i+x,j+y)
+						neighbor_with_dist = (i+x,j+y, dist+1)
+						frontier.append(neighbor_with_dist)
+						visited.append(neighbor)
+		return -1
 
 	def dfs(self, grid: [[int]], i: int, j: int) -> int:
 		total = float('inf') 
