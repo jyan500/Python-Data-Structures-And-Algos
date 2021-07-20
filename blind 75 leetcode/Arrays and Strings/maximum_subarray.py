@@ -12,12 +12,14 @@ class Solution:
         for i in range(len(nums)):
             ## check to see if the current number we're on is greater than our current sum
             ## if it is, we can just set the current sum to the current number we're on
-            if (nums[i] > cur_sum + nums[i]):
-                cur_sum = nums[i]
-            else:
-                cur_sum = cur_sum + nums[i]
+            # if (nums[i] > cur_sum + nums[i]):
+            #     cur_sum = nums[i]
+            # else:
+            #     cur_sum = cur_sum + nums[i]
+            cur_sum = max(nums[i], cur_sum+nums[i])
             
-            if (cur_sum > max_sum):
-                max_sum = cur_sum
+            # if (cur_sum > max_sum):
+            #     max_sum = cur_sum
+            max_sum = max(cur_sum,max_sum)
             
         return max_sum
