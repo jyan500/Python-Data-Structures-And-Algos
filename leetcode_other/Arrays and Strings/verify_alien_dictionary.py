@@ -14,10 +14,11 @@ in the order string world should come before word since "l" comes before "d" in 
 therefore, in our __lt__ method, the index of "l" (3) comes before "d" (4), so "world" should be less
 than "word"
 
-we then convert each of the strings into the customWord class and store it into a list, and call the sorted method on this list
-then convert each customWord back into a list of built-in python strings to compare it with the original input to see if its the same.
+we then convert each of the strings into the customString class and store it into a list
+iterate through this list of customString starting from the second word, if the previous customString is greater
+than the current, then its not in sorted order. Else we can just return True
 
-time complexity: I'm not sure if this is O(NLogN) or O(N^2), since for each comparison that the sorting makes
+time complexity: I'm not sure if this is O(N) or O(N^2), since for each comparison that the sorting makes
 it will iterate through the strings to compare the indexing via the order
 space complexity: O(N) to store the custom list of strings
 
