@@ -94,11 +94,10 @@ class Solution:
         s2_list = []
         for i in range(len(words)):
             s_list.append(customString(words[i], order))
-        ## print(s_list)
-        s_list = sorted(s_list)
-        for i in range(len(s_list)):
-            s2_list.append(s_list[i].s)
-        return s2_list == words
+        for i in range(1, len(s_list)):
+            if (s_list[i-1]>s_list[i]):
+                return False
+        return True
 
     ## Tim chang's solution
     def isAlienSortedAlternate(self, words: List[str], order: str) -> bool:
