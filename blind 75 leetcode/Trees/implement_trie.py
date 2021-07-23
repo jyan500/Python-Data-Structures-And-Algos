@@ -8,6 +8,22 @@ void insert(String word) Inserts the string word into the trie.
 boolean search(String word) Returns true if the string word is in the trie (i.e., was inserted before), and false otherwise.
 boolean startsWith(String prefix) Returns true if there is a previously inserted string word that has the prefix prefix, and false otherwise.
 
+A Trie data structure consists of a series of trie nodes. A Trie Node contains a dictionary mapping a character to another TrieNode
+and a boolean flag determining if that character marks the end of a word.
+
+When we insert a word into a Trie, we iterate through the word to check if the character already exists as a key in our
+root level TrieNode, if not, we create this TrieNode and map it to the character in the root level children dictionary.
+We then continue to traverse down the Trie, by marking cur = cur.children[c], since cur.children[c] evaluates to another TrieNode
+
+The startsWith and search are similar concepts, for search, we are iterating through the word and checking if at each level of 
+our Trie, if the children dict contains the character. If it doesn't, then that means the word doesn't exists in our trie.
+However, if we reach the end of our word and all the characters have been found, we still need to check if the last character
+has been marked as an "end of a word," otherwise it would not actually be considered a word that we have stored in our Trie
+
+For the startswith method, it will do something similar to search, except if at any point the character is not found in our TrieNode's children dict,
+then we'll just return False. If we iterated through the whole word, then the prefix was found, so it must be true.
+
+
 https://leetcode.com/problems/implement-trie-prefix-tree/
 https://www.youtube.com/watch?v=oobqoCJlHA0&ab_channel=NeetCode
 '''
