@@ -56,17 +56,24 @@ def addBoldTag(s: str, word_dict: [str]) -> str:
 			if (s.startswith(w, i)):
 				## update the cur end to be the max of the current end  and the length of the word (in word dict) + the current
 				## value of i
-				## its len(w) + i
+				## its len(w) + i to find the new cur_end
 				cur_end = max(cur_end, i+len(w))
 		is_bold = i < cur_end
 		flag[i] = is_bold
-
 	res = ''
 	for i in range(len(s)):
-		if flag[i] and (i == 0 or (i > 0 and not flag[i-1])):
-			res += '<b>'
+		if (flag[i]):
+			## if we're at the start of the string and flag[i] is true, we'll set the bold tag
+			## or, if our i is past the start of the string, and our previous position in our
+			## flag array is False (i.e ...01...), where 0 is prev, and 1 is current, start the bold tag
+			if (i == 0 or (i > 0 and not flag[i-1])):
+				res += '<b>'
+		## add the character to our result string
 		res+=s[i]
-		if flag[i] and (i == n - 1 or (i < n-1 and not flag[i+1])):
+		## after we've added the character, if we're at the end of the string and flag[i] is true, we'll set the bold tag
+		## or, if our i is before the end of the string, and the next position in our
+		## flag array is False (i.e ...10...), where 0 is next, and 1 is current, end the bold tag
+		if flag[i] and (i == len(s) - 1 or (i < len(s)-1 and not flag[i+1])):
 			res += '</b>'
 	return res
 
