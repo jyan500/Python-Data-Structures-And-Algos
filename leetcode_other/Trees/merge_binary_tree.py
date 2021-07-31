@@ -28,6 +28,9 @@ to form the root.
 by the end, our r.left and r.right will contain the left and right subtrees merged together
 so we just return r
 
+Time complexity: O(max(T1,T2)), as it will depend if T1 or T2 has more nodes, 
+Space complexity: O(max(T1,T2)), as the space will need to be enough to include the bigger of the two trees
+
 '''
 # Definition for a binary tree node.
 # class TreeNode:
