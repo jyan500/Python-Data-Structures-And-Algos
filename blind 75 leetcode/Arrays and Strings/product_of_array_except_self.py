@@ -8,6 +8,85 @@ https://leetcode.com/problems/product-of-array-except-self/
 https://www.youtube.com/watch?v=tSRFtR3pv74&t=148s&ab_channel=NickWhiteNickWhite
 '''
 class Solution:
+
+    ## I revisited this problem on 8/5/2021, using nick white's solution again
+    ## Its O(N) Time and O(N) space
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+
+        ## Time complexity = O(N^2)
+        ## Space complexity = O(1), no additional space
+        ## can we do better?
+        # l = []
+        # for i in range(len(nums)):
+        #     if (i == 0):
+        #         l.append(self.multiply(nums[1:]))
+        #     elif (i == len(nums)-1):
+        #         l.append(self.multiply(nums[:len(nums)-1]))
+        #     else:
+        #         l.append(self.multiply(nums[:i]+nums[i+1:]))
+        # return l
+        
+        ## https://www.youtube.com/watch?v=khTiTSZ5QZY&ab_channel=NickWhite
+        ## the key realization here is that at any given number i, the product we want
+        ## is the product of all the numbers to the left * the product of all numbers to the right
+        ## so our approach is that for each number, we want a list of all the products to the left of each number
+        ## and we also want a list of all the products to the right of each number
+        ## the final result would just be the two products multiplied together
+        ## we're not going to be able to do this all in one loop so we need multiple loops
+        ## to find the left and right products
+        
+        ## for example, for [1,2,3,4]
+        ## for the first element, the product of all the numbers to the left of 1 would just be 1, since there's no numbers to the left of 1
+        ## the product of all the numbers to the right of 1 would be 24
+        ## so 1 * 24 = 24
+        ## for the second element, the product of all the numbers to the left is 1
+        ## the product of all the numbers to the right is 12
+        ## so the answer is 1 * 12 = 12
+        ## for the third element, the product of all the numbers to the left is 2
+        ## and the product of all the numbers to the right is 4, so the answer is 2 * 4 = 8
+        ## for the fourth element, the product of all the numbers to the left is 1*2*3 = 6
+        ## and the product of all the numbers to the right is 1, since there's no numbers to the right
+        ## the total answer is 6
+        ## final result is 24,12,8,6 which is correct
+
+        N = len(nums)
+        left_product = [1] * N
+        right_product = [1] * N
+        result = [1] * N
+        ## calculate the product of all numbers to the left at each index
+        for i in range(N):
+            if (i == 0):
+                ## there's no numbers to the left here since its the first element, so the left product is just 1
+                left_product[i] = 1
+            else:
+                ## the products on the left would simply be multiplying the previous number (nums[i-1]),
+                ## with the cumulative product that we've calculated so far (left_product[i-1])
+                left_product[i] = nums[i-1] * left_product[i-1]
+        ## calculate the product of all numbers to the right at each index, we need to iterate through
+        ## the list in reverse to do this
+        for i in range(N-1,-1,-1):
+            if (i == N-1):
+                ## there's no numbers to the right here since its the last element, so the right product
+                ## is just 1
+                right_product[i] = 1
+            else:
+                ## the products on the right would simply be multiplying the previous number (from reverse persective, this is actually nums[i+1]) 
+                ## with the cumulative product that we've calculated so far (right_product[i+1])
+                right_product[i] = nums[i+1] * right_product[i+1]
+        
+        ## the result at a given index is just all the products of each number to the left * all products of each number to the right
+        for i in range(N):
+            result[i] = left_product[i] * right_product[i]
+        
+        return result
+
+    
+    def multiply(self, L):
+        ans = 1
+        for i in range(len(L)):
+            ans *= L[i]
+        return ans
+
 	def mostEfficientSolution(self, nums: List[int]) -> List[int]:
 		## O(1) space
 		output = [1]
