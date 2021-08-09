@@ -20,6 +20,15 @@ explanation of above case:
 by right side view, we define this as the rightmost node of each level of the tree
 that explains why a right side view of [1,2] is [1,2], despite 2 being the left child of 1
 because in this case for the 2nd level, 2 is the only node that isn't None so that would be the rightmost child
+
+Concept:
+perform a level order traversal on our tree using a queue and BFS:
+for each node that gets popped from the queue, add its left and right children to the queue
+except on each level, we only add the last node of our queue to our result list, as this will be the rightmost node on our current level
+
+Time complexity: O(N), representing the nodes in the tree
+space complexity: O(N), N nodes in the queue
+
 '''
 # Definition for a binary tree node.
 # class TreeNode:
@@ -34,9 +43,6 @@ class Solution:
         queue = deque()
         queue.append(root)
         res = []
-        ## concept: perform a level order traversal on our tree using a queue and BFS:
-        ## for each node that gets popped from the queue, add its left and right children to the queue
-        ## except on each level, we only add the last node of our queue to our result list, as this will be the rightmost node on our current level
         while (queue):
             N = len(queue)
             for i in range(len(queue)):
