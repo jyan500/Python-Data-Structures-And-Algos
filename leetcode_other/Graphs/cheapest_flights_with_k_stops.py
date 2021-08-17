@@ -26,8 +26,11 @@ adjacency list = {0: [3], 1: [2,3], 2: [0, 4], 3: [1,4], 4: [0,2]}
 src = 0
 dest = 4
 
-Time complexity: 
-Space complexity: 
+Time complexity: O(V^K), where V is the number of vertices
+https://stackoverflow.com/questions/53127792/time-complexity-cheapst-flights-within-k-stops
+the algorithm might return to cities that its already visited, up to k times
+
+Space complexity: O(V), since we may need to hold all vertices in the queue
 '''
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
@@ -81,6 +84,8 @@ class Solution:
     def bfs(self, adjacency_list, src, dst, k, num_stops):
     	queue = deque()
         ## append the initial travel options
+        for i in range(len(adjacency_list[src])):
+            queue.append(adjacency_list[src][i])
         smallest_price = float('inf')
         while (queue):
             edge, price, num_stops = queue.popleft()
@@ -97,8 +102,9 @@ class Solution:
                 ## but also add the current price of the route we're traveling to the edge's price
                 ## and increase the number of stops by 1
                 for j in range(len(adjacency_list[edge])):
-                    edge2, price2, num_stops = adjacency_list[edge][j]
-                    queue.append((edge2, price2 + price,  num_stops + 1))
+                	if (price2 + price < smallest_price):
+	                    edge2, price2, num_stops = adjacency_list[edge][j]
+	                    queue.append((edge2, price2 + price, num_stops + 1))
                     
         if (smallest_price == float('inf')):
             return -1
