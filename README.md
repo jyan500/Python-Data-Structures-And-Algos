@@ -1,2 +1,2 @@
-## My Progress in Leetcode and Data Structures and Algorithms
+My Progress in Leetcode and Data Structures and Algorithms
 
