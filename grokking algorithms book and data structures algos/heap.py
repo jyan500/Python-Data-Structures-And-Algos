@@ -1,6 +1,8 @@
 '''
 https://www.youtube.com/watch?v=HqPJF2L5h9U&t=1822s&ab_channel=AbdulBari
 
+Heap is a complete binary tree
+
 ## Array representation of Heap ## 
 
 if a node is at index i

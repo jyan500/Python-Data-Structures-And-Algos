@@ -33,7 +33,6 @@ def iterative_binary_search(l, num):
 
 ## returns true if the number is within the sorted list, returns false if not
 def recursive_binary_search(l, num):
-	print(l)
 	if (len(l) == 0):
 		return False
 	else:

@@ -1,4 +1,4 @@
-## Stack Data Structure and Some Algorithms that can be solved using STack
+## Stack Data Structure and Some Algorithms that can be solved using Stack
 class Stack:
 	def __init__(self):
 		self.stack = []

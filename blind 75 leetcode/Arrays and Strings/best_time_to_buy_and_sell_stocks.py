@@ -8,6 +8,21 @@ https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 https://www.youtube.com/watch?v=mj7N8pLCJ6w&ab_channel=NickWhiteNickWhiteVerified
 '''
 class Solution:
+	def alternateSolution(self, prices: List[int]) -> int:
+		maxProf = 0
+        buy = 0
+        sell = 1
+        while sell < len(prices):
+            if prices[sell] > prices[buy]:
+                maxProf = max(maxProf, prices[sell] - prices[buy])
+            # we update the "buy" index if the selling price is less than the buying price,
+            # since we should be able to make a greater profit using the selling price
+            # if it's less
+            else:
+                buy = sell
+            sell += 1
+        return maxProf
+
 	def maxProfit(self, prices: List[int]) -> int:
 		## O(N) time, O(1) space
 		min_val = float('inf')

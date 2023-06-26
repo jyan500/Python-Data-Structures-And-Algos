@@ -16,7 +16,7 @@ graph["jonny"] = []
 def bfs(graph, name):
 	search_queue = deque()
 	## put your first degree connections in the queue
-	search_queue += g[name]
+	search_queue += graph[name]
 	## keep track of any of your connections that you have already searched
 	searched = []
 	while (search_queue):
@@ -26,7 +26,7 @@ def bfs(graph, name):
 				return person 
 			else:
 				## get your connection's friends into the queue
-				search_queue += g[person]
+				search_queue += graph[person]
 				searched.append(person)
 	return False 
 
