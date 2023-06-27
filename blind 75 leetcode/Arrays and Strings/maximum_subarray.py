@@ -6,20 +6,28 @@ Kadane's Algorithm
 '''
 
 class Solution:
+	def alternativeSolution(self, nums: List[int]) -> int:
+        largest_sum = float('-inf')
+        current_sum = float('-inf')
+        for i in range(len(nums)):
+            # if you add the current number, 
+            # and the current number is still greater than the current sum, 
+            # we can set the current sum to be the current number, as the subarray
+            # starting at this number should have a greater sum than the subarray before it
+            if nums[i] >= current_sum + nums[i]:
+                current_sum = nums[i]
+            else:
+                current_sum += nums[i]
+        	# check to see if the current sum is greater than the largest sum 
+            largest_sum = max(largest_sum, current_sum)
+
+        return largest_sum
+
     def maxSubArray(self, nums: List[int]) -> int:
         max_sum = float(-inf)
         cur_sum = 0
         for i in range(len(nums)):
-            ## check to see if the current number we're on is greater than our current sum
-            ## if it is, we can just set the current sum to the current number we're on
-            # if (nums[i] > cur_sum + nums[i]):
-            #     cur_sum = nums[i]
-            # else:
-            #     cur_sum = cur_sum + nums[i]
             cur_sum = max(nums[i], cur_sum+nums[i])
-            
-            # if (cur_sum > max_sum):
-            #     max_sum = cur_sum
             max_sum = max(cur_sum,max_sum)
             
         return max_sum
