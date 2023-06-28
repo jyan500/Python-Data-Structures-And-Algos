@@ -9,6 +9,26 @@ https://www.youtube.com/watch?v=tSRFtR3pv74&t=148s&ab_channel=NickWhiteNickWhite
 '''
 class Solution:
 
+	# revisited in 2023 using https://www.youtube.com/watch?v=10NJzNaSsrg&ab_channel=ThatIndianCoder
+	def alternativeSolution(self, nums: List[int]) -> List[int]:
+        # two pass solution
+		length = len(nums)
+        left = [1 for i in range(length)]
+        right = [1 for i in range(length)]
+        answer = [1 for i in range(length)]
+        # iterate left to right, and calculate the products of every element before i (i-1),
+        # ignore index 0 since there's no element to the left
+        for i in range(1, length):
+            left[i] = nums[i-1] * left[i-1]
+        # iterate right to left, and calculate the products of every element after i (i+1)
+        # ignore index len(nums)-1 since there's no element to the right
+        for i in range(length-2, -1, -1):
+            right[i] = nums[i+1] * right[i+1]
+        # to get the product of all elements besides i, multiply the elements of left and right
+        for i in range(length):
+            answer[i] = left[i] * right[i]
+        return answer
+
     ## I revisited this problem on 8/5/2021, using nick white's solution again
     ## Its O(N) Time and O(N) space
     def productExceptSelf(self, nums: List[int]) -> List[int]:
