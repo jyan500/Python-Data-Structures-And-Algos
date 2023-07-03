@@ -24,6 +24,33 @@ if its overlapping, update the end value of the current interval
 if its not overlapping with the current interval, add it to the list and update the current interval value 
 '''
 class Solution:
+	# revisited this solution on 7/3/2023
+	def altSolution1(self, intervals: [[int]]) -> [[int]]
+		if len(intervals) == 1:
+            return intervals
+        # sort the intervals
+        intervals = sorted(intervals, key = lambda x: [x[0], x[1]])
+        # keep track of a stack where the top is always the last interval
+        # that was merged
+        result = [intervals[0]]
+        for i in range(1, len(intervals)):
+            start, end = intervals[i]
+            previousStart, previousEnd = result[-1]
+            # at the top of the stack, 
+            # if the previous interval's end is greater than or equal to the current interval's start
+            # that means it's overlapping
+            if previousEnd >= start:
+                # when merging the intervals, get the smallest start and the greatest end 
+                mergedStart = previousStart if previousStart < start else start
+                mergedEnd = previousEnd if previousEnd > end else end
+                # update the top of the stack with the merged interval,
+                # if the next interval overlaps with this merged interval, this value gets
+                # updated again, etc until it no longer overlaps
+                result[-1] = [mergedStart, mergedEnd]
+            else:
+                result.append(intervals[i])
+        return result
+
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         intervals = sorted(intervals, key = lambda nums: nums[0])
         output = [intervals[0]]
