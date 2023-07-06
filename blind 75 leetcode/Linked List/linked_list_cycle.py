@@ -14,6 +14,20 @@ https://leetcode.com/problems/linked-list-cycle
 #         self.val = x
 #         self.next = None
 
+class Solution2:
+	# revisited on 7-6-2023
+	def hasCycle(self, head: ListNode) -> bool:
+		slow = head
+        fast = head
+        if head == None:
+            return None
+        while (fast != None and fast.next != None):
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                return True
+        return False
+
 class Solution:
 	## first attempt, put the ids of the listnodes into hashmap, and check if we've visited the node before
     def hasCycle(self, head: ListNode) -> bool:

@@ -4,6 +4,50 @@ Given the head of a singly linked list, reverse the list, and return the reverse
 https://leetcode.com/problems/reverse-linked-list/
 
 '''
+class Solution2:
+	def reverseList(self, head: ListNode) -> ListNode:
+		""" 
+		in place solution approach:
+        we keep track of prev, which is the head of our new list
+        on each iteration, we track curr, which is the placement of our head currently before we 
+        do head.next to advance to the next node
+        we then set the value of curr.next to be prev, which is basically setting equal to the 
+        previous element in the list, and then setting prev to be the "head" of this new list
+        example:
+        1 -> 2 -> 3 -> 4 -> 5 -> None
+        1st iteration, we build 1 -> None
+        prev = None
+        curr = head (curr = 1)
+        head = head.next (head = 2)
+        curr.next = prev ( curr.next = None)
+        prev = curr (prev = 1)
+        
+        2nd iteration, we build 2 -> 1 -> None
+        prev = 1
+        curr = head (curr = 2)
+        head = head.next ( head = 3)
+        curr.next = prev ( curr.next = 1)
+        prev = curr ( prev = 2)
+        
+        3rd iteration, we build 3 -> 2 -> 1 -> None, etc
+        
+        finally at the last iteration
+        prev = 4
+        curr = head ( curr = 5)
+        head = head.next (head = None)
+        curr.next = prev ( curr.next = 4)
+        prev = curr ( prev = 5 )
+        
+        head is now none, so our loop is done
+        
+        """
+        prev = None
+        while (head != None):
+            curr = head
+            head = head.next
+            curr.next = prev
+            prev = curr	
+        return prev
 
 class Solution:
 	## my first attempt using O(N) time and O(N) space
