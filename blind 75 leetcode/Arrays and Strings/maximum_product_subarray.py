@@ -10,6 +10,55 @@ https://leetcode.com/problems/maximum-product-subarray
 O(N) time (loops through the array once)
 O(1) space (only using two variables, no arrays or extra contiguous memory)
 '''
+
+class Solution2:
+
+	# revisited this problem on 7-4-2023 using
+	# https://www.youtube.com/watch?v=hnswaLJvr6g&ab_channel=takeUforward
+	def maxProduct(self, nums: List[int]) -> int:
+        """
+        keep track of the running product coming from the front (prefix), and from the back (suffix)
+        the logic is that this running prefix and suffix product will capture all possible subarrays
+        that can be found, so we just need to find the max between the prefix and suffix product during
+        the iteration
+        For example:
+        2, 5, -1, 3, 6
+        if we take the prefix starting at 2
+        and suffix starting at 6
+        prefix = 2 * 5 = 10
+        suffix = 6 * 3 = 18
+        greatest is 18
+        
+        prefix = 2 * 5 * -1 = -10
+        suffix = 6 * 3 * -1 = -18
+        greatest is still 18
+        
+        prefix = 2 * 5 * -1 * 3 = -30
+        suffix = 6 * 3 * -1 * 5 = -90
+        greatest is still 18
+        
+        prefix = 2 * 5 * -1 * 3 * 6 = -180
+        suffix = 6 * 3 * -1 * 5 * 2 = -180
+        greatest is still 18
+        
+        If any of the numbers are zero, we need to "restart" the prefix/suffix product to 1 since
+        if we kept it at 0, all the subsequent products would become 0 as well.
+        """
+        greatest = float("-inf") 
+        prefix = 1
+        suffix = 1
+        length = len(nums)
+        for i in range(length):
+            if prefix == 0:
+                prefix = 1
+            if suffix == 0:
+                suffix = 1
+            prefix = prefix * nums[i]
+            suffix = suffix * nums[length - 1 - i]
+            greatest = max(greatest, max(prefix, suffix))
+        return greatest
+
+
 class Solution:
     def maxProduct(self, nums: List[int]) -> int:
         ## we need to set the result to max(nums) to handle an edge case where you have only one number in the nums

@@ -20,6 +20,67 @@ Note: Solution MUST BE IN O(LogN)
 ## if the target is bigger, search right.
 '''
 
+"""
+revisited on 7/5/2023
+approach:
+find the index of the min element within the sorted rotated array
+once we find that, we know that both the segment to the left and right
+are sorted, so if the target element is in bounds of one of the left/right portions,
+we do the binary search in that portion
+
+recursive adaptation based on:
+https://www.youtube.com/watch?v=QdVrY3stDD4&t=367s&ab_channel=NickWhite
+
+O(LogN) time O(1) space
+"""  
+class Solution2:
+    def findMinIndex(self, nums: List[int], left: int, right: int):
+        # if left exceeds right, that means we've found the index
+        # of the min element, the search is complete
+        if left >= right:
+            return left  
+        mid = left + (right - left) // 2
+        # this indicates the array is rotated, because
+        # in a normal sorted array, the mid element should always be less than the right
+        # in that case, continue the search down the right side
+        if nums[mid] > nums[right]:
+            return self.findMinIndex(nums, mid + 1, right)
+        # otherwise, if it's less, that means we can find smaller values to the left
+        # of mid, so continue the search down the left
+        else:
+            return self.findMinIndex(nums, left, mid)
+        
+    # perform regular binary search, where if the element is less than the midpoint,
+    # we search the left side, otherwise we search the right
+    def binarySearch(self, nums: List[int], left: int, right: int, target: int):
+        mid = left + (right - left) // 2
+        if nums[mid] == target:
+            return mid
+        if left >= right:
+            return -1
+        if target < nums[mid]:
+            return self.binarySearch(nums, left, mid - 1, target)
+        else:
+            return self.binarySearch(nums, mid + 1, right, target)
+        
+    def searchHelper(self, nums: List[int], target: int) -> int:
+        minIndex = self.findMinIndex(nums, 0, len(nums) - 1)
+        left = 0 
+        right = len(nums) - 1
+        # if target is in bounds of the min index and the right side
+        # search on the right side by setting left at the minIndex
+        if nums[minIndex] <= target <= nums[right]:
+            left = minIndex
+        # otherwise, search on the left side by setting right to the minIndex
+        else:
+            right = minIndex
+       	# perform regular binary search starting on one of the sides determined
+       	# by the left/right indices set above  (either left to minIndex, or minIndex to right)
+        return self.binarySearch(nums, left, right, target)
+    
+    def search(self, nums: List[int], target: int) -> int:
+        return self.searchHelper(nums, target)
+
 class Solution:
     def findPeakIndex(self, nums: List[int]) -> int:
         left = 0
