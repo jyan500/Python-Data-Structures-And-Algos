@@ -15,6 +15,50 @@ Given the sorted rotated array nums of unique elements, return the minimum eleme
 ## the sorted order, but then we would know that the array was rotated around this point.
 ## 2. Because the element to the right of the peak element is the smallest, just return the element at index peak_index + 1.
 '''
+class Solution2:
+    """ 
+    	revisited on 7/6/2023
+    	Finding the min of the rotated sorted array using a modified binary search
+
+	    in a regular sorted array, the midpoint's value should never be greater than
+	    the right side's value because the values are always increasing from left
+	    to right. If so, we know that the min must be on this side
+		example:
+	    3,4,5,1,2, when 5 is the midpoint, 
+	    we need to binary search the values to the left of 5 because
+	    5 > 2. There can't be a value smaller than 2 on the left side because that would
+	    break the sorted order (if the array were to be unrotated back to its original form)
+
+	    once we narrow down to 5, 1, 2,
+	    where left is index 3 (value 5), right is index 4 ( value 2) and 
+	    mid = 4 (value 1)
+	    narrow down to:
+	    mid = 3 + (5 - 3) // 2 = 3 + 2 // 2 = 
+
+	    example:
+	    2, 2.5, 3, 4, 5 when 3 is the midpoint, we need to search the values to the left
+	    of 3 since 3 < 5
+	    Similar concept is expl
+
+
+    """
+    def findMinHelper(self, nums:List[int], left: int, right: int) -> int:
+        mid = left + (right - left) // 2
+        if left >= right:
+            return nums[left]
+
+        if nums[mid] > nums[right]:
+            left = mid + 1
+            return self.findMinHelper(nums, left, right)
+        else:
+            right = mid
+            return self.findMinHelper(nums, left, right)
+
+    def findMin(self, nums: List[int]) -> int:
+        # in rotation, the sorted order is maintained
+        left = 0
+        right = len(nums) - 1
+        return self.findMinHelper(nums, left, right)
 
 class Solution:
     def findPeakIndex(self, nums: List[int]) -> int:
