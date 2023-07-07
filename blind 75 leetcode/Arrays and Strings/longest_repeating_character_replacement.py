@@ -6,6 +6,48 @@ Return the length of the longest substring containing the same letter you can ge
 https://leetcode.com/problems/longest-repeating-character-replacement/
 https://www.youtube.com/watch?v=gqXU1UyA8pk&ab_channel=NeetCode
 '''
+
+class Solution2:
+    """
+    Revisited 7/7/2023
+    Concepts:
+    https://www.youtube.com/watch?v=gqXU1UyA8pk&ab_channel=NeetCode
+    1) sliding window by tracking left and right pointer
+       right pointer increments to create window
+    2) keep track of a dict to get the max amount of characters that need to be replaced
+    3) window size - max amt of characters gives us the amount of characters that needs to be replaced in this window
+       if this value exceeds k, we need to shrink the window by incrementing the left pointer, 
+       which also decreases the character amount in our dict
+    4) we also need another boolean (updatedRight) so that in the case the left side is updated,
+       we don't increment the count of the character that the right pointer is pointing to unnecessarily
+    """
+    def characterReplacement(self, s: str, k: int) -> int:
+        count = dict()
+        left = 0
+        right = 0
+        longest = 1
+        updatedRight = True
+        while (left < len(s) and right < len(s) and left <= right):
+            windowSize = right - left + 1
+            if updatedRight:
+                if s[right] in count:
+                    count[s[right]] += 1
+                else:
+                    count[s[right]] = 1
+            
+            greatestAmtChars = max(count.values())
+            numReplacements = windowSize - greatestAmtChars
+            if numReplacements <= k:
+                right += 1
+                longest = max(longest, windowSize)
+                updatedRight = True
+            else:
+                count[s[left]] -= 1
+                left += 1
+                updatedRight = False
+        return longest
+                
+
 class Solution:
     ## Using the O(26N) solution, where the "26" is searching
     ## all possible 26 capital letters within count to find the most frequently occuring
