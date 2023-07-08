@@ -5,6 +5,62 @@ An island is surrounded by water and is formed by connecting adjacent lands hori
 
 https://leetcode.com/problems/number-of-islands/
 '''
+class Solution2:
+    """
+    Revisited on 7/8/2023
+    O(N^2 * O(N+M)) time, where M is the amount of nodes starting from our start point during DFS?
+    O(N^2) space (we could hold every grid element one time theoretically since we don't add repeats)
+    1) perform a DFS at a given element if it's value is 1 and the value hasn't been visited yet
+    2) During the DFS, we go left, right, up and down from the given value if the value is "1",
+       and continue in that direction until there's no more 1's to visit. At each step, we add each "1" to our visited set
+    3) Once the DFS finishes, we should've visited all adjacent 1's, which would be an island. 
+    4) If our visited set returns at least one element, that would've indicated we've visited the whole island
+       and can increment our count
+    """
+    def numIslands(self, grid: List[List[str]]) -> int:
+        # brute force, DFS
+        visited = set()
+        islandCount = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == "1" and (i,j) not in visited:
+                    newVisited = self.dfs(grid, i, j, set())
+                    # if we've manage to visit some new nodes, this must be an island
+                    if len(newVisited) > 0:
+                        islandCount += 1
+                        visited.update(newVisited)
+             
+        return islandCount
+                    
+    def inBounds(self, grid: [[str]], i: int, j: int) -> bool:
+        return i >= 0 and j >= 0 and i <= len(grid) - 1 and j <= len(grid[i]) - 1
+    
+    def dfs(self, grid: [[str]], i:int, j:int, visited: Set) -> int:
+        visited.add((i,j))
+        leftCoord = (i, j+1)
+        rightCoord = (i, j-1)
+        upCoord = (i-1, j)
+        downCoord = (i+1, j)
+        rightX, rightY = rightCoord
+        leftX, leftY = leftCoord
+        upX, upY = upCoord
+        downX, downY = downCoord
+        if self.inBounds(grid, rightX, rightY) and rightCoord not in visited:
+            if grid[rightX][rightY] == "1":
+                self.dfs(grid, rightX, rightY, visited)
+        if self.inBounds(grid, leftX, leftY) and leftCoord not in visited:
+            if grid[leftX][leftY] == "1":
+                self.dfs(grid, leftX, leftY, visited)
+        if self.inBounds(grid, upX, upY) and upCoord not in visited:
+            if grid[upX][upY] == "1":
+                self.dfs(grid, upX, upY, visited)
+        if self.inBounds(grid, downX, downY) and downCoord not in visited:
+            if grid[downX][downY] == "1":
+                self.dfs(grid, downX, downY, visited)
+        return visited
+
+
+
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
        
