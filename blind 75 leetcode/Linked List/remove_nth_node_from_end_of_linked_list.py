@@ -10,7 +10,48 @@ class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
-        
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+"""
+Revisited on 7-8-2023
+Two Pass solution (O(2N))
+1) 1st pass, traverse the list to find out the amount of elements
+2) check the index that needs to be removed, since this is counting from the back
+we would subtract the total length - n to give the index we need to remove
+3) Special case: if we need to remove the head of the linked list (index = 0), we simply
+set the head to the next element, and then return the head
+4) Otherwise, we loop through the remainder of the linked list starting from head,
+and track a previous element, if we find the element we want to delete, just 
+set the previous' next to be equal to the current elements' next to skip over it
+"""
+class Solution2:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        dummy1 = head
+        dummy2 = head
+        prev = head
+        length = 0
+        while (dummy1 != None):
+            dummy1 = dummy1.next
+            length += 1
+        indexToRemove = length - n
+        counter = 0
+        if indexToRemove == 0:
+            head = head.next
+            return head
+        else:
+            while (dummy2 != None):
+                if counter == indexToRemove:
+                    prev.next = dummy2.next
+                    dummy2 = dummy2.next
+                else:
+                    prev = dummy2
+                    dummy2 = dummy2.next
+                counter += 1
+            return head        
+
 def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
 	## create a dummy node at the very front of the list before the head
 	dummy = ListNode()
