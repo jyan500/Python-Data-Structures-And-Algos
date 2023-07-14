@@ -14,6 +14,75 @@ O(N^2) time, O(1) space "Expand around the center" solution:
 https://www.youtube.com/watch?v=4RACzI5-du8&ab_channel=NeetCodeNeetCode
 '''
 
+# Revisited on 7-14-2023
+class Solution2:
+    # def isPalindrome(self, s: str) -> int:
+    #     left = 0
+    #     right = len(s) - 1
+    #     while (left <= right):
+    #         if s[left] != s[right]:
+    #             return False
+    #         left += 1
+    #         right -= 1
+    #     return True
+    
+    def countSubstrings(self, s: str) -> int:
+        """
+        Brute Force
+        O(N^3), creating substrings i to j, including itself, which is O(N^2) and for each
+        substring, check if its a palindrome, which is O(N)
+        O(N^2 * N)
+        """
+        # count = 0
+        # for i in range(len(s)):
+        #     for j in range(i, len(s)):
+        #         if self.isPalindrome(s[i:j+1]):
+        #             count += 1
+        # return count
+        """
+        Optimal Solution
+        Check palindrome by having two pointers that start together
+        at i, but move outwards
+        Finding odd numbered length substrings i.e s = A A A, where i = 1 here
+        left = 1, right = 1
+        S[1] == S[1], this is a palindrome
+        move outwards by checking left -= 1, right += 1
+        left = 0, right = 2, s[0] == s[2], so this is a palindrome
+        
+        We need to check for even numbered length substrings as well, s = A A A,
+        such as "A A"
+        we can do this by setting left = i, right = left + 1
+        A A A, where i = 1
+        left = 1 right = 2
+        s[1] == s[2], this is a palindrome
+        
+        Time complexity:
+        O(2(N^2)), for each character, iterates through the whole substring by moving both pointers outward
+        performs the same N^2 operation twice for odd and even length substrings
+        Space complexity: O(1) no additional space
+        """
+        count = 0
+        for i in range(len(s)):
+            left = i
+            right = i
+            while left >= 0 and right <= len(s) - 1:
+                if s[left] == s[right]:
+                    count += 1
+                else:
+                    break
+                left -= 1
+                right += 1
+            left = i
+            right = left + 1
+            while left >= 0 and right <= len(s) - 1:
+                if s[left] == s[right]:
+                    count += 1
+                else:
+                    break
+                left -= 1
+                right += 1
+        return count
+
 class Solution:
     def printMatrix(self, matrix):
         s = ''
