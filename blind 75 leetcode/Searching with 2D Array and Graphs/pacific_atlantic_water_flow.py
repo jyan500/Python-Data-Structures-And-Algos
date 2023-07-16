@@ -6,6 +6,65 @@ test case #1: [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
 test case #2: [[3,3,3],[3,1,3],[0,2,4]]
 '''
 
+# revisited on 7-14-2023, brute force solution that's O(N^2 * (N + M)),
+# where M is the amount of nodes traversed starting from N within the DFS
+class Solution2:
+    def isPacific(self, heights: [[int]], i:int, j:int) -> bool:
+        return i < 0 or j < 0
+    
+    def isAtlantic(self, heights: [[int]], i:int, j:int) -> bool:
+        return i > len(heights) - 1 or j > len(heights[0]) - 1
+    
+    def inBounds(self, heights: [[int]], i:int, j:int) -> bool:
+        return i >= 0 and j >= 0 and i <= len(heights) - 1 and j <= len(heights[0]) - 1
+    
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        result = []
+        for i in range(len(heights)):
+            for j in range(len(heights[i])):
+                # if we're able to reach pacific and atlantic from these coordinates
+                # save the result
+                if self.dfs(heights, i, j, set(), [False, False]):
+                    result.append((i, j))
+        return result
+    
+    def dfs(self, heights: List[List[int]], i:int, j:int, visited: set, reached: list):
+        left = (i-1, j)
+        right = (i+1, j)
+        up = (i, j-1)
+        down = (i, j+1)
+        
+        leftX, leftY = left
+        rightX, rightY = right
+        upX, upY = up
+        downX, downY = down
+        
+        visited.add((i, j))
+        # no need to continue traversing if we've already found valid paths to 
+        # pacific and atlantic
+        if reached[0] and reached[1]:
+            return True
+        if self.isPacific(heights, leftX, leftY) or self.isPacific(heights, upX, upY):
+            # mark this cell as reaching pacific for future recursive calls
+            # if we're still traversing the matrix
+            reached[0] = True
+        if self.isAtlantic(heights, rightX, rightY) or self.isAtlantic(heights, downX, downY):
+            # mark this cell as reaching atlantic for future recursive calls
+            # if we're still traversing the matrix
+            reached[1] = True
+        # check to make sure the value at the index is less than the current,
+        # as we're only allowed to move in the direction of decreasing or equal value
+        if self.inBounds(heights, leftX, leftY) and heights[leftX][leftY] <= heights[i][j] and left not in visited:
+            self.dfs(heights, leftX, leftY, visited, reached)
+        if self.inBounds(heights, rightX, rightY) and heights[rightX][rightY] <= heights[i][j] and right not in visited:
+            self.dfs(heights, rightX, rightY, visited, reached)
+        if self.inBounds(heights, upX, upY) and heights[upX][upY] <= heights[i][j] and up not in visited:
+            self.dfs(heights, upX, upY, visited, reached)
+        if self.inBounds(heights, downX, downY) and heights[downX][downY] <= heights[i][j] and down not in visited:
+            self.dfs(heights, downX, downY, visited, reached)
+        
+        return reached[0] and reached[1]
+        
 ## My original brute force solution (how to optimize?)
 class Solution:
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
