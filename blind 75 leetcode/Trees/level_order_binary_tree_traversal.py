@@ -10,6 +10,52 @@ https://www.youtube.com/watch?v=XZnWETlZZ14&ab_channel=KevinNaughtonJr.
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+"""
+Revisited on 7/17/2023 (came up with the same solution)
+O(N) time, O(N) space
+
+Key Realizations:
+You can use BFS, adding the left and right children onto the queue
+The items in the queue will always represent the current level,
+so you can iterate through the items in the queue and pop off,
+appending to a level list
+        1
+      /   \
+     2     3
+    / \   / \
+   4  5  6   7
+
+queue = [1]
+level = []
+result = []
+
+iterate through queue
+only 1, so add 1 to level
+1's children are 2 and 3, so add 2 and 3 to the queue
+append [1] to result
+
+queue = [2, 3]
+level = []
+result = [[1]]
+
+iterate through queue
+pop left which results in 2
+add children 4 and 5
+queue is now [3, 4, 5] at this point
+add 2 to the level list
+pop left which results in 3
+add children 6 and 7
+queue is now [4, 5, 6, 7] at this point
+add 3 to the level list
+
+result = [[1], [2, 3]]
+
+in the last iteration, 4, 5, 6, and 7 don't have children,
+so these are all added to level list, and because they're 
+all popped off without appending any new children, 
+the while loop ends
+"""
 class Solution:
     ## Perform BFS
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
