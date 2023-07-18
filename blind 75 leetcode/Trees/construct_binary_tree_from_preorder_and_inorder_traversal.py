@@ -45,9 +45,14 @@ You can get the root from preorder and then find that within the inorder list
 any elements to the left of the root within the inorder list = left subtree
 any elements to the right = right subtree
 
-Recursively, you can pass in smaller sections of the preorder and inorder lists, building
-the left and right subtrees, and then create the node passing in the recursive returns
-for the left and right, returning the node
+Recursively, you can pass in smaller sections of the preorder and inorder lists, 
+we can take the length of the left subtree we found from the inorder list,
+and then slice the preorder list such that it gives us all the roots for the left subtree,
+and same for the right
+
+can also pass in the left/right subtrees found from the inorder
+
+recursively build the left and right passing in these smaller sections of preorder and inorder
 
 Base case is when the preorder list is empty, which means the previous recursive call
 was a leaf node with no children
