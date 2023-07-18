@@ -34,6 +34,110 @@ into left and right halves, and pass those into recursive calls to further build
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+"""
+Revisited on 7/18/2023
+Key concepts in this problem:
+1) the preorder traversal will always give you the roots
+2) the inorder traversal tells you whether the roots are on the left or right subtree
+
+You can get the root from preorder and then find that within the inorder list
+any elements to the left of the root within the inorder list = left subtree
+any elements to the right = right subtree
+
+Recursively, you can pass in smaller sections of the preorder and inorder lists, building
+the left and right subtrees, and then create the node passing in the recursive returns
+for the left and right, returning the node
+
+Base case is when the preorder list is empty, which means the previous recursive call
+was a leaf node with no children
+
+example:
+
+             3
+          /     \
+         9      20
+        /  \   /  \
+       12  15 16  7
+      /
+     10
+
+[3, 9, 12, 10, 15, 20, 16, 7] preorder traversal
+[10, 12, 9, 15, 3, 16, 20, 7] inorder traversal
+
+3 is the root based on preorder[0]
+find 3 in the inorder traversal list and section it off like so:
+left sub = [10, 12, 9, 15] 
+right sub = [16, 20, 7]
+
+in the next recursive call, we slice the preorder where we get the roots for the
+left and right subtrees
+[9, 12, 10, 15] is passed in to the left, [20, 16, 7] is passed into the right
+
+in the next recursive call to build the left
+[9, 12, 10, 15] is our preorder
+[10, 12, 9, 15] is our inorder
+
+preorder[0] is 9, which is the next root in our tree on the left side
+we find 9 within the inorder and split it off again
+left sub = [10, 12]
+right sub = [15]
+
+we then slice the preorder list again
+[12, 10] is passed in to the left, [15] is passed into the right
+
+in the next recursive call to build the left
+[12, 10] is our preorder
+[10, 12] is our inorder
+
+preorder[0], 12 is the root
+find 12 in the inorder list
+left sub = [10]
+right sub = [], which means there's no child on the right of root 12
+
+slice the preorder list again
+[10] is passed into the left, [] is passed into the right
+
+in the next recursive call to build the left
+[10] is our predrder
+[10] is our inorder
+
+at this point, if we go further, we'll pass in an empty list and return None in the base case
+because our left recursive call has now returned, we try building the right side now.
+
+We actually can't build anything on the right either, so now we create our first node 10,
+
+If we continue to follow the recursion, you'll see the nodes getting built in the following order
+10 -> 12 -> 15 -> 9 -> 16 -> 7 -> 20 -> 3
+which is technically the postorder traversal, and it makes sense: left, right and then process
+
+
+"""
+class Solution2:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        # root is always the first element of the preorder list
+        if len(preorder) == 0:
+            return None
+        root = preorder[0]
+    
+        # find the root in the inorder list
+        rootIndex = inorder.index(root)
+        inOrderRoot = inorder[rootIndex]
+        # Anything to the left of this root
+        # is the left subtree, and anything
+        # to the right is the right subtree
+        leftSubtree = inorder[:rootIndex]
+        rightSubtree = inorder[rootIndex+1:]
+
+        # within the recursion, we progressively pass in smaller sections of the preorder and inorder lists
+        # for preorder, we know the root is always the 0th element, so we slice from 1 to the 1+len(leftSubtree)
+        # to get all roots for the left subtree, and then for the right subtree,
+        # slicing from len(preorder) - len(rightSubtree) to get all the roots for the right subtree
+        left = self.buildTree(preorder[1:1+len(leftSubtree)], leftSubtree)
+        right = self.buildTree(preorder[len(preorder)-len(rightSubtree): ], rightSubtree)
+        newRoot = TreeNode(val=root, left=left, right=right)
+        return newRoot
+
 class Solution:
     ## Neetcode's solution
     def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
