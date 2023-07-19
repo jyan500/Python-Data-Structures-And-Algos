@@ -13,6 +13,44 @@ Space: Min(N, M), because the recursion is determined by the tree that has less 
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+'''
+Revisited the problem on 7/19/2023
+O(N * M) time, since for each node in the main tree, 
+we're doing an O(M) operation for the amount of nodes in the subtree checking
+if the given subtree and the subtree starting from node N are the same.
+
+space is determined by the amount of nodes traversed during the recursion that was needed
+to find the subtree, at worse it could be O(N * M) amount of recursive calls? 
+if the subtree isn't found, we'd perform the search on every root
+
+Key concepts:
+1) for each node, check if the subtree starting with that node is the same tree as the 
+given subtree. Use the same algorithm as isSameTree to solve this
+
+2) If it's the same, we can return true
+otherwise, we continue down the left and right. We can return
+whether the subtree is found in the left OR right sides
+'''
+class Solution2:
+    def isSameTree(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> bool:
+        if root1 == None and root2 == None:
+            return True
+        if root1 == None or root2 == None:
+            return False
+        if root1.val != root2.val:
+            return False
+        else:
+            return self.isSameTree(root1.left, root2.left) and self.isSameTree(root1.right, root2.right)
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        if root:
+            isSub = self.isSameTree(root, subRoot)
+            if isSub:
+                return True
+            return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+        return False
+
+
 class Solution:
     def isSubtree(self, root: TreeNode, subRoot: TreeNode) -> bool:
     	## if the root is null, then this cannot be a subroot
