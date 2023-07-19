@@ -2,6 +2,33 @@
 https://leetcode.com/problems/top-k-frequent-elements/
 '''
 from heapq import nlargest, heappop
+"""
+Revisited on 7/18/2023
+for heap problems, remember that you can construct
+a heap using a list of tuples, where one of the elements in the tuple
+is the comparator, i.e the first element of the tuple is the frequency of the element
+and the second is the number
+
+remember that python's default implementation of heapify will result in a min heap,
+so you need to inverse the comparator (in this case, setting the frequency to negative) 
+so that the most frequent element ends up as the root of the heap
+
+"""
+
+""" a short O(NLogN) solution """
+class Solution2:
+	def topKFrequent(self, nums: [int], k: int) -> [int]:
+		countDict = dict()
+        for i in range(len(nums)):
+            if nums[i] in countDict:
+                countDict[nums[i]] += 1
+            else:
+                countDict[nums[i]] = 1
+        # sort the dict based on values, this creates a list of tuples where
+        # the key is first element and the value is the second element
+        # this works as an ONLogN solution
+        sortedTuples = sorted(countDict.items(), key=lambda x: x[1], reverse=True)
+        return [sortedTuples[i][0] for i in range(k)]
 
 class Solution:
     ## O(N^2) solution, O(N) space

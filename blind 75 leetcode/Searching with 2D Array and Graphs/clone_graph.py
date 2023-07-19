@@ -10,6 +10,70 @@ class Node:
         self.val = val
         self.neighbors = neighbors if neighbors is not None else []
 """
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+"""
+
+"""
+revisited on 7/19/2023
+Used BFS again
+Key concepts:
+1) similar to a linked list problem, you need to track
+a head and a current pointer that leads back to head.
+whenever we "visit" a node that we just popped off,
+we also need to set the current pointer to the node
+that we just created (not the node that we popped off directly though
+since we're creating new nodes and not setting them equal to the existing input node)
+
+2) keep track of the nodes that we've already created using a dict with the 
+key as the node value (since the problem states that these values are unique within the graph),
+and the created node
+
+3) as we traverse the graph using BFS, we should be able to create new nodes, and then 
+in the following iteration, we can then set the neighbors for that node based 
+on the neighbors list given for each existing node. If we've already created a node, we can
+find it in our dict.
+
+
+"""
+class Solution2:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        from collections import deque
+        if not node:
+            return None
+        q = deque()
+        q.append(node)
+        visited = [node.val]
+        # keep track of the head, which is what we'll be returning
+        # similar to a linked list problem
+        head = Node(node.val, neighbors = [])
+        # keep track of the node that we've currently made
+        cur = head
+        createdNodes = dict({node.val: head})
+        # perform a BFS through the existing graph
+        while (len(q) != 0):
+            n = q.popleft()
+            # advance cur to the node that we're evaluating currently
+            if n.val in createdNodes:
+                cur = createdNodes[n.val]
+            for neighbor in n.neighbors:
+                if neighbor.val not in visited:
+                    q.append(neighbor)
+                    visited.append(neighbor.val)
+                # if we haven't created the neighbor node, create it
+                if neighbor.val not in createdNodes:
+                    neighborNode = Node(neighbor.val, neighbors = [])
+                    createdNodes[neighbor.val] = neighborNode
+                # otherwise, retrieve node directly
+                else:
+                    neighborNode = createdNodes[neighbor.val]
+                # add to the list of neighbors for the current node
+                cur.neighbors.append(neighborNode)
+        return head
 
 class Solution:
 	## My first approach used breadth first search to go through the neighbors, and at
