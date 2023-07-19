@@ -65,7 +65,8 @@ class Solution:
 			# if a knows b, that means b could be a potential candidate
 			# so we update potential to be the current index. 
 			# this also means once we find a candidate, we'd expect that candidate
-			# to not know anyone either
+			# to not know anyone either, so the value of candidate should never change once 
+			# we find it
 			if self.celebrity.knows(candidate, i):
 				candidate = i
 

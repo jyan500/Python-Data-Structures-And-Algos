@@ -31,9 +31,8 @@ class Solution2:
 
 	    once we narrow down to 5, 1, 2,
 	    where left is index 3 (value 5), right is index 4 ( value 2) and 
-	    mid = 4 (value 1)
+	    mid = 3 + (4 - 3) // 2 = 3 + 1//2 = 3 + 0 = 3
 	    narrow down to:
-	    mid = 3 + (5 - 3) // 2 = 3 + 2 // 2 = 
 
 	    example:
 	    2, 2.5, 3, 4, 5 when 3 is the midpoint, we need to search the values to the left
