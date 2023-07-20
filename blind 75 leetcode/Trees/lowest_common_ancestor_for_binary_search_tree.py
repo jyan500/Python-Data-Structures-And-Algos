@@ -19,6 +19,27 @@ https://www.youtube.com/watch?v=kulWKd3BUcI&ab_channel=KevinNaughtonJr.KevinNaug
 ## lowest common ancestor yet
 ## however, once p and q are no longer on the same side of the tree (which means they have split, i.e either p is greater than root, but q is not greater), then the root is the lowest common ancestor
 
+"""
+Revisited on 7/20/2023, coming up with the same solution
+OLogN time because it's a binary search tree
+Key Concepts:
+the lowest common ancestor in the binary search tree is the moment when p and q are no longer on the same
+subtree, meaning either p >= root and q <= root OR p <= root and q >= root. In that case,
+the root has to be the lowest common ancestor, since in a BST, all values to the right of root
+are going to be greater, and all values on the left will always be less.
+
+"""
+class Solution2:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if p.val < root.val and q.val < root.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        if p.val > root.val and q.val > root.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        # this could just be an else statement like below, but for explanation purposes,
+        # but clearer for learning purposes
+        if p.val >= root.val and q.val <= root.val or p.val <= root.val and q.val >= root.val:
+            return root
+
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         if (p.val < root.val and q.val < root.val):
