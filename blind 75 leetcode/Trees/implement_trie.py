@@ -84,3 +84,61 @@ class Trie:
 # obj.insert(word)
 # param_2 = obj.search(word)
 # param_3 = obj.startsWith(prefix)
+
+""" 
+Revisited on 7/20/2023 
+I visualized the trie as a series of nested dictionaries,
+where you'd store increasingly large prefixes, and managed to 
+get an accepted solution out of it. The above method is still the best
+way to do this though.
+"""
+
+class Trie2:
+    def __init__(self):
+        self.words = dict()
+        self.trie = dict()
+
+    def insert(self, word: str) -> None:
+        if word not in self.words:
+            self.words[word] = 1
+        if not self.startsWith(word):
+            self.trie = self.insertHelper(self.trie.copy(), word, 0, len(word)-1)
+    
+    def insertHelper(self, trie: dict, word: str, index: int, wordLen: int) -> dict:
+        # as we progressively increase the prefix, set the prefix as the key and the value
+        # as a nested dictionary containing prefixes starting from that prefix
+        # i.e {"a": {"aa": {"aaa": {}}}}
+        # on the last prefix, which should be the whole word,
+        # return an empty dict with the prefix as the key
+        if index == wordLen:
+            return {**trie, word[:index+1]: {}}
+        elif index < wordLen:
+            prefix = word[:index+1]
+            if prefix in trie:
+                # ** spreads the existing key - value pairs of the trie into the new dict that
+                # is being returned
+                return {**trie, prefix: self.insertHelper(trie[prefix], word, index + 1, wordLen)}
+            else:
+                return {**trie, prefix: self.insertHelper({}, word, index + 1, wordLen)}
+
+ 
+
+    def search(self, word: str) -> bool:
+        return word in self.words
+      
+    def startsWithHelper(self, trie: dict, word: str, index: int, wordLen: int):
+        if index == wordLen:
+            prefix = word[:index+1]
+            if prefix in trie:
+                return True
+            return False
+        elif index < wordLen:
+            prefix = word[:index+1]
+            if prefix in trie:
+                return self.startsWithHelper(trie[prefix], word, index + 1, wordLen)
+            else:
+                return False
+        
+    def startsWith(self, prefix: str) -> bool:
+        return self.startsWithHelper(self.trie.copy(), prefix, 0, len(prefix)-1)
+
