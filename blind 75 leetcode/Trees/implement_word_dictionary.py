@@ -12,6 +12,15 @@ https://www.youtube.com/watch?v=O5yxoFS_diY&ab_channel=SaiAnishMalla
 
 The difference between this question and implement trie is that the words for the search can contain ".", which are wildcards
 we need to make use of a stack to backtrack, in order to visit all the possibilities of that wildcard
+
+Revisited on 7/21/2023
+The iterative DFS solution below is still the most straight forward, from Sai Anish Malla's channel
+Time complexity depends on how many wildcards are present in the word:
+if theres no wildcard, then it's an O(N) search, where N is the length of the word,
+ since it relies on hashmap for O(1) operations
+If theres wildcard, we factor in an additional O(N*26^k), where k is the amount of wildcard characters
+
+Space complexity is O(N), N is the amount of words in the word dictionary
 '''
 class TrieNode:
     def __init__(self):

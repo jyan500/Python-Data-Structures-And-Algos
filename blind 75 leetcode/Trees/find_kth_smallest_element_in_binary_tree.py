@@ -12,6 +12,40 @@ Time complexity: O(N), because we traverse all the elements potentially if we ha
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+"""
+Revisited on 7/22/2023
+This is similar to the solution below except it uses global variables instead of 
+passing in an array as a param that gets updated through the recursive calls
+
+Key concept:
+traversing all the way to the left most child, because this is a BST
+this will be the smallest value in the tree. We can use inorder to traverse
+the values in sorted order
+
+start decrementing k at each node afterwards, and see if k == 0, which means
+we're at the k element
+
+If so, this is the value we're looking for so set it (either in global variable,
+or via an array like the first solution)
+"""
+class Solution2:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int: 
+        self.res = 0
+        self.k = k
+        def kthSmallestHelper(root: Optional[TreeNode]):
+            if not root:
+                return
+            kthSmallestHelper(root.left)
+            self.k -= 1
+            if self.k == 0:
+                self.res = root.val
+                return
+            kthSmallestHelper(root.right)
+        
+        kthSmallestHelper(root)
+        return self.res
+
 class Solution:
     def kthSmallest(self, root: TreeNode, k: int) -> int:
         ## keep track of a nums array where nums[0] contains the current (index + 1) that we're on

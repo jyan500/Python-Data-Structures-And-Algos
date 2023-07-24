@@ -36,6 +36,75 @@ explanation:
 
 youtube.com/watch?v=eeTToT5JUUY&list=PLJjp1UcO5B7d7Fm3e45xO74UBf0QiN-wn&index=18&t=339s&ab_channel=TimothyHChang
 '''
+
+"""
+Revisited on 7/23/2023
+Slightly less efficient but still accepted ONLogN solution
+"""
+class Solution2:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        """
+        O(NLogN) time complexity, which requires inserting the new interval and then sorting 
+        then performing the merge intervals algorithm on the remaining intervals
+        """
+        # insert the interval and then sort
+        intervals.append(newInterval)
+        intervals = sorted(intervals, key = lambda x: [x[0], x[1]])
+        # do merge intervals on the remainder of the intervals
+        previousIntervals = [intervals[0]]
+        for i in range(1, len(intervals)):
+            prevStart, prevEnd = previousIntervals[-1]
+            start, end = intervals[i]
+            if prevEnd >= start:
+                mergedStart = prevStart if prevStart < start else start
+                mergedEnd = prevEnd if prevEnd > end else end
+                previousIntervals[-1] = [mergedStart, mergedEnd]
+            else:
+                previousIntervals.append(intervals[i])
+        return previousIntervals
+
+    """
+    O(3N) solution
+    1) Get all intervals into the output where the intervals start is less than the new interval's start
+    2) Attempt to insert the new interval, fixing any overlaps by updating the end to whichever interval's end is greater
+    3) Merge any remaining overlapping intervals
+    """
+    def insert2(self, intervals: [[int]], newInterval: [int]) -> [[int]]:
+    	output = []
+        for i in range(len(intervals)):
+            start = intervals[i][0]
+            newIntervalStart = newInterval[0]
+            if start < newIntervalStart:
+                output.append(intervals[i])
+        merged = False
+        for i in range(len(output)):
+            prevStart, prevEnd = output[i]
+            newStart, newEnd = newInterval
+            if prevEnd >= newStart:
+                # update only the end
+                output[i][1] = max(prevEnd, newEnd)
+                # update merged to show that we've merged
+                # and fixed an overlap
+                merged = True
+        # if there were no overlaps, just append the new interval
+        if not merged:
+            output.append(newInterval)
+        
+        # merge the remaining intervals to see if any intervals that had 
+        # a start time > then the new interval overlaps
+        startingIndex = len(output) - 1
+        previousInterval = output[startingIndex]
+        for i in range(startingIndex, len(intervals)):
+            prevStart, prevEnd = previousInterval
+            curStart, curEnd = intervals[i]
+            if prevEnd >= curStart:
+                previousInterval[1] = max(prevEnd, curEnd)
+            else:
+                previousInterval = intervals[i]
+                output.append(intervals[i])
+        return output
+
+
 class Solution:
     def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
         ## insert the intervals from the intervals list before reaching new interval
