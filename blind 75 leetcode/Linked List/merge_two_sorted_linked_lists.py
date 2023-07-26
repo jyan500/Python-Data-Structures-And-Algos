@@ -8,6 +8,57 @@ class ListNode:
         self.val = x
         self.next = None
 
+"""
+Revisited in 7/26/2023
+Key concept:
+1) when iterating through both lists,
+because the lists are sorted, if one ptr value is less than the other,
+you can continue iterating down that pointer, adding more nodes to the list
+until that condition is no longer true
+
+2) If one of the lists finishes iterating before the other,
+append the remainder of the linked list
+
+Time Complexity: O(N)
+Space Complexity: O(N)
+"""
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution2:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        newHead = ListNode()
+        cur = newHead
+        
+        ptr1 = list1
+        ptr2 = list2
+        
+        # iterate through both lists
+        while (ptr1 != None and ptr2 != None):
+            # if one val is less than the other,
+            # keep iterating through that side until it's no longer less,
+            # then switch to iterating on the other side
+            if ptr1.val < ptr2.val:
+                n1 = ListNode(val=ptr1.val)
+                cur.next = n1
+                cur = cur.next
+                ptr1 = ptr1.next
+            else:
+                n2 = ListNode(val=ptr2.val)
+                cur.next = n2
+                cur = cur.next
+                ptr2 = ptr2.next
+                
+        # append the remainder of the linked list
+        # if iteration didn't complete on one side
+        if ptr1 != None:
+            cur.next = ptr1
+        elif ptr2 != None:
+            cur.next = ptr2
+        return newHead.next
+
 ## my attempt
 ## where I went wrong was that I assumed that you could always traverse down
 ## the lists simultaneously, rather than alternating traversing between one list or the other
