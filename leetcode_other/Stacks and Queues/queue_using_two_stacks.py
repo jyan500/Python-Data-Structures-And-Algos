@@ -12,6 +12,102 @@ Notes:
 You must use only standard operations of a stack, which means only push to top, peek/pop from top, size, and is empty operations are valid.
 Depending on your language, the stack may not be supported natively. You may simulate a stack using a list or deque (double-ended queue) as long as you use only a stack's standard operations.
 
+'''
+
+"""
+Revisited on 7/26/2023
+https://www.youtube.com/watch?v=EUNGb8PMoCc&ab_channel=HackersRealm
+
+When pushing to the queue, we push onto the self.input stack
+When peeking or popping from the queue, if the self.output stack is empty, 
+we pop all the elements off of self.input stack, and onto the self.output stack, essentially pushing the elements
+into self.output stack in the reverse order
+
+From there, we can either call self.output.pop() or self.output[-1] to get the last element
+
+To check whether the queue is empty, we check both stacks
+
+pop() and peek() are the bottlenecks, both taking at least O(length of the input queue)
+
+example:
+
+enqueue 1
+input = [1]
+output = []
+
+enqueue 2
+input = [1, 2]
+output = []
+
+peek
+input = []
+output = [2, 1]
+
+returns 1
+
+enqueue 3
+input = [3]
+output = [2, 1]
+
+pop
+input = [3]
+output = [2, 1]
+
+returns 1
+
+pop
+input = [3]
+output = [2]
+
+returns 2
+
+pop
+input = []
+output = [3]
+
+returns 3
+
+"""
+class MyQueue2:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.input = []
+        self.output = []
+        
+
+    def push(self, x: int) -> None:
+        """
+        Push element x to the back of queue.
+        """
+        self.input.append(x)
+
+    def pop(self) -> int:
+        """
+        Removes the element from in front of queue and returns that element.
+        """
+        res = self.peek()
+        self.output.pop()
+        return res
+
+    def peek(self) -> int:
+        """
+        Get the front element.
+        """
+        if len(self.output) == 0:
+            while (len(self.input) != 0):
+                self.output.append(self.input.pop())
+        return self.output[-1]
+
+    def empty(self) -> bool:
+        """
+        Returns whether the queue is empty.
+        """
+        return len(self.input) == 0 and len(self.output) == 0
+
+'''
 My initial implementation:
 
 The idea is that a queue is essentially a stack where the items are reversed

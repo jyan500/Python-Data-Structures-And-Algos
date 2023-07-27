@@ -34,6 +34,32 @@ later versions by setting the left = midpoint + 1 to search the right half.
 # @return an integer
 # def isBadVersion(version):
 
+"""
+Revisited on 7/26/2023
+Using recursive binary search
+OLogN Time
+"""
+class Solution2:
+    def firstBadVersion(self, n: int) -> int:
+        left = 1
+        right = n
+        def helper(left, right):
+            mid = left + (right-left)//2
+            isCurrentVersionBad = isBadVersion(mid)
+            # when the left exceeds the right,
+            # that means we should've found our first bad version
+            if left >= right:
+                return mid
+            # if the current version is bad, that means we may not have found
+            # the first "bad" version, since any versions after this are bad, search the left half  
+            if isCurrentVersionBad:
+                return helper(left, mid)
+            # if the current version is good, that means the bad version is somewhere in the future
+            # release, so we search the right half
+            else:
+                return helper(mid+1, right)
+        return helper(left, right)
+
 class Solution:
     ## Time complexity: O(LogN), since we're splitting the possibilities in half each time
     def firstBadVersion(self, n):
