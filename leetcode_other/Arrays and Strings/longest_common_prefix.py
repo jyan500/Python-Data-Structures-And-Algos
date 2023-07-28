@@ -15,6 +15,34 @@ Output: ""
 Explanation: There is no common prefix among the input strings.
 
 '''
+"""
+Revisited 7/28/2023
+"pythonic" solution
+1) use zip to get a list of tuples of each character based on index 
+it uses the * operator in python to unpack a list as parameters for the function
+i.e a = ["car", "cired", "core"] -> zip(*a) evaluates to -> zip("car", "cired", "core")
+-> [("c", "c", "c"), ("a", "i", "o"), ("r", "r", "r")]
+Note there's only three entries because the shortest string is only length 3
+
+If each character in the tuple is the same, that means they share the same prefix
+If a character is not the same, we end the loop early
+
+O(N^2) time complexity, because the len(set(zipped)) is O(N) operation, for each tuple of N characters.
+In the worst case, each string is the same and we end up checking the whole length of it
+O(N^2 space) for the zip(*strs), since it's a tuple of each character in all strings? 
+it might also just be the length of the prefix string
+"""
+class Solution2:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        prefix = ""
+        for zipped in zip(*strs):
+            if len(set(zipped)) == 1:
+                prefix += zipped[0]
+            else:
+                break
+       
+        return prefix
+
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
         '''
