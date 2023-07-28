@@ -12,7 +12,64 @@ Example 2:
 Input: nums = [0]
 Output: [0]
 
+https://leetcode.com/problems/move-zeroes/
+https://www.youtube.com/watch?v=aayNRwUN3Do&ab_channel=NeetCode
+
+Revisited on 7/28/2023
+Think about moving the non-zero values to the front of the list rather than moving zeroes
+to the back.
+By using two pointers, one slow and one fast, if our fast pointer reaches a non zero element
+we swap the elements between the indices of the fast and slow pointer. 
+
+And then increment slow until it's equal to zero. since we just swapped a non zero value into this index.
+The reason why we guarantee the next spot being zero, is because our fast pointer would've reached that
+current spot beforehand and swapped a value if it was non zero, which guarantees the spot where slow pointer
+is will now be zero. 
+
+0 1 0 3 12
+slow = 0
+fast = 0
+
+slow = 0
+fast = 1
+this is a non-zero value (1)
+swap index 0 and 1
+increment slow by 1
+
+1 0 0 3 12
+slow = 1
+fast = 2
+
+slow = 1
+fast = 3
+this is a non zero value (3)
+swap index 1 and 3
+increment slow by 1
+
+1 3 0 0 12
+
+slow = 2
+fast = 4
+
+this is a non zero value (12)
+swap index 2 and 4
+increment slow by 1
+
+1 3 12 0 0
+
+fast has reached the end of the list, done
+
 '''
+class Solution2:
+    def moveZeroes(self, nums: List[int]) -> None:
+        slow = 0
+        fast = 0
+        while (fast < len(nums)):
+            if nums[fast] != 0:
+                nums[fast], nums[slow] = nums[slow], nums[fast]
+                slow += 1
+            fast += 1
+
 class Solution:
     def moveZeroes(self, nums: List[int]) -> None:
         '''
