@@ -45,14 +45,16 @@ class Solution:
         ## Get the middle of linked list by utilizing a fast and slow pointer, where the fast pointer goes through
         ## twice as fast as the slow
         ## because fast iterates through twice as fast, slow will contain the middle of the linked list
+        ## this is the same as floyd's cycle detection algorithm
         while (fast != None and fast.next != None):
             slow = slow.next
             fast = fast.next.next
         
         ## to account for edge case for odd number of list nodes (when fast pointer is None, for even number nodes, fast pointer would be the last element and not None), we need to shift the slow pointer by one over since
         ## in an odd number, you need to shift one over to go from the middle to the second half
-        if (fast != None):
-            slow = slow.next
+        # Update: 7/28/2023 this might not be necessary?
+        # if (fast != None):
+        #     slow = slow.next
             
         
         
