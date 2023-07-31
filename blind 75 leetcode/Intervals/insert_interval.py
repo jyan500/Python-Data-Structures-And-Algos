@@ -36,7 +36,38 @@ explanation:
 
 youtube.com/watch?v=eeTToT5JUUY&list=PLJjp1UcO5B7d7Fm3e45xO74UBf0QiN-wn&index=18&t=339s&ab_channel=TimothyHChang
 '''
-
+"""
+Revisited again on 7/31/2023,
+slightly cleaner solution than the original 
+"""
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        # find out where the interval should be inserted
+        i = 0
+        while (i < len(intervals) and intervals[i][0] < newInterval[0]):
+            i += 1
+        # insert the interval and then perform merge intervals on all intervals before this one
+        toInsert = intervals[:i]
+        toInsert.append(newInterval)
+        previousIntervals = [toInsert[0]]
+        for j in range(1, len(toInsert)):
+            prevStart, prevEnd = previousIntervals[-1]
+            curStart, curEnd = toInsert[j]
+            if prevEnd >= curStart:
+                previousIntervals[-1][1] = max(prevEnd, curEnd)
+            else:
+                previousIntervals.append(toInsert[j])
+        # perform merge interval on the remaining intervals
+        restOfIntervals = previousIntervals + intervals[i: ]
+        result = [previousIntervals[0]]
+        for k in range(1, len(restOfIntervals)):
+            prevStart, prevEnd = result[-1]
+            curStart, curEnd = restOfIntervals[k]
+            if prevEnd >= curStart:
+                result[-1][1] = max(prevEnd, curEnd)
+            else:
+                result.append(restOfIntervals[k])
+        return result
 """
 Revisited on 7/23/2023
 Slightly less efficient but still accepted ONLogN solution

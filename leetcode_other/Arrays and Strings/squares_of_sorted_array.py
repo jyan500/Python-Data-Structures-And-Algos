@@ -24,6 +24,86 @@ Follow up: Squaring each element and sorting the new array is very trivial, coul
 
 https://leetcode.com/problems/squares-of-a-sorted-array/
 '''
+
+"""
+Revisited on 7/31/2023
+Key concepts:
+1) find the split point, where negative becomes positive
+2) split into two separate arrays
+    -edge cases:
+        - all negative
+        1) in the case all numbers are negative, check to see if the last number is negative or not
+        2) reverse all numbers, square them and return
+        - all positive
+        1) square all numbers and return
+3) square each number
+4) reverse the order of the negative arrays
+5) perform merge sorted arrays on the two separate halves
+O(N) time
+O(N) space
+"""
+class Solution2:
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+      
+        splitPoint = 0
+        for i in range(len(nums)):
+            if nums[i] >= 0:
+                splitPoint = i
+                break
+        # if split point is zero,
+        # check to see if the last element is positive or negative
+        # if the last elements is negative, that means that all elements
+        # before it are also negative since it's in sorted order, which means
+        # we need to reverse the order of the elements after squaring it
+        # if the last element is not negative, so we can just
+        # square each number in the array and return it since they're all positive
+        if splitPoint == 0:
+            if nums[-1] > 0:
+                  return [num * num for num in nums]
+            else:
+                squares1 = []
+                
+                for i in range(len(nums)-1,-1,-1):
+                    squares1.append(nums[i] * nums[i])
+                return squares1
+        negatives = nums[:splitPoint]
+        positives = nums[splitPoint:]
+        squares1 = []
+        for i in range(len(negatives)-1,-1,-1):
+            squares1.append(negatives[i] * negatives[i])
+        squares2 = [num * num for num in positives]
+        # perform merge sorted arrays,
+        # use two pointers
+        # while one element on one side is less than the other,
+        # keep incrementing that side
+        m = len(squares1)
+        n = len(squares2)
+        i = 0
+        j = 0
+        merged = []
+        while (i < m and j < n):
+            if squares1[i] < squares2[j]:
+                merged.append(squares1[i])
+                i+=1
+            elif squares1[i] > squares2[j]:
+                merged.append(squares2[j])
+                j+=1
+            else:
+                merged.append(squares1[i])
+                merged.append(squares2[j])
+                i+=1
+                j+=1
+        # if one of the arrays is still less, than append the rest of the elements
+        if i < m:
+            while (i < m):
+                merged.append(squares1[i])
+                i += 1
+        if j < n:
+            while (j < n):
+                merged.append(squares2[j])
+                j += 1
+        return merged
+
 class Solution:
     ## O(N) Time, O(N) space solution
     ## handling three cases (all negative numbers), (all positive numbers), (both)
