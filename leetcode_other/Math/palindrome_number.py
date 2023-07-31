@@ -1,5 +1,6 @@
 """
 https://leetcode.com/problems/palindrome-number/
+7/31/2023
 """
 class Solution:
     def isPalindrome(self, x: int) -> bool:
