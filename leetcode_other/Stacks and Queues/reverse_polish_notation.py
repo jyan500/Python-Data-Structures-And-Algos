@@ -31,6 +31,70 @@ Explanation: ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
 
 https://leetcode.com/problems/evaluate-reverse-polish-notation/
 '''
+
+"""
+Revisited on 8/2/2023
+Similar solution to below:
+Key concepts:
+1) Use a stack
+2) Continually add any digits to the stack
+3) If you see an operator, pop the last two items off the stack (both values should be digits)
+evaluate, and then push back onto the stack
+i.e 
+tokens = ["3", "5", "+", "4", "/"]
+1) adds 3 and 5 to the stack
+2) stack = [3, 5], gets to "+"
+3) pops off 5 then 3
+   5 + 3 = 8, adds 8 to the stack
+   stack = [8]
+4) adds 4 to the stack
+   stack = [8, 4]
+5) Division operator:
+   8/4 = 2
+   Adds 2 to the stack
+   [2]
+
+Return stack[0]
+
+4) In order to round a decimal towards 0, convert the division operation (i.e -2/4) to an int:
+int(-2/4) = 0, if you don't do this, it's -.5 instead. Floor will actually round down to -1, so 
+don't use that here
+
+"""
+class Solution:
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = []
+        for i in range(len(tokens)):
+            token = tokens[i]
+            if i == 0:
+                stack.append(int(token))
+            else:
+                if token == "+":
+                    firstNum = stack.pop()
+                    secondNum = stack.pop()
+                    res = secondNum + firstNum
+                    stack.append(res)
+                elif token == "-":  
+                    firstNum = stack.pop()
+                    secondNum = stack.pop()
+                    res = secondNum - firstNum
+                    stack.append(res)
+                elif token == "*":
+                    firstNum = stack.pop()
+                    secondNum = stack.pop()
+                    res = secondNum * firstNum
+                    stack.append(res)
+                elif token == "/":    
+                    firstNum = stack.pop()
+                    secondNum = stack.pop()
+                    # int rounds towards zero, even for negative decimals below 1
+                    # i.e -.5 evaluates to 0
+                    res = int(secondNum / firstNum)
+                    stack.append(res)
+                else:
+                    stack.append(int(token))
+        return stack[0]
+
 from math import floor, ceil
 class Solution:
     ## Stack solution by TimZeng
