@@ -4,7 +4,11 @@ Top-Down Solution: https://www.youtube.com/watch?v=Kf_M7RdHr1M&ab_channel=Tushar
 Bottom Up Solution: https://www.youtube.com/watch?v=H9bfqozjoqs&t=3s&ab_channel=NeetCode
 
 The Top Down Solution's Time Complexity is
-O(total value * total amount of coins)
+O(total amount * total amount of coins)
+
+Space Complexity is
+O(Total amount), as the memoization dictionary should contain a key value pair
+for each amount
 '''
 class Solution:
    	## bottom up solution 
