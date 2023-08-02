@@ -2,6 +2,9 @@
 https://leetcode.com/problems/coin-change/submissions/
 Top-Down Solution: https://www.youtube.com/watch?v=Kf_M7RdHr1M&ab_channel=TusharRoy-CodingMadeSimple	
 Bottom Up Solution: https://www.youtube.com/watch?v=H9bfqozjoqs&t=3s&ab_channel=NeetCode
+
+The Top Down Solution's Time Complexity is
+O(total value * total amount of coins)
 '''
 class Solution:
    	## bottom up solution 
