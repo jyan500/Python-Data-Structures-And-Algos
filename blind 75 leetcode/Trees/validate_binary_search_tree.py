@@ -61,7 +61,26 @@ We can do this by keeping track of a min and max as we traverse the tree
 
  continue this process for the rest of the tree
 """
-class Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+""" 
+8/3, same idea but shorter solution 
+"""
+class Solution3:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def helper(root, minVal, maxVal):
+            if root:
+                return minVal < root.val < maxVal and helper(root.left, minVal, root.val) and helper(root.right, root.val, maxVal)
+            return True
+        return helper(root, float("-inf"), float("inf"))
+
+class Solution2:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:        
         return self.isValidBSTHelper(root, float("-inf"), float("inf"))
    
@@ -73,7 +92,7 @@ class Solution:
         else:
             return self.isValidBSTHelper(root.left, minimum, root.val) and self.isValidBSTHelper(root.right, root.val, maximum)
 
-class Solution:
+class Solution1:
     def isValidBST(self, root: TreeNode) -> bool:
         return self.validate(root, None, None)
     def validate(self, root, min_val, max_val) -> bool:
