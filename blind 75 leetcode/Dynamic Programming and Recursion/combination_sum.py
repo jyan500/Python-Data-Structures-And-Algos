@@ -35,6 +35,8 @@ Input: candidates = [1], target = 2
 Output: [[1,1]]
 
 https://stackoverflow.com/questions/49773957/confusing-about-passing-list-in-recursion-function-of-python
+
+Time Complexity: O(2^target) exponential
 '''
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
