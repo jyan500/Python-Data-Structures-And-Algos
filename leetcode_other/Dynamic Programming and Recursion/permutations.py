@@ -29,6 +29,23 @@ During the backtracking, the current permutation will then look for a different 
 
 '''
 
+"""
+Revisited on 8/4/2023
+Same concept as above, but a slightly shorter solution that populates 
+a set (still an accepted solution despite the return type not being a list)
+"""
+class Solution2:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        self.res = set()
+        def helper(nums, cur):
+            if len(nums) == 0:
+                self.res.add(tuple(cur))
+                return
+            for i in range(len(nums)):
+                helper(nums[0:i]+nums[i+1:], cur + [nums[i]])
+        helper(nums, [])           
+        return self.res
+
 class Solution:
     ## time complexity is O(N!) (factorial) (or is it O(N*N!))? since the list slicing could be O(N)
     ## space is also O(N!) to keep track of all different permutations
