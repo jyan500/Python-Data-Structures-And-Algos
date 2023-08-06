@@ -19,6 +19,35 @@ as this would represent the lowest common ancestor before the paths diverged
 #         self.left = None
 #         self.right = None
 
+"""
+Revisited on 8/5/2023
+Recursive Concept from https://www.youtube.com/watch?v=WO1tfq2sbsI&ab_channel=CrackingFAANG
+1) While traversing, if we find p or q, return the root
+The idea is that once we return the root in our recursive call on one side,
+we check to see if the other side's recursive call also returned a root, or if it returned None
+2) If both sides returned a root, that means an ancestor was found, but we can continue to bubble up
+the recursion to naturally find the lowest common ancestor.
+If only one side returned root, we will continue going up the recursion until:
+1) both sides return a root, OR
+2) the recursion ends, which means the returned root is the lowest common ancestor, 
+because the other target node is on the same side is this root
+"""
+class Solution2:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if not root:
+            return None
+        if root == p or root == q:
+            return root
+        root1 = self.lowestCommonAncestor(root.left, p, q)
+        root2 = self.lowestCommonAncestor(root.right, p, q)
+        if root1 and root2:
+            return root
+        if (root1 and not root2):
+            return root1
+        elif (not root1 and root2):
+            return root2
+            
+            
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         ## search the tree to find the path to p
