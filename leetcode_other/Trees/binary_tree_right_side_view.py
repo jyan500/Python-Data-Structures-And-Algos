@@ -25,9 +25,14 @@ Concept:
 perform a level order traversal on our tree using a queue and BFS:
 for each node that gets popped from the queue, add its left and right children to the queue
 except on each level, we only add the last node of our queue to our result list, as this will be the rightmost node on our current level
+(i.e the right most node that is visible if we were to be standing on the right side of the tree as mentioned in the problem description)
 
 Time complexity: O(N), representing the nodes in the tree
 space complexity: O(N), N nodes in the queue
+
+Revisited on 8/9/2023
+One important note is that we save the length of the queue before we start popping out elements from the level
+so we know which element was last in the level
 
 '''
 # Definition for a binary tree node.

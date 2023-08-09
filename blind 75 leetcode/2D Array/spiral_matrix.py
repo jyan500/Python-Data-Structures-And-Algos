@@ -6,6 +6,45 @@
 	concept: iterate through the indicies in a spiral fashion, by keeping within the boundaries of the 
 	matrix without hitting a coordinates that we've already visited
 '''
+"""
+Revisited on 8/9/2023 with a similar concept but cleaner solution
+O(N^M) time, where M is the number of rows and N is the number of columns
+O(N^M) space, where M is the number of rows and N is the number of columns
+"""
+
+class Solution:
+    def inBounds(self, i, j, matrix):
+        return 0 <= i < len(matrix) and 0 <= j < len(matrix[0])
+    
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        # go as far to the right as you can
+        # go as far down as you can
+        # go as far left as you can
+        # go as far up as you can
+        # all of these, stop before you visit the same node again
+        # repeat...
+        visited = set()
+        visited.add((0,0))
+        numCells = len(matrix) * len(matrix[0])
+        # right, down, left, up
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)] 
+        res = [matrix[0][0]]
+        i = 0
+        j = 0
+        while len(visited) < numCells:
+            for d in directions:
+                x, y = d
+                while (True):
+                    newX, newY = i+x,j+y
+                    if self.inBounds(newX, newY, matrix) and (newX, newY) not in visited:
+                        visited.add((newX, newY))
+                        res.append(matrix[newX][newY])
+                        i += x
+                        j += y
+                    else:
+                        break
+        return res
+            
 class Solution:
     def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
         rows = len(matrix)
