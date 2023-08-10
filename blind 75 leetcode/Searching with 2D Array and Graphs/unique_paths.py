@@ -1,3 +1,45 @@
+"""
+https://leetcode.com/problems/unique-paths/
+Time Complexity: O(N*M)
+Space Complexity: O(N*M)
+
+Concept:
+1) We can use DFS to find the number of ways to get to a path from a given cell,
+and use memoization to store the amount of ways per cell, so that if we reach
+this cell again, we don't need to recalculate the amount of paths
+2) By the time of DFS goes back to (0, 0), it would be the sum of the num paths stored
+for the cell directly to the right and down
+
+"""
+class Solution2:
+    def inBounds(self, i, j, m, n):
+        return 0 <= i < m and 0 <= j < n
+    def uniquePaths(self, m: int, n: int) -> int:
+        # DFS
+        # can only go right and down 
+        directions = [(0, 1), (1, 0)]
+        self.memo = dict()
+        def dfs(i, j, m, n):
+            if (i,j) in self.memo:
+                return self.memo[(i,j)]
+            # reached the end
+            if i == m - 1 and j == n - 1:
+                return 1
+            count = 0
+            for d in directions:
+                x, y = d
+                newX, newY = i + x, j + y
+                if self.inBounds(newX, newY, m, n) and (newX, newY) not in self.visited:
+                    count += dfs(newX, newY, m, n)
+            # for a given cell, save the amount of ways to get to the finish,
+            # and re-use this in subsequent calls so we don't need to recalculate
+            # the amount of paths for a given cell
+            self.memo[(i, j)] = count
+            return self.memo[(i, j)]
+     
+        count = dfs(0, 0, m, n)
+        return count
+        
 class Solution:
     def uniquePaths(self, m: int, n: int) -> int:
     	## m = num of rows
