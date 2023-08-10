@@ -25,6 +25,53 @@ Test Cases
 "ABCESEEEFS"
 '''
 
+"""
+Revisited on 8/10/2023
+
+Concept:
+1) DFS within grid
+2) when we go down a given path starting from a cell, we want to keep track of the cells we've already visited so that
+we don't go back into a cell we've already been to. However, after the path exploration is done for that cell, we want to 
+pop off all the cells we visited so that we can take into account other paths that may visit these same cells. Hence the 
+visited.remove((i,j)) in the case we're returning False from dfs because no letters could be found.
+3) We start by initially finding a starting point where the first letter of our word is found, and then gradually increase
+the index as we find more characters, until our index == len(word), which means there are no more characters to be found,
+so we've found the whole string and can return True 
+
+Time Complexity: O(M^N * (4^K)), where M is the number of rows and N is the number of columns, and then 4^K states
+that we can go in four directions, and then for each direction,
+we can go another 4 and so on, up to the length of the word K
+
+Space Complexity: O(N*M), for the additional visited set which could hold every cell in the grid at some point
+
+"""
+class Solution2:
+    def inBounds(self, i, j, board):
+        return 0 <= i < len(board) and 0 <= j < len(board[0])
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        self.visited = set()
+        def dfs(i, j, board, curIndex, word):
+            self.visited.add((i, j))
+            if curIndex == len(word):
+                return True
+            for d in directions:
+                x, y = d
+                newX, newY = i+x, j+y
+
+                if self.inBounds(newX, newY, board) and word[curIndex] == board[newX][newY] and (newX, newY) not in self.visited:
+                    if dfs(newX, newY, board, curIndex + 1, word):
+                        return True
+            self.visited.remove((i,j))
+            return False
+        
+        for i in range(len(board)):
+            for j in range(len(board[0])):      
+                if board[i][j] == word[0]:
+                    if dfs(i, j, board, 1, word):
+                        return True
+        return False
+
 '''
 not a working solution, but somewhere I went wrong when figuring out when to reset the visited variable
 class Solution:
