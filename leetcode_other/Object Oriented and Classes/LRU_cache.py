@@ -45,8 +45,68 @@ O(1) get and O(1) put
 O(N) space
 '''
 from collections import OrderedDict
-class LRUCache:
 
+"""
+Second try using ordereddict solution 8/15/2023
+O(1) get and O(1) put
+O(N) space
+
+Concept is the same as above, keep the most recently used items 
+in the back of the ordered dict, since the ordered dict keeps the order
+at which keys are inserted
+
+Whenever we call get or put on an item, we delete that item from the map and re-insert it into the
+bback of the ordered dict to show it was recently used.
+
+The least recently used will always end up in the front of the ordered dict, which we can 
+access in O(1) using map.popitem(last=False)
+
+"""
+class LRUCache:
+    def __init__(self, capacity: int):
+        from collections import OrderedDict
+        self.capacity = capacity
+        self.length = 0
+        self.map = OrderedDict()
+        
+    def get(self, key: int) -> int:
+        if key in self.map:
+            # find the element in queue, pop it and append it to the front
+            val = self.map[key]
+            del self.map[key]
+            self.map[key] = val
+            return val
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+
+        if key in self.map:
+            # remove from the queue and append it to the front
+            # to indicate it was recently used
+            del self.map[key]
+            self.map[key] = value
+        else:
+            # before inserting a new element...
+            if self.length >= self.capacity:
+                # if length exceeds capacity,
+                # get the last element in the queue which is the least recently used
+                # (the front of the array)
+                # pop the element out
+                # remove from dict
+                self.map.popitem(last=False)
+                self.length -= 1
+
+            # store both the value and index
+            self.map[key] = value
+            self.length += 1
+
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+
+class LRUCache2:
     def __init__(self, capacity: int):
         self.capacity = capacity
         self.num_items = 0
@@ -126,6 +186,67 @@ class LRUCache:
     '''
         
         
+
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+
+class LRUCache3:
+    """
+
+    First try on 8/15/2023 
+
+    queue to keep track of most recently used, where the least recently used is in the back
+    Dict to keep track of key value pair, where the value holds the value + index into the queue
+    Whenever we put(), insert into map, insert into queue in the zero position if it does not exist. If it does,
+    pop it from the queue based on index and insert it back into the front to indicate it was just used
+    Whenever we get(), get the value from the index. Do the same update on the queue as put to insert the
+    most recently used back into the front
+
+    O(N) get and put (because list index() is an O(N) operation)
+    O(N) space
+    """
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.length = 0
+        self.map = dict()
+        self.q = []
+
+    def get(self, key: int) -> int:
+        if key in self.map:
+            # find the element in queue, pop it and append it to the front
+            self.q.pop(self.q.index(key))
+            self.q.append(key)
+            return self.map[key]
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+
+        if key in self.map:
+            # remove from the queue and append it to the front
+            # to indicate it was recently used
+            self.q.pop(self.q.index(key))
+            self.q.append(key)
+            self.map[key] = value
+        else:
+            # before inserting a new element...
+            if self.length >= self.capacity:
+                # if length exceeds capacity,
+                # get the last element in the queue which is the least recently used
+                # (the front of the array)
+                # pop the element out
+                # remove from dict
+                k = self.q.pop(0)
+                self.map.pop(k)
+                self.length -= 1
+
+            # add the key to the front of the queue
+            self.q.append(key)
+            # store both the value and index
+            self.map[key] = value
+            self.length += 1
 
 
 # Your LRUCache object will be instantiated and called as such:
