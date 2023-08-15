@@ -28,7 +28,55 @@ the items to keep it in monotonic decreasing order
 
 https://leetcode.com/problems/daily-temperatures/
 https://www.youtube.com/watch?v=cTBiBSnjO3c&ab_channel=NeetCode
+
 '''
+
+"""
+Revisited on 8/15, watching Neetcode
+
+Concept:
+iterate through temps, push a tuple containing the value and the index
+if the current temp is greater than the top of the stack, record the result and pop off the top of the stack
+in a while loop, continue to do this process until the current temp is not greater than the top of the stack
+
+input = [73,74,75,71,69,72,76,73]
+result = [0, 0, 0, 0, 0, 0, 0, 0]
+i = 0 stack = [(73, 0)]
+i = 1 stack = [(73, 0)], 74 > 73, i = 0 in our result, record 1 - 0 and pop 73 off the stack
+i = 2 stack = [(74, 1)], 75 > 74, at i = 1 in our result, record 1 - 0 and pop 74 off the stack
+i = 3 stack = [(75, 2)] 71, 71 < 75, continue pushing
+i = 4 stack = [(75, 2), (71, 3)], 69 < 71, continue pushing
+i = 5 stack = [(75, 2), (71, 3), (69, 4)] 72, 69 < 72, at i = 4 in our result, record 5 - 4, pop 69 off stack
+(we still are checking 72 here via the while loop)
+i = 5 stack = [(75, 2), (71, 3)] 72 72 < 71, at i = 3, record 5 - 3, pop 71 off the stack
+75 > 72, so our while loop breaks here
+i = 6 stack = [(75, 2)] 76, 76 > 75, at i = 2, record 6 - 2 = 4, pop off stack
+stack = [(76, 6)], 73, 73 < 76
+stack = [(76, 6), (73, 7)], no more elements to compare
+
+O(N) time:
+even though there is a while loop, 
+it simply pops out stack elements one by one,
+and there can't be more than n elements pushed inside the stack as every element is pushed once.
+
+O(N) space
+""" 
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        res = [0 for i in range(len(temperatures))]
+        stack = []
+        for i in range(len(temperatures)):
+            if len(stack) > 0:
+                while stack:
+                    top, index = stack[-1]
+                    if temperatures[i] > top:
+                        res[index] = i - index
+                        stack.pop()   
+                    else:
+                        break
+            stack.append((temperatures[i], i))
+        return res
+
 class Solution:
     ## Brute Force
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
