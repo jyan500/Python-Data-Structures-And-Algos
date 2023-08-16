@@ -1,3 +1,30 @@
+"""
+Revisited 8/16/2023
+Similar solution to below, top down recursive approach, except 
+we start from the front of the array instead of the back
+Key concept (similar to knapsack problem):
+1) either rob the current house at i and then jump to i+2, or 
+2) skip this house i and rob the next house (i+1)
+3) Use memoization to figure out at house i, what's the max profit I can make? And then 
+re-use that subproblem if that house i is reached in a future recursive call
+
+O(N) time
+"""
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        self.memo = dict()
+        def helper(nums, i):
+            if i in self.memo:
+                return self.memo[i]
+            if i >= len(nums):
+                self.memo[i] = 0
+                return 0
+            currentHouse = nums[i] + helper(nums, i+2)
+            nextHouse = helper(nums, i+1)
+            self.memo[i] = max(currentHouse, nextHouse)
+            return self.memo[i]
+        return helper(nums,0)
+
 class Solution:
     def rob(self, nums: List[int]) -> int:
         '''
