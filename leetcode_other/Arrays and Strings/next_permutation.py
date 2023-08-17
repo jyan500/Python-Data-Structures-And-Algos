@@ -2,6 +2,64 @@
 https://leetcode.com/problems/next-permutation/
 https://www.youtube.com/watch?v=4wlBBRo4tYY&ab_channel=SaiAnishMalla
 '''
+
+"""
+Revisited on 8/17/2023
+Re-wrote a solution based on my understanding of Sai Anish Malla's video
+
+1) starting from the back of the array, find the first descending number
+2) using the descending number, figure out the first number which is greater than
+our descending number (this is our swap point)
+3) swap these two numbers
+4) starting from the index of our first descending number + 1, reverse the order of the list
+to get the next permutation as the result.
+
+There's an edge case where the numbers are in descending order,
+which breaks steps 1), and 2)
+(i.e [3, 2, 1]), we just need to reverse the list in place in that case
+
+Time Complexity: O(3N), 3 separate one pass operations
+Space Complexity: O(1)
+"""
+class Solution2:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        descending = 0
+        swap = 0
+        # find the first descending number
+        for i in range(len(nums)-2,-1,-1):
+            if nums[i] < nums[i+1]:
+                descending = i
+                break
+        
+        # find the swapping point, which is the first number that is greater than our
+        # descending number
+        for i in range(len(nums)-1,-1,-1):
+            if nums[descending] < nums[i]:
+                swap = i
+                break
+
+        # if the list is full descending order, just reverse the whole list
+        if descending == 0 and swap == 0:
+            l = 0
+            r = len(nums)-1
+            while (l <= r):
+                nums[l],nums[r] = nums[r],nums[l]
+                l += 1
+                r -= 1
+        else:  
+            # swap these numbers
+            nums[descending],nums[swap]=nums[swap],nums[descending]
+            # reverse the list in place one place after descending
+            l = descending + 1
+            r = len(nums)-1
+            while (l <= r):
+                nums[l],nums[r] = nums[r],nums[l]
+                l += 1
+                r -= 1
+
 class Solution:
     def nextPermutation(self, nums: List[int]) -> None:
         """
