@@ -6,6 +6,45 @@ test case #1: [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
 test case #2: [[3,3,3],[3,1,3],[0,2,4]]
 '''
 
+"""
+8-18-2023
+Condensed Solution
+"""
+class Solution:
+    def inBounds(self, x, y, heights):
+        return 0 <= x < len(heights) and 0 <= y < len(heights[0])
+    
+    def isPacific(self, x, y):
+        return x == 0 or y == 0
+
+    def isAtlantic(self, x, y, heights):
+        return x == len(heights)-1 or y == len(heights[0])-1
+    
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        self.res = []
+        self.directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        def dfs(i, j, heights, visited, temp):
+            if temp[0] and temp[1]:
+                return True
+            if self.isPacific(i, j):
+                temp[0] = True
+            if self.isAtlantic(i, j, heights):
+                temp[1] = True
+            visited.add((i, j))
+            for d in self.directions:
+                x, y = d
+                newX, newY = i+x, y+j
+                if self.inBounds(newX, newY, heights) and (newX, newY) not in visited:
+                    if heights[newX][newY] <= heights[i][j]:
+                        dfs(newX, newY, heights, visited, temp)
+            return temp[0] and temp[1]
+        
+        for i in range(len(heights)):
+            for j in range(len(heights[0])):
+                if dfs(i, j, heights, set(), [False, False]):
+                    self.res.append([i,j])
+        return self.res
+
 # revisited on 7-14-2023, brute force solution that's O(N^2 * (N + M)),
 # where M is the amount of nodes traversed starting from N within the DFS
 class Solution2:

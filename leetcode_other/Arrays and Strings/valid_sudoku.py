@@ -7,7 +7,8 @@ Key concepts:
 
 It only requires you to check whether duplicate number exist within a given row, given col, 
 and given 3x3 square within the 9x9 grid. We don't need to worry about whether
-we can actually "solve" the sudoku in the given state (i.e filling in numbers 1-9 for each col, row, etc)
+we can actually "solve" the sudoku in the given state, just that the filled in numbers are not duplicated
+(i.e filling in numbers 1-9 for each col, row, etc)
 
 1 2 3 4 5 6 7 8 *
                 2
