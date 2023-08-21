@@ -6,6 +6,115 @@ https://www.youtube.com/watch?v=CE2b_-XfVDk&t=324s&ab_channel=TusharRoy-CodingMa
 Top Down Solution
 https://www.youtube.com/watch?v=ekKYRYFEm9w&list=PLQdWvigIOnscz0Fgps9PtnymVkvJrZylH&index=5&ab_channel=AnuragVishwa
 '''
+
+"""
+Revisited on 8/21/2023
+adapted from: 
+https://leetcode.com/problems/longest-increasing-subsequence/discuss/1124603/Top-DownBackTrackingMemoization
+Top down approach:
+1) Find increasingly larger numbers within the array
+2) when one is found, make a recursive call to find the next greatest number, where the result of this
+recursive call will be the max length subsequence that can be found starting at this number. 
+Pass in the index at which this element was found.
+3) For memoization, we store the max length mapped to each index of nums.
+4) Our "base case" is technically when we pass in an element, and no greater number is found.
+In that case, the length of the subsequence is just 1, so we return the length
+
+In the leetcode problem, it passes in the index instead of a smaller slice of the array which is smart
+to save space. That way, we can just key into the original nums array and know the index which makes
+memoization much easier.
+
+Time complexity: O(N^2) (one loop per element, and then additional recursive calls from start to n-1)
+Space Complexity: O(N^2) recursive calls
+
+Example:
+nums = [10, 9, 2, 5, 3, 7, 101, 18]
+
+1) 
+self.memo = {}
+first call:
+starting from i = 0
+10
+
+loops through 9 ... 18
+finds 101 > 10
+
+num = 101
+start = 6
+dfs(6, 101)
+
+cannot find a number greater than 101,
+therefore at index 6, the greatest length we get is 1
+
+self.memo = {6: 1}
+
+2) 
+Back to 10, we store in our memo index 0 mapped to length 2, exit and now run dfs starting from i = 1 (9)
+9
+
+loops through 2 ... 18
+finds 101
+we already found 101 in our memoization, since index 6 is in memo
+return 1
+
+therefore, the max is now 1 + self.memo[6] which is 2
+store memo, which is {1: 2} 
+
+goes back to loop, finds 18
+
+at 18, max length is 1 since there's no other elements past it
+stores index 7 mapped to length 1 in self.memo, {7: 1}
+
+self.memo = {0: 2, 6:1, 7:1, 1: 2}
+
+3) 
+exits, goes back to start running DFS on i = 2 now (element 2)
+it will now loop through
+5 ... 18
+finds 5, does a recursive call
+
+loops through 3 ... 18
+finds 7, does a recursive call
+
+loops through 101 ... 18
+finds 101, this is already in our memoization so returns 1
+1+1 = 2 (current subsequence is 7, 101)
+
+finds 18, this is also already in our memoization so returns 1
+1+1 = 2 
+
+We store length 3 for the index 4
+self.memo = {0: 2, 6:1, 7:1, 1:2, 4: 3}
+
+goes back to 5 ... 18, adds one to the length
+we store length 4 for the index2 
+self.memo = {0: 2, 6:1, 7:1, 1:2, 4: 3, 2: 4}
+
+This same process continues until all i ... n - 1 are examined,
+the final answer should be 4, with the longest subsequence here
+being 2, 3, 7, 101 OR 2, 5, 7, 101
+
+
+"""
+
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        self.memo = dict()
+        self.nums = nums
+        def dfs(start, num):
+            if start in self.memo:
+                return self.memo[start]
+            length = 1
+            for i in range(start, len(self.nums)):
+                if self.nums[i] > num:  
+                    length = max(length, 1 + dfs(i+1, self.nums[i]))            
+            self.memo[start] = length
+            return length
+        maxLength = 0
+        for i in range(len(self.nums)):
+            maxLength = max(dfs(i+1, nums[i]), maxLength)
+        return maxLength
+
 class Solution:
     ## converted from Tushar Roy's java solution
     ## https://github.com/mission-peace/interview/blob/master/src/com/interview/dynamic/LongestIncreasingSubsequence.java
