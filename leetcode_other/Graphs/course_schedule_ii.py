@@ -1,3 +1,35 @@
+"""
+Revisited on 8/22/2023
+"""
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        adjacencyList = dict()
+        for i in range(numCourses):
+            adjacencyList[i] = []
+        for i in range(len(prerequisites)):
+            course, prereq = prerequisites[i]
+            adjacencyList[course].append(prereq)
+        self.stack = []
+        self.visited = set()
+        self.cycleDetect = set()
+        def topologicalSort(node):
+            if node in self.cycleDetect:
+                return False
+            self.cycleDetect.add(node)
+            for n in adjacencyList[node]:
+                if n not in self.visited:
+                    if not topologicalSort(n):
+                        return False
+            self.visited.add(node)
+            self.stack.append(node)
+            self.cycleDetect.remove(node)
+            return True
+        for i in range(numCourses):
+            if i not in self.visited:
+                if not topologicalSort(i):
+                    return []
+        return self.stack
+        
 class Solution:
     ## concept is that we want to apply topological sort, as well
     ## as make sure that our graph has no cycles
