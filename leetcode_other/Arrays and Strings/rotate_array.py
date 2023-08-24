@@ -7,6 +7,46 @@ Try to come up as many solutions as you can, there are at least 3 different ways
 Could you do it in-place with O(1) extra space?
 
 '''
+
+"""
+Revisited on 8/24/2023
+Key Concept:
+1) To figure out the new index for i after rotation,
+add the rotation factor k to the current index, and then mod by
+the length of the array 
+
+2) If a problem requires rotation (i.e something that wraps around from the end to beginning,
+like array rotation, time (AM/PM) related problems, or number related problems,
+think of using mod (%) operator)
+
+1 2 3 4 5 6 7
+k = 3
+
+i.e for element 5, i = 4
+4 + 3 = 7
+7 % 7 = 0
+
+for element 6, i = 5
+5 + 3 = 8
+8 % 7 = 1
+
+output should be 
+5 6 7 1 2 3 4
+
+O(N) time
+O(N) space
+"""
+class Solution2:
+    def rotate(self, nums: List[int], k: int) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        n = len(nums)
+        copy = nums.copy()
+        for i in range(len(copy)):
+            newIndex = (i + k) % n
+            nums[newIndex] = copy[i]
+
 class Solution:
     def rotate(self, nums: List[int], k: int) -> None:
         """
