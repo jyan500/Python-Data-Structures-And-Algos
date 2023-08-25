@@ -28,7 +28,45 @@ Output: "abccdcdcdxyz"
 
 https://leetcode.com/problems/decode-string/
 '''
+
+"""
+Revisited on 8/25/2023
+https://www.youtube.com/watch?v=qB0zZpBJlh8&ab_channel=NeetCode
+"""
 class Solution:
+    def decodeString(self, s: str) -> str:
+        stack = []
+        for i in range(len(s)):
+            # closing bracket found
+            # continually pop until we reach the opening bracket
+            # after the opening bracket is popped, the top of the stack
+            # must be a digit of the integer k in k[encoded string], 
+            # keep popping until it's no longer a digit
+            # multiply the string with the number k and append back to the top of the stack
+            if s[i] == "]":
+                element = []
+                while (len(stack) and stack[-1] != "["):
+                    element.insert(0, stack[-1])
+                    stack.pop()
+                # pop the opening bracket
+                stack.pop()
+                num = []
+                while (len(stack) and stack[-1].isdigit()):
+                    num.insert(0, stack[-1])
+                    stack.pop()
+                # multiply the string element by num
+                # i.e 2 * "ab" = "abab"
+                element = "".join(element) * int("".join(num))
+                # bring element back to the top of the stack
+                stack.append(element)
+            else:
+                stack.append(s[i])
+
+        # at the end, we're going to end up with a list of strings, so join them together
+        return "".join(stack)
+        
+                
+        class Solution:
     def decodeString(self, s: str) -> str:
         ## Time: O(N), because we are iterating through the string once, plus some additional iterations
         ## through our stack, but our stack will always less than N elements
