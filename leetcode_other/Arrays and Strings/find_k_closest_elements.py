@@ -2,6 +2,74 @@
 https://leetcode.com/problems/find-k-closest-elements/
 '''
 
+"""
+https://leetcode.com/problems/find-k-closest-elements/discuss/1310981/Simple-Solutions-w-Explanation-or-All-Possible-Approaches-Explained!
+
+Note that there's an even better solution that uses Binary Search, for O(LogN + K) solution:
+https://www.youtube.com/watch?v=o-YDQzHoaKM&ab_channel=NeetCode
+
+O(N-K) solution:
+Key Concepts:
+1) Two pointers, left at the beginning of array, right at the end
+2) K is our window size, so the goal is that we want right pointer index - left pointer index to be equal to the window size,
+where within this window, we have the closest integers to our target x
+any element in our window size
+3) Because the array is sorted, we know that the elements to the right of our left boundary will either have increasing distance 
+or decreasing distance, and same for our right boundary
+4) We can use the logic from the problem statement to either increase the left pointer OR decrease the right pointer
+to adjust our window size:
+
+if abs(arr[left] - x) < abs(arr[right] - x) OR 
+abs(arr[left] - x) == abx(arr[right] - x) AND arr[left] < arr[right]
+
+5) If the distance between our left element and x is smaller than the distance between the right element and x OR
+the distances are the same, but the left element is smaller than the right element:
+
+    We need to shrink the window size from the right because the distance between the right element and x is too big,
+    there are elements closer to x to the left of our right element
+
+6) However if we hit the else statement, that means
+
+    We need to shrink the window size from the left because the distance between the left element and x is too big,
+    that are elements closer to x to the right of our left element
+
+At the end, we can get the k closest elements by taking a slice of the array from L to R + 1 (+1 because of the python slice which does -1 for 
+the ending index)
+
+The time complexity is O(N-K), where N is the length of the list and K is the window size.
+This is because we reduce the window size from the initial N to final K,
+which requires N-K comparisons (it's not iterating through the entirety of N because of our while loop condition)
+    """
+class Solution:
+    def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
+        # O(NLogN) solution
+        # import heapq
+        # heap = []
+        # for i in range(len(arr)):
+        #     heap.append((abs(arr[i]-x), arr[i]))
+        # heapq.heapify(heap)
+        # res = []
+        # for i in range(k):
+        #     distance, num = heapq.heappop(heap)
+        #     res.append(num)
+        # return sorted(res)
+        
+        """
+        O(N) solution
+        """
+        l = 0
+        r = len(arr)-1
+        
+        while (l <= r and r - l >= k):
+            if (
+                abs(arr[l]-x) < abs(arr[r]-x) or 
+                abs(arr[l]-x) == abs(arr[r]-x) and arr[l] < arr[r]
+            ):
+                r-=1
+            else:
+                l+=1
+        return arr[l:r+1]
+
 class Solution: 
     def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
         
