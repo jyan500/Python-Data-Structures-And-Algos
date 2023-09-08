@@ -10,6 +10,94 @@ https://leetcode.com/problems/sort-list/
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
+"""
+Revisited on 9/8/2023
+https://www.youtube.com/watch?v=TGveA1oFhrc&ab_channel=NeetCode
+
+O(NLogN) time O(1) memory solution 
+1) use merge sort by continually finding the middle of the linked list
+until we reach a case with individual nodes
+3) Apply adding two sorted linked lists (simplest case being two individual nodes)
+"""
+class Solution2:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        """
+        O(NLogN) time O(N) memory solution 
+        1) convert to array
+        2) sort
+        3) convert back to linked list
+        """
+        # temp = []
+        # p1 = head
+        # while (p1):
+        #     temp.append(p1.val)
+        #     p1 = p1.next
+        # temp.sort()
+        # l = ListNode()
+        # res = l
+        # for i in range(len(temp)):
+        #     res.next = ListNode(val=temp[i])
+        #     res = res.next
+        # return l.next
+        """
+        O(NLogN) time O(1) memory solution 
+        1) use merge sort by continually finding the middle of the linked list
+        until we reach a case with individual nodes
+        3) Apply adding two sorted linked lists (simplest case being two individual nodes)
+        """    
+        
+        def split(head1):
+            # continually split
+            l1 = head1
+            l2 = head1.next
+            # if the fast pointer has reached the end, the slow pointer will be at the middle of the LL
+            while (l2 != None and l2.next != None):
+                l1 = l1.next
+                l2 = l2.next.next
+            
+            return l1
+    
+        def merge(head1, head2):
+            l1 = head1
+            l2 = head2
+            newHead = ListNode()
+            cur = newHead
+            while (l1 and l2):
+                if l1.val < l2.val:
+                    cur.next = l1
+                    l1 = l1.next
+                else:
+                    cur.next = l2
+                    l2 = l2.next
+                cur = cur.next
+            if l1:
+                cur.next = l1
+            if l2:
+                cur.next = l2
+            return newHead.next
+
+        
+        # if we have null, or an individual node, return the node
+        if not head or not head.next:
+            return head
+        left = head
+        right = split(head)
+
+        # because the middle of the linked list is one node to the left
+        # of where we want to start the second half,
+        # we need to set the next node to None to "disconnect" the two linked lists
+        # and then set our new "right" so that it starts at the second half
+        tmp = right.next
+        right.next = None
+        right = tmp
+
+        left = self.sortList(left)
+        right = self.sortList(right)
+
+        return merge(left, right)
+
+
 class Solution:
     ## O(NLogN) time and O(N) space
     ## can we solve it in O(NLogN) time but O(1) memory?

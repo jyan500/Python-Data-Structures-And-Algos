@@ -25,6 +25,69 @@ Output: [8,9,9,9,0,0,0,1]
 #         self.val = val
 #         self.next = next
 
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+"""
+Revisited 9/8/2023
+O(N) Time and O(N) memory solution
+1) convert both linked lists into arrays
+2) create a temp array while adding the numbers together
+3) If sum of digits > 10, placeholder = sum % 10 and carry over is always 1 (max should be 9 + 9, so carry over 1 and then placeholder 8)
+we add the placeholder to the temp array to represent the digit and then carry over 1. 
+If there's no carryover because the sum of digits < 10, just the sum of digits + carryover
+4) If len(l1) != len(l2), account for additional spots to cover carryover after the last digit of the shorter linked list 
+by padding shorter list with zeroes (i.e 99999+999 is effectively 99999+00999 when performing carryover addition)
+5) If there's an additional carryover at the end, add to the temp array
+6) convert temp array back to linked list
+"""
+class Solution2:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        p1 = l1
+        p2 = l2
+        list1 = []
+        list2 = []
+        while (p1):
+            list1.append(p1.val)
+            p1 = p1.next
+        while (p2):
+            list2.append(p2.val)
+            p2 = p2.next
+        # if one of the lists is shorter than the other, pad the shorter list with zeroes
+        # to make addition easier
+        if len(list1) < len(list2):
+            list1.extend([0 for i in range(len(list2)-len(list1))])
+        else:
+            list2.extend([0 for i in range(len(list1)-len(list2))])
+        temp = []
+        carryover = 0
+        for a, b in zip(list1, list2):
+            # if sum is less than 10, add and reset the carryover
+            if carryover + a + b < 10:
+                temp.append(carryover + a + b)
+                carryover = 0
+            # if the sum is greater than 10, recalculate the new placeholder
+            # and set carryover to 1
+            # i.e 9 + 9 = 18, placeholder = 8 and carryover = 1
+            else:
+                newSum = carryover + a + b 
+                placeholder = newSum % 10
+                carryover = 1
+                temp.append(placeholder)
+        # append final digit of carry over if it exists
+        if carryover != 0:
+            temp.append(carryover)
+        l = ListNode()
+        head = l
+        # convert back to linked list
+        for i in range(len(temp)):
+            head.next = ListNode(val=temp[i])
+            head = head.next
+        return l.next
+        
 
 class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
