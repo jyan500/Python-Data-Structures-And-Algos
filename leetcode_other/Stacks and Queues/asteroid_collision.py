@@ -1,0 +1,32 @@
+"""
+https://leetcode.com/problems/asteroid-collision/
+Time: O(N)
+Space: O(N)
+
+1) Add elements to the stack, but whenever we reach a case
+where the top of our stack is positive and the element we want to add
+is negative, this indicates a collision
+2) Compare the absolute value of both elements to see which asteroid will overtake the other, and
+become the new top of the stack
+Note that if the absolute values are the same, set to 0 as they will cancel each other out, and
+don't add it to the stack
+
+"""
+class Solution:
+    def asteroidCollision(self, asteroids: List[int]) -> List[int]:
+        stack = []
+        for i in range(len(asteroids)):
+            if len(stack) > 0:
+                # check for collision
+                newTop = asteroids[i]
+                while len(stack) > 0 and stack[-1] > 0 and newTop < 0:
+                    top = stack.pop()
+                    if abs(top) > abs(newTop):
+                        newTop = top
+                    elif abs(top) == abs(newTop):
+                        newTop = 0
+                if newTop != 0:
+                    stack.append(newTop)
+                continue
+            stack.append(asteroids[i])
+        return stack
