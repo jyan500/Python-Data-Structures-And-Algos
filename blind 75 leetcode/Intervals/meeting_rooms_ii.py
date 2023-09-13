@@ -65,4 +65,4 @@ class Solution:
                 numMeetings -= 1
                 endPointer += 1
         
-        return amountOfRoomsNeed
+        return amountOfRoomsNeeded
