@@ -34,3 +34,113 @@ class Solution:
                 matrix[i][end] = tmp
                 start += 1
                 end -= 1
+
+
+"""
+Revisited on 9/18/2023
+
+1) reverse each row
+2) iterate through the matrix diagonally starting from the top right corner
+    - for each diagonal, swap the first and last elements of the diagonal
+i.e you can also iterate through an inverted "L" shape, starting from the topmost "L",
+performing a swap at each iteration
+
+1 2 3
+4 5 6
+7 8 9
+
+reverse each row
+
+3 2 1
+6 5 4
+9 8 7 
+
+If you do the L shaped iterations and swapping:
+
+1 gets swapped with itself ( no effect )
+
+the 2 and 4 get swapped 
+
+3 4 1
+6 5 2
+9 8 7
+
+The 3 and 7 get swapped
+
+7 4 1 
+6 5 2
+9 8 3
+
+The 6 and 8 get swapped
+
+7 4 1
+8 5 2
+9 6 3
+
+The 9 gets swapped with itself (no effect)
+
+final answer is 
+
+7 4 1
+8 5 2
+9 6 3
+
+O(N^2) time
+O(N^2) space
+
+"""
+class Solution2:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+
+        r = len(matrix)
+        c = len(matrix[0])
+                
+        for i in range(r):
+            matrix[i].reverse()
+        
+        # top right
+        i = 0
+        j = len(matrix[0])-2
+        
+        """
+        w[0][3] (first iteration is done)
+        w[0][2] swaps with w[1][3]
+        w[0][1] swaps with w[2][3]
+        w[0][0] swaps with w[3][3]
+        """
+        # get the "horizontal" portion of each L
+        coords1 = []
+        coords2 = []
+        for i in range(r):
+            for j in range(c-1-i,-1,-1):
+                coords1.append((i,j))
+       
+        # get the "vertical" portion of each L
+        offset = 0
+        i = 0
+        j = c-1 
+        while (j >= 0):
+            while (i < r):
+                coords2.append((i,j))
+                i+=1
+            i = 0
+            offset += 1
+            i += offset
+            j -= 1
+        
+        # perform zip, pairing up the coordinates and swapping
+        for c1, c2 in zip(coords1, coords2):
+            x1,y1 = c1
+            x2,y2 = c2
+            matrix[x1][y1], matrix[x2][y2] = matrix[x2][y2], matrix[x1][y1]
+            
+        
+                
+            
+            
+        
+            
+        
