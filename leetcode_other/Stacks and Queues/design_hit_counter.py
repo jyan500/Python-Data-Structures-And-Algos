@@ -1,6 +1,7 @@
 """
 Leetcode Premium
 https://www.lintcode.com/problem/3662/
+https://www.youtube.com/watch?v=BTzlerTV820&ab_channel=Let%27sCode
 
 O(N) Time O(N) Space
 
@@ -9,6 +10,7 @@ Key Concept:
 2) In get_hits, we continually pop off the front of the queue if the timestamp is more than 5 minutes ago (300 seconds),
 this translates to top of queue <= timestamp - 300. If the timestamp is less than 300, it doesn't enter the while loop, which means
 it's still within the 5 minute threshold
+
 """
 class HitCounter:
 
