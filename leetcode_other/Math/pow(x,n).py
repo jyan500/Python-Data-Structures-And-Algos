@@ -8,6 +8,23 @@ Time complexity : O(LogN)
 space complexity : O(LogN) recursive stack
 
 '''
+
+""" 
+9/20/2023
+Same solution as below, just rewritten slightly
+"""
+class Solution2:
+    def myPow(self, x: float, n: int) -> float:
+        if n == 0:
+            return 1
+        if n % 2 == 0:
+            temp = self.myPow(x, n/2)
+            return temp * temp
+        if n > 0:
+            return x * self.myPow(x, n - 1)
+        elif n < 0:
+            return (1 / x) * self.myPow(x, n + 1)
+
 class Solution:
     import math
     def myPow(self, x: float, n: int) -> float:
@@ -25,8 +42,9 @@ class Solution:
         ## if n is an even number
         ## then we can evaluate this exponent to be the same as 
         ## x^n = x^(n/2) * x^(n/2)
+        # i.e x^4 = x^2 * x^2
         ## so we can make a big improvement since we'll be cutting the amount of recursive calls in half
-        ## since every other number will be even
+        ## since every other number will be even, we don't need to do recursion here
         if (n % 2 == 0):
             temp = self.pow(x, n/2)
             return temp * temp

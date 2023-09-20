@@ -11,6 +11,40 @@ https://leetcode.com/problems/path-sum-iii/
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+"""
+9/20/2023
+Brute Force Solution:
+O(N^2) time and O(N) space
+1) Traverse the tree to get all nodes and store in array
+2) Loop through the array apply pre-order traversal where each node is the root where the 
+traversal begins, keeping track of the path sum as a param.
+3) In the recursion, if the path sum + the current root value equals the target sum, increment global count
+4) return the global count
+"""
+class Solution2:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
+        self.count = 0
+        self.nodes = []
+        def helper1(root):
+            if root:
+                self.nodes.append(root)
+                helper1(root.left)
+                helper1(root.right)
+        
+        def helper2(root, curSum):
+            if root:
+                if curSum + root.val == targetSum:
+                    self.count += 1
+                helper2(root.left, curSum + root.val)
+                helper2(root.right, curSum + root.val)
+        
+        helper1(root)
+        for i in range(len(self.nodes)):
+            helper2(self.nodes[i], 0)
+
+        return self.count
+
 class Solution:     
     def pathSum(self, root: TreeNode, targetSum: int)->int:
         '''
