@@ -10,6 +10,84 @@ Could you devise a constant space solution?
 https://leetcode.com/problems/set-matrix-zeroes/
 https://www.youtube.com/watch?v=T41rL0L3Pnw&ab_channel=NeetCode
 '''
+
+class Solution3:
+    """
+    9/25/2023
+    O(M*N) time
+    O(1) space
+    See the comments, by iwccsbfb
+    https://leetcode.com/problems/set-matrix-zeroes/discuss/26026/O(1)-space-solution-in-Python
+
+    1) Instead of storing the original zeroes, when we find an original zero at (i, j),
+    we can pre-emptively mark the cell values within the matrix 
+    for the non-zero values in the four directions starting from (i, j)
+    2) On a second pass, we can then change those "marked" cell values to zeroes
+
+    """
+
+    def inBounds(m, n, i, j):
+        return 0 <= i < m and 0 <= j < n
+    
+    m = len(matrix)
+    n = len(matrix[0])
+    
+    directions = [(-1, 0), (1, 0), (0, 1), (0, -1)]
+    for i in range(m):
+        for j in range(n):
+            if matrix[i][j] == 0:
+                for d in directions:
+                    x, y = d
+                    newX, newY = x + i, y + j
+                    if inBounds(m, n, newX, newY):
+                        while inBounds(m, n, newX, newY):
+                            if matrix[newX][newY] != 0:
+                                matrix[newX][newY] = "mark as zero"
+                            newX, newY = x + newX, y + newY
+    for i in range(m):
+        for j in range(n):
+            if matrix[i][j] == "mark as zero":
+                matrix[i][j] = 0
+
+class Solution2:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+    """
+    Do not return anything, modify matrix in-place instead.
+    """
+    """
+    9/25/2023
+    1) initial pass to figure out where the "original" zeroes are so that
+    we don't interpret any newly set zeroes as "original" zeroes and perform operations in the four directions for those.
+    2) second pass to perform the set zero operations on the "original" zeroes
+
+    Uses additional space to store the original zeroes
+    O(M*N) time
+    O(m+n) space
+    """
+    
+    def inBounds(m, n, i, j):
+        return 0 <= i < m and 0 <= j < n
+    
+    m = len(matrix)
+    n = len(matrix[0])
+    
+    zeroes = set()
+    directions = [(-1, 0), (1, 0), (0, 1), (0, -1)]
+    for i in range(m):
+        for j in range(n):
+            if matrix[i][j] == 0:
+                zeroes.add((i,j))
+    for i in range(m):
+        for j in range(n):
+            if (i,j) in zeroes:
+                # perform operation
+                for d in directions:
+                    x, y = d
+                    newX, newY = x + i, y + j
+                    if inBounds(m, n, newX, newY):
+                        while inBounds(m, n, newX, newY):
+                            matrix[newX][newY] = 0
+                            newX, newY = x + newX, y + newY
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
         """

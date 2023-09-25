@@ -10,6 +10,94 @@ https://www.youtube.com/watch?v=xRYPjDMSUFw&t=611s&ab_channel=NickWhite
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
+"""
+Revisited 9/25/2023
+https://www.youtube.com/watch?v=S5bfdUTrKLM&ab_channel=NeetCode
+
+1) find the middle of the linked list
+2) split into two parts, reverse the second half
+3) merge the two parts together:
+
+For the merge, we modify head directly by
+1) Saving the "original" next values for the pointers for both halves
+3) For the pointer for the first half, we want to set that to the remainder of the second half
+4) For the pointer for the second half, we set that to the "next" value for the first half
+5) advance to the "original" next
+
+example:
+after splitting 1 -> 2 -> 3 -> 4 -> 5 and then reversing
+1 -> 2 -> 3
+5 -> 4
+
+------ 1st iteration -------
+tmp1, tmp2 = 2, 4
+
+curHead.next = curPrev, which will set 1 -> 5
+curPrev.next = tmp1, which sets 5 -> 2
+
+curHead = tmp1, sets to 2
+curPrev = tmp2, sets to 4
+
+------ 2nd iteration --------
+tmp1, tmp2 = 3, None
+
+curHead.next = curPrev, which will set 1 -> 5 -> 2 -> 4
+curPrev.next = tmp1, which sets 4 -> 3
+
+curHead = tmp1, sets to 3
+curPrev = tmp2, sets to None
+
+curPrev is now None
+
+1 -> 5 -> 2 -> 4 -> 3
+
+is the final answer
+
+
+"""
+class Solution:
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+
+        slow = head
+        fast = head.next
+        while (fast != None and fast.next != None):
+            slow = slow.next
+            fast = fast.next.next
+        
+        # split the list down the middle by setting slow.next equal to None
+        # so that head only goes up to slow
+        # save the remainder of the LL starting from slow.next in the temp variable
+
+        secondHalf = slow.next
+        slow.next = None
+        
+        # reverse the list starting from temp      
+        prev = None
+        while (secondHalf != None):
+            curr = secondHalf
+            secondHalf = secondHalf.next
+            curr.next = prev
+            prev = curr
+        
+        # merge
+        curHead = head
+        curPrev = prev
+        while (curHead != None and curPrev != None):
+
+            tmp1, tmp2 = curHead.next, curPrev.next
+            curHead.next = curPrev
+            curPrev.next = tmp1
+            
+            curHead = tmp1
+            curPrev = tmp2
+            
+        return head
+        
+
 from collections import deque
 class Solution:
 	# O(N) time, O(N) space solution, can we do better in terms of space?
