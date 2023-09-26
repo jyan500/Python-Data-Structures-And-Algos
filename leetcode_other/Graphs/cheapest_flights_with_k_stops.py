@@ -25,7 +25,155 @@ An additional test case which involves a cycle:
 adjacency list = {0: [3], 1: [2,3], 2: [0, 4], 3: [1,4], 4: [0,2]}
 src = 0
 dest = 4
+'''
 
+class Solution:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        """
+        Directed graph
+        1) build adjacency list
+        2) BFS, use queue
+        keep track of the number of stops taken within the queue itself in a tuple
+        
+        Technically this should work but it TLEs in Leetcode
+        """
+#         from collections import deque
+#         adjacencyList = dict()
+#         for i in range(n):
+#             adjacencyList[i] = []
+#         for i in range(len(flights)):
+#             fromSrc, toDst, price = flights[i]
+#             adjacencyList[fromSrc].append((toDst, price))
+        
+#         q = deque()
+#         minPrice = float("inf")
+#         # append all the initial edges starting from src
+#         for i in range(len(adjacencyList[src])):
+#             to, price = adjacencyList[src][i]
+#             # add the 0 to represent the stops taken
+#             q.append((to, price, 0))
+#         while (q):
+#             to, price, numStops = q.popleft()
+#             if to == dst and numStops <= k:
+#                 minPrice = min(minPrice, price)
+#             else:
+#                 for neighbor in adjacencyList[to]:
+#                     neighborTo, neighborPrice = neighbor
+#                     if price + neighborPrice < minPrice:
+#                         q.append((neighborTo, price + neighborPrice, numStops + 1))
+
+
+#         return minPrice if minPrice != float("inf") else -1
+
+        """
+        Bellman Ford Solution
+        https://www.youtube.com/watch?v=5eIK3zUdYmE&ab_channel=NeetCode
+        Time Complexity: 
+        O(E * K)
+        Space:
+        O(E)
+
+        Example:
+
+        [[0, 1, 100], [0, 2, 500], [1, 2, 100]]
+
+               0
+
+            /    \
+           1  --  2 
+
+        src = 0 
+        dst = 2
+        k = 1
+        
+        1st iteration of "for i in range(k+1)..."
+        ---------------------------------------
+        prices = [0, inf, inf]
+        tmpPrices = [0, inf, inf]
+    
+        for s, d, p in flights ...
+        1st iteration
+        s = 0, d = 1, p = 100
+
+        prices[0] + 0 < tmpPrices[0], true
+
+        tmpPrices = [0, inf, inf]
+
+        2nd iteration
+        s = 0 d = 2 p = 500
+
+        prices[0] == inf, continue ...
+
+        tmpPrices = [0, inf, 500]
+
+        3rd iteration
+        s = 1 d = 2 p = 100
+
+        prices[1] == inf, continue ...
+
+        tmpPrices = [0, 100, 500]
+
+        prices = tmpPrices
+
+        2nd iteration of "for i in range(k+1)"
+        ---------------------------------------
+
+        prices = [0, 100, 500]
+        tmpPrices = [0, 100, 500]
+
+        for s, d, p in flights...
+        1st iteration 
+        s = 0 d = 1 p = 100 
+
+        no need to update here, it remains 0 
+
+        2nd iteration
+        s = 0 d = 2 p = 500
+        
+        no need to update here, it remains 0 
+
+        3rd iteration
+        s = 1 d = 2 p = 100
+
+        Important!
+        prices[1] = 100
+        prices[1] + p < tmpPrices[2], true!
+
+        100 + 100 < 500
+
+        tmpPrices[2] = 200
+
+        prices = tmpPrices
+
+        Final result:
+
+        prices[2] = 200
+        """
+    
+        prices = [float("inf")] * n
+        prices[src] = 0
+        
+        # it's k + 1 because 0 "stops" involves at least two nodes
+        # 1 "stop" involving at least 3 nodes, etc
+        for i in range(k+1):
+            # you need the tmpPrices to act as a "buffer" until we finish our loop below so we don't 
+            # update prices while we loop through at the same time and get a potentially incorrect answer
+            # we only prices after we're done with the below loop
+            tmpPrices = prices.copy()
+            for s, d, p in flights:
+                # if we cannot reach this node in the graph, ignore
+                if prices[s] == float("inf"):
+                    continue
+                # if we can reach node destination (d) in a smaller price, update it
+                if prices[s] + p < tmpPrices[d]:
+                    tmpPrices[d] = prices[s] + p
+            prices = tmpPrices
+        
+        return -1 if prices[dst] == float("inf") else prices[dst]
+            
+        
+
+'''
 Time complexity: O(V^K), where V is the number of vertices
 https://stackoverflow.com/questions/53127792/time-complexity-cheapst-flights-within-k-stops
 the algorithm might return to cities that its already visited, up to k times
