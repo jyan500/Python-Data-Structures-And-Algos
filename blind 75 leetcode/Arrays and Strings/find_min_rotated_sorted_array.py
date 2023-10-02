@@ -25,7 +25,7 @@ class Solution2:
 	    to right. If so, we know that the min must be on this side
 		example:
 	    3,4,5,1,2, when 5 is the midpoint, 
-	    we need to binary search the values to the left of 5 because
+	    we need to binary search the values to the right of 5 because
 	    5 > 2. There can't be a value smaller than 2 on the left side because that would
 	    break the sorted order (if the array were to be unrotated back to its original form)
 
