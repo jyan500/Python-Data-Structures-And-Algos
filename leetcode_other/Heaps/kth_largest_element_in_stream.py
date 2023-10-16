@@ -1,0 +1,56 @@
+"""
+https://leetcode.com/problems/kth-largest-element-in-a-stream/
+Time: O(NLogN + MLogK), where M is the amount of calls to "add"
+NLogN is the time taken to convert the array to a heap
+Space: O(N)
+
+Concept: 
+
+Note that when you print a heap out in python, it's in the "heap" represented order (if you were to create a tree out of it),
+but not necessarily in the array's sorted order, in a similar way to an array representation of an inorder binary tree traversal.
+
+
+1) Use Min Heap
+kth largest element in the list example:
+k = 3
+heap = [1, 2, 3, 5, 6]
+Because k is 3, the third largest element in this list is 3
+
+2) Because we only need k, we can pop any elements off that are less than k, so 1 and 2 in this case
+
+heap = [3, 5, 6]
+
+3) When adding new elements, we do heap push, and then immediately pop off the smallest element
+
+heap = [3, 5, 4, 6]
+
+After heappop, the 4 gets bubbled up to the root as it's now the min element
+
+heap = [4, 5, 6]
+
+"""
+
+import heapq
+class KthLargest:
+    
+    def __init__(self, k: int, nums: List[int]):
+        self.k = k
+        self.nums = nums
+        heapq.heapify(self.nums)
+        # use a min heap, and pop out until only k items are left
+        # in the heap
+        while len(self.nums) > self.k:
+            heapq.heappop(self.nums)
+        
+    def add(self, val: int) -> int:
+        heapq.heappush(self.nums, val)
+        # if we've exceeded k amount, pop
+        if len(self.nums) > self.k:
+            heapq.heappop(self.nums)
+        # the first item in the list will always be the kth largest 
+        return self.nums[0]
+
+
+# Your KthLargest object will be instantiated and called as such:
+# obj = KthLargest(k, nums)
+# param_1 = obj.add(val)
