@@ -22,6 +22,26 @@ in the same recursive call
 
 In each recursive call, return both the height, as well as whether the subtree is balanced
 """
+
+""" 
+    10/23 even simpler solution with the same concept, determine the balancing AS we calculate the 
+    height of the tree. if we ever reach a point where
+    the tree is unbalanced, just set a global var to false.
+"""
+class Solution3:
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        self.isBalanced = True
+        def height(root):
+            if root:
+                leftHeight = height(root.left)
+                rightHeight = height(root.right)
+                if abs(leftHeight - rightHeight) > 1:
+                    self.isBalanced = False
+                return 1 + max(leftHeight, rightHeight)
+            return 0
+        height(root)
+        return self.isBalanced
+
 class Solution2:
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         def dfs(root, height):
