@@ -17,6 +17,68 @@ Output: false
 
 https://leetcode.com/problems/valid-palindrome-ii/
 '''
+
+"""
+Revisited on 10/27 with a clearer solution
+"""
+class Solution:
+    """
+        same as valid palindrome I, except:
+        if we find a point where the characters are no longer equal,
+        perform two separate while loops:
+        one where we start keep the same right character, but ignoring the left character and incrementing by one
+        and another where we start by keeping the same left character, but ignoring the right character and decrementing by one
+        
+        both while loops will have separate flags, if one flag OR the other is true,
+        return True
+        
+        c b b c c
+        
+        c == c
+        b != c, so at indices l = 1, r = 3
+        we start by ignoring l = 1 and increment, so l = 2 and r= 3
+        b != c, so this is more than one difference. 
+        
+        Run the other while loop, starting at l = 1 and increment from r = 2 to r = 3 this time,
+        b == b, so this can be a palindrome
+        
+        return True
+    """
+    def validPalindrome(self, s: str) -> bool:
+
+        l = 0
+        r = len(s) - 1
+        while (l <= r):
+            if s[l] != s[r]:
+                break
+            l += 1
+            r -= 1
+        
+        
+        l1 = l + 1
+        r1 = r
+
+        flag1 = True
+        while (l1 <= r1):
+            if s[l1] != s[r1]:
+                flag1 = False
+                break
+            l1 += 1
+            r1 -= 1
+        
+        l2 = l
+        r2 = r - 1
+        flag2 = True
+        while (l2 <= r2):
+            if s[l2] != s[r2]:
+                flag2 = False
+                break
+            l2 += 1
+            r2 -= 1
+        
+        return flag1 or flag2
+        
+
 class Solution:
     '''
     Time complexity is O(N) overall, with two additional
