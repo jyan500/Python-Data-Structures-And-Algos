@@ -26,6 +26,24 @@ where the target = sum of total array - X
 
 Once we find that, we take total length of array - length of this subarray to get the answer
 
+1 1 4 2 3
+
+1 1 4 equals our target, this is a window size of 3, so it would be length of array - windowsize (5 - 3 = 2),
+which would be minimum of 2 operations to make x = 5 become x = 0. This adds up, since the only two numbers
+remaining are 2 and 3 ( 2+3 = 5, 5 - 5 = 0) 
+
+If we continue the logic...
+1 + 1 + 4 + 2 is 8 which is too big, keep shrinking the window until the current sum is less than the target again,
+which will be:
+4 2 
+
+this is a window size of 2, so length of array - windowSize (5 -2 = 3), this is the equivalent 
+of 1 1 on the left side, and 3 on the right side (three operations). We've already found that
+removing 2 and 3 takes less operations though.
+
+Returns 2
+
+
 
 """
 
@@ -54,4 +72,3 @@ class Solution:
         return res if res != float("inf") else -1
                 
     
-        
