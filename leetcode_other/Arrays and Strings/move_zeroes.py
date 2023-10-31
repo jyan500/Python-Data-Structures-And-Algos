@@ -60,6 +60,27 @@ increment slow by 1
 fast has reached the end of the list, done
 
 '''
+
+class Solution3:
+    def moveZeroes(self, nums: List[int]) -> None:
+        """
+        Revisited 10/31/2023
+        Reverse thinking:
+        move all non-zero elements to the front, keeping track of a pointer 
+        that shows when the last non-zero element was
+        after moving all non zero elements, pad the rest of the array with zeroes
+        starting from the pointer to the len(nums)
+        """
+        j = 0
+        for i in range(len(nums)):
+            if nums[i] != 0:
+                nums[j] = nums[i]
+                j += 1
+        # after all non-zero elements are moved to the front, pad the rest of the 
+        # array with zeroes
+        for k in range(j, len(nums)):
+            nums[k] = 0
+
 class Solution2:
     def moveZeroes(self, nums: List[int]) -> None:
         slow = 0
