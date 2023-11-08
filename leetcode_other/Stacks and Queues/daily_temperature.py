@@ -61,6 +61,23 @@ and there can't be more than n elements pushed inside the stack as every element
 
 O(N) space
 """ 
+
+# shorter solution 11/8/2023
+class Solution:
+    stack = []
+    res = [0 for i in range(len(temperatures))]
+    for i in range(len(temperatures)):
+        if len(stack) > 0:
+            while (len(stack) > 0 and temperatures[i] > stack[-1][0]):
+                temp1, index1 = stack.pop()
+                res[index1] = i - index1
+            
+            stack.append((temperatures[i], i))
+                
+        else:
+            stack.append((temperatures[i], i))
+    return res
+
 class Solution:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         res = [0 for i in range(len(temperatures))]
