@@ -13,6 +13,7 @@ class Solution:
         so we can look at ones that are closer to the target first
         2) When looking at two cars, we can calculate the time it takes to reach the target
         by calculating the difference in position divided by speed ( target - position ) / speed
+            -within our stack, we store the time taken to reach the target
         3) If the 2nd car reaches the target before the first, these cars will become a fleet, and we need to "merge" these two vehicles by simply popping out the faster car that we just added (which is the top of the stack) 
         
         Time complexity: O(NLogN)

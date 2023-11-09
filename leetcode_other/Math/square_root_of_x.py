@@ -37,6 +37,39 @@ number
 
 
 '''
+
+# revisited on 11/9/2023 with about the same solution
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        """
+        binary search from 0 to x, x is the right bound here because we know that 
+        any number greater than x would produce a square value that's greater than x ** 2
+        
+        if the mid**2 value is less than the target, we need to search the right half
+        else, search the left half
+        
+        at the end, if we left exceeded right, that means we're one number off the target which 
+        is greater than the target,
+        so we need to subtract one to get the "floor"
+        
+        if x is less than or equal to 1,
+        than 0 or 1 is the only answer
+        """
+        left = 0
+        right = x
+        
+        if (x <= 1):
+            return x
+        while (left < right):
+            mid = left + (right-left)//2
+            if mid * mid == x:
+                return mid
+            if mid * mid < x:
+                left = mid + 1
+            else:
+                right = mid
+        return left-1
+
 class Solution:
     def mySqrt(self, x: int) -> int:
         '''
