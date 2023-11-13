@@ -1,4 +1,5 @@
 """
+https://leetcode.com/problems/search-insert-position/
 Key Concept:
 This is a binary search, except if the element is not found in the case
 of left pointer >= right pointer, we know that this is the element "closest" in value
