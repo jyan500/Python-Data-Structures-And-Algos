@@ -54,6 +54,45 @@ class Solution:
             add it to res
 
         O(N+M) solution
+
+        Neetcode: 
+        https://www.youtube.com/watch?v=68a1Dc_qVq4
+
+        nums1 = [4, 1, 2]
+        nums2 = [1, 3, 4, 2]
+    
+
+        counter = {4: 0, 1: 1, 2:2}
+        stack = []
+        res = [-1, -1, -1]
+
+        first iteration
+        stack = [1]
+
+        second iteration
+        is 3 greater than 1? yes
+        so pop off, save res[1] = 3
+
+        res = [-1, 3, -1]
+
+        is 3 in counter? no, don't add to stack
+    
+        third iteration
+        stack = []
+
+        is 4 in counter, yes
+        add to stack
+
+        fourth iteration
+        stack = [4]
+
+        is 2 greater than 4, no
+        is 2 in counter? yes, add to stack
+
+        stack = [4, 2]
+
+        returns res = [-1, 3, -1]
+
         """
 
         res = [-1 for i in range(len(nums1))]
