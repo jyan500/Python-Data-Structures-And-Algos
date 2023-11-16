@@ -16,6 +16,66 @@ Output: false
 
 https://leetcode.com/problems/can-place-flowers/
 '''
+
+""" Revisited on 11/15/2023 """
+class Solution:
+    def canPlaceFlowers(self, flowerbed: List[int], n: int) -> bool:
+        """
+        Key Concepts:
+        Array Indices and Logic
+        
+        1) At each 0 within the flowerbed, are both it's neighbors also zeroes?
+            if so, you can add a flower at i, so mutate flowerbed[i] = 1 so that once we get to the next element,
+            this neighbor would have the most updated value so we can check neighbors accurately as we iterate.
+
+            If you're at the edge (either i == 0 or i == len(flowerbed)-1, check if the neighbor to either the left or right == 0)
+            
+        2) If the flowerbed is only length 1, check to see if the only available spot is empty
+        (flowerbed[0] == 0), as well as if a flower can be planted
+
+        
+        At every 0, can you add a 1 to both the left and right neighbor?
+        if n = 2 (planting two flowers)
+        1 0 0 0 1
+          ^
+        1 0 1 0 1 (1 flower planted)
+        
+        1 0 1 0 1
+              ^
+              you can't add a flower to either the left or right side
+        
+        if n = 1
+        1 0 0 0 1 (planting one flower)
+        
+        1 0 1 0 1 (1 flower planted)
+        
+        if n = 2
+        0 0 0 0 0 1 0 1
+        0 1 0 1 0 1 0 1
+        
+        """
+        # has to be the string 1 0 1 0 ... if the first spot is a flower
+        numFlowers = 0
+        if len(flowerbed) == 1:
+            return flowerbed[0] == 0 or n == 0
+        
+        for i in range(len(flowerbed)):
+            if numFlowers == n:
+                break
+            if i > 0 and i < len(flowerbed) - 1:
+                if flowerbed[i] == 0 and flowerbed[i-1] == 0 and flowerbed[i+1] == 0:
+                    numFlowers += 1
+                    flowerbed[i] = 1
+            elif i == 0:
+                if flowerbed[0] == 0 and flowerbed[i+1] == 0:
+                    numFlowers += 1
+                    flowerbed[i] = 1
+            elif i == len(flowerbed)-1:
+                if flowerbed[-1] == 0 and flowerbed[i-1] == 0:
+                    numFlowers += 1
+                    flowerbed[i] = 1
+        return numFlowers == n
+
 class Solution:
     ## initial:
     ## time complexity: O(2N) 
