@@ -14,6 +14,59 @@ The test cases are generated such that there are no cycles anywhere in the entir
 #         self.val = x
 #         self.next = None
 
+"""
+Revisited on 11/22/2023
+"""
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        """
+        Using O(M+N) time and O(N) space
+        1) Keep a hashmap of the memory address to the node
+        2) If the second node ever hits the same address, we've found the intersection
+        """
+#         lookup = dict()
+#         while (headA != None):
+#             lookup[id(headA)] = headA
+#             headA = headA.next
+#         while (headB != None):
+#             if id(headB) in lookup:
+#                 return headB
+#             headB = headB.next
+        """
+        O(M+N) time and O(1) Space
+        1) Figure out the lengths of both linked lists first
+        2) Then, find the difference between the lengths (say len(m) - len(n)),
+        and then iterate through the longer list by len(m) - len(n), such that the pointers
+        at both lists are now aligned, and we can iterate through both lists together
+        3) if the nodes at list m and n have equal id, then this is an intersection
+        """
+        lenA = 0
+        lenB = 0
+        curA = headA
+        curB = headB
+        while (curA != None):
+            lenA += 1
+            curA = curA.next
+        while (curB != None):
+            lenB += 1
+            curB = curB.next
+        # figure out which list is longer
+        if lenA != lenB:
+            longer = lenA if lenA > lenB else lenB
+            shorter = lenA if lenA < lenB else lenB
+            difference = longer - shorter
+            for _ in range(difference):
+                if longer == lenA:
+                    headA = headA.next
+                else:
+                    headB = headB.next
+        while (headA != None and headB != None):
+            if id(headA) == id(headB):
+                return headA
+            headA = headA.next
+            headB = headB.next
+        return None
+
 class Solution:
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
         '''
