@@ -38,6 +38,29 @@ Space complexity: O(max(T1,T2)), as the space will need to be enough to include 
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+# Revisited on 12/26/2023
+class Solution:
+    def mergeTrees(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> Optional[TreeNode]:
+        """
+
+        1) Make recursive calls to go down the left subtree of both trees first, then the right subtrees
+        2) If one root exists in one tree while the other does not, return the root that exists 
+        3) If both roots do not exist, return None
+        4) Once we've traversed both left and right for the given node, that means that we're at the parent, which exists
+        for both trees. Create the treenode by setting the left and right to be the recursive calls, and then the value
+        to be the sum of both parents' values.
+
+        """
+        if (root1 and not root2) or (root2 and not root1):
+            return root1 if root1 else root2
+        elif (not root1 and not root2):
+            return None
+        else:
+            left = self.mergeTrees(root1.left, root2.left)
+            right = self.mergeTrees(root1.right, root2.right)
+            return TreeNode(root1.val + root2.val, left, right)
+
 class Solution:
     def mergeTrees(self, root1: TreeNode, root2: TreeNode) -> TreeNode:
         ## base case, when both roots are None, we return None
