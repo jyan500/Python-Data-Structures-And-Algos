@@ -26,6 +26,31 @@ Space Complexity: O(H), where H is the height of the tree, for H amount of possi
 #         self.val = val
 #         self.left = left
 #         self.right = right
+"""
+Revisited on 12/27/2023
+Similar solution to below, if we're at a leaf node where there's no left and right child,
+then take the cumulative sum (plus our leaf node's val) and check if === targetSum,
+
+otherwise, we continue recursive calls either down the left or right sides, adding the current
+root's value to the cumulative sum as we go
+"""
+class Solution:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        if not root:
+            return False
+        def search(root, cur, targetSum):
+            isLeft = False
+            isRight = False
+            if not root.left and not root.right:
+                return cur + root.val == targetSum
+            if root.left:
+                isLeft = search(root.left, cur + root.val, targetSum)
+            if root.right:
+                isRight = search(root.right, cur + root.val, targetSum)
+
+            return isLeft or isRight
+        return search(root, 0, targetSum)
+
 class Solution:
     def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
         ## base case to check for empty tree
