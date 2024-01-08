@@ -40,6 +40,51 @@ to loop through each word within the words list, but the good news is that it on
 
 And an additional O(N) space for the lookup and words2 temp variable
 '''
+
+# Revisited this on 1/8/2024
+class Solution:
+    def isAlienSorted(self, words: List[str], order: str) -> bool:
+        from functools import cmp_to_key
+        """
+        Approach:
+        1) Take the "order" param and convert into a dict where the key is the letter, and the value
+        is the index to get O(1) look up times when we compare words to this ordering later on
+        2) create a new sorting key based on the alien dictionary lexicographical order
+            -if one word is longer than the other, return 1, else -1
+            -can apply "zip" method in python to iterate both words at once, and automatically
+            stop iteration at the shorter word
+            -compare the letters, if one letter is greater than the order based on the lexicographical order,
+            returns 1, else -1
+            i.e 
+            order: bca, order map: b: 0, c: 1, a: 2
+            beetcode, aeetcode
+            b > a, so return 1 here
+        3) use the cmp_to_key function to allow us to compare two items at once in our 
+        custom sorting key function, similar to javascript
+        4) check to see if the sorted version of "words" is the same as before
+        
+        Time Complexity:
+        O(N) + O(NLog26) + O(26N), where the 26 represents the length of "order" as it's a fixed number here
+        """
+        orderDict = dict()
+        for i in range(len(order)):
+            orderDict[order[i]] = i
+        def sortingKey(a, b):
+            if len(a) > len(b):
+                return 1
+            elif len(a) < len(b):
+                return -1
+
+            for letterA, letterB in zip(a, b):
+                if orderDict[letterA] < orderDict[letterB]:
+                    return -1
+                if orderDict[letterA] > orderDict[letterB]:
+                    return 1
+            return 0
+        sortedWords = sorted(words, key=cmp_to_key(sortingKey))
+        return sortedWords == words
+        
+
 class customString:
     def __init__(self, s, order):
         self.s = s
