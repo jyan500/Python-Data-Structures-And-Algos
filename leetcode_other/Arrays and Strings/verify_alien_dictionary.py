@@ -62,6 +62,7 @@ class Solution:
             -after comparing each letter individually and letters are all the same,
                 -if one word is longer than the other, return 1, else -1
         ** slight edit
+        see: https://leetcode.com/problems/verifying-an-alien-dictionary/discuss/203175/Python-straightforward-solution
         You don't really need to sort the entire array, you can just compare adjacent items using zip(words, words[1:])
         and apply the sorting key
         However, if we ever return 1, that means that assuming that wordA comes before wordB, and wordA is greater than wordB, but it should be less than, this means we return False
