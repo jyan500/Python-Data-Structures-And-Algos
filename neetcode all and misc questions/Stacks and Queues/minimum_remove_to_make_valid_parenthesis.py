@@ -48,6 +48,37 @@ Output: "a(b(c)d)"
 ## after that, all invalid parenthesis will be removed to get our result
 
 '''
+
+# Revisited on 1/17/2024
+class Solution:
+    def minRemoveToMakeValid(self, s: str) -> str:
+        """
+        Approach:
+        1) use a stack and push a tuple containing the parenthesis and index
+        2) iterate s, as we push, if the top of our stack and the current element
+        make a valid set, we remove the top of stack
+        
+        3) At the end, only the invalid parenthesis are left
+        4) Iterate through the stack and then get the indices, remove these indices from the string
+        and return
+        """
+        stack = []
+        for i in range(len(s)):
+            if s[i] == "(" or s[i] == ")":
+                if len(stack) > 0:
+                    paren, index = stack[-1]
+                    if paren == "(" and s[i] == ")":
+                        stack.pop()
+                        continue
+                stack.append((s[i], i))
+        res = []
+        iSet = set()
+        for item in stack:
+            paren, i = item
+            iSet.add(i)
+        res = [s[i] for i in range(len(s)) if i not in iSet]
+        return "".join(res)
+
 class Solution:
     def minRemoveToMakeValid(self, s: str) -> str:
         stack = []
