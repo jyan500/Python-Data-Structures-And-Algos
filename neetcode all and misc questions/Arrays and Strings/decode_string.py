@@ -30,6 +30,55 @@ https://leetcode.com/problems/decode-string/
 '''
 
 """
+Revisited on 1/23/2024
+Took around ~25 mins to do after some refreshing on the solution
+The slight change in approach this time was if the previous element 
+on the stack was a digit, just continue adding onto this element to 
+form the number instead of appending a separate element to the stack
+
+i.e 
+10[abc]
+
+stack = [1],
+
+in the next iteration, add 0 to 1
+stack = [10]
+
+instead of 
+stack = [1, 0]
+
+That way, once we start evaluating the expression between the braces,
+stack =  [10, [, c, ], ]
+after getting our inner string of "c",
+we can just pop off once more to get 10,
+and then multiply and append back to the stack
+
+
+"""
+class Solution:
+    def decodeString(self, s: str) -> str:
+        stack = []
+        for i in range(len(s)):
+            # if the previous element in the stack was also numeric, continue forming the number
+            if s[i].isnumeric() and len(stack) > 0 and stack[-1].isnumeric():
+                stack[-1] += s[i]
+                continue
+            if s[i] == "]":
+                inner = ""
+                while (len(stack) > 0 and stack[-1] != "["):
+                    inner = stack[-1] + inner
+                    stack.pop()
+                stack.pop() # pop once more for the opening bracket
+                # because a bracket is always after the multiplier, the multiplier should be the next element in the stack
+                multiplier = stack.pop()
+                res = int(multiplier) * inner
+                # append the result once we've evaluated everything between the braces
+                # and multiplied by the appropriate multiplier
+                stack.append(res)
+                continue
+            stack.append(s[i])
+        return "".join(stack)
+"""
 Revisited on 8/25/2023
 https://www.youtube.com/watch?v=qB0zZpBJlh8&ab_channel=NeetCode
 """
