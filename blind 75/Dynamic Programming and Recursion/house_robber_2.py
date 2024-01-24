@@ -4,6 +4,54 @@ Note that concept for the solution is explained here, but the video itself does 
 but I wanted to stick with top-down since it makes more sense to me:
 https://www.youtube.com/watch?v=mFT2bIFKUFE&t=461s&ab_channel=NareshGupta
 '''
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        """
+        Approach mentioned in:
+        https://www.youtube.com/watch?v=rWAJCfYYOvM&ab_channel=NeetCode
+
+          3        
+        2   2
+        
+        You can never rob
+        0 AND n - 1, where n = len(nums)
+        
+        Recurrence Relation:
+        1) Rob house at i, next i is i + 2
+        2) Skip i and rob house at i + 1
+        
+        max(nums[i] + f(i+2), f(i+1))
+        
+        The trick is that we can re-use the same recurrence relation as House Robber I,
+        except we run the function twice, where we only rob the houses from 1 ... n - 1
+        and 0 ... n - 2, since this meets the condition where we can't rob 0 and n - 1 together
+
+        [2, 3, 2, 4]
+        
+        first run through goes through [3, 2, 4], where we don't have the option of robbing 0
+        second run through goes through [2, 3, 2], where we don't have the option of robbing n - 1
+       	
+       	We then take the max between both of these function calls to get the max amount we can rob
+       	without breaking the constraints 
+        
+        Time Complexity: O(N)
+        Space Complexity: O(N)
+        """
+        if len(nums) == 1:
+            return nums[0]
+        self.memo = dict()
+        def search(i, nums):
+            if i >= len(nums):
+                return 0
+            if i in self.memo:
+                return self.memo[i]
+            self.memo[i] = max(nums[i] + search(i+2, nums), search(i+1, nums))
+            return self.memo[i]
+        
+        allButFirstHouse = search(0, nums[1:])
+        self.memo = dict()
+        allButLastHouse = search(0, nums[:len(nums)-1])
+        return max(allButFirstHouse, allButLastHouse)
 
 class Solution:
     ## the key difference between House Robber I and House Robber II is that...
