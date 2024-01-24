@@ -7,6 +7,7 @@ https://www.youtube.com/watch?v=mFT2bIFKUFE&t=461s&ab_channel=NareshGupta
 class Solution:
     def rob(self, nums: List[int]) -> int:
         """
+        Revisited 1/24/2024
         Approach mentioned in:
         https://www.youtube.com/watch?v=rWAJCfYYOvM&ab_channel=NeetCode
 
