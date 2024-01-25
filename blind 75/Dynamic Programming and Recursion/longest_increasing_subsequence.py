@@ -96,6 +96,58 @@ being 2, 3, 7, 101 OR 2, 5, 7, 101
 
 
 """
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        """
+        Revisited on 1/25/2024
+        O(N^2) Time Complexity (Same as above)
+        1) Approach, find all possibilities, pick the maximum length at each subproblem
+        10 9 2 5 3 7 101 18
+        2 3 7 101
+        
+        10 101
+        9 101
+        
+        2 3 OR 2 7
+        Note that at 2, we have a choice of picking either 3 as the next element, OR
+        7 as the next element, these are both valid increasing subsequences,
+        so this is the first instance of the recursive sub problem. You can see 
+        the decision tree that you'd have to make for each subsequent increasing number.
+        
+                           2 3 OR 2 7
+                           
+            2 3 7 OR 2 3 101           2 7 101 OR 2 7 18
+                     
+         2 3 7 18 OR 2 3 7 101                       
+         
+        
+        
+        """
+        # we can store at a given index,
+        # what's the longest increasing subsequence we can make at that index?
+        # this will cut down on repeated subproblems
+        self.memo = dict()
+        def search(i):
+            maxLen = 1
+            if i in self.memo:
+                return self.memo[i]
+            for k in range(i, len(nums)):
+                # if we find a number greater than our 
+                # current number that also has a greater index,
+                # this is a subproblem, because there's a chance
+                # we could find multiple numbers greater than our current number,
+                # which would be different subsequences, so do a recursive call.
+                if nums[k] > nums[i]:
+                    maxLen = max(1 + search(k), maxLen)
+            self.memo[i] = maxLen
+            return self.memo[i]
+        
+        maxLen = 1
+        # for each i, we want to find a number greater than nums[i]
+        for i in range(len(nums)):
+            maxLen = max(search(i), maxLen)
+        return maxLen
+
 
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
