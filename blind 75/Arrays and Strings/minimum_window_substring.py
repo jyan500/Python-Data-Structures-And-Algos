@@ -8,6 +8,99 @@ https://www.youtube.com/watch?v=jSto0O4AJbM&t=615s&ab_channel=NeetCode
 '''
 
 """
+Revisited on 1/24
+This approach is O(N*(N+M)), not as efficient as the O(N+M) solution
+from neetcode but easier to remember.
+
+The main bottleneck is the isSubsetOf method, which is O(N) to compare
+the keys and values between the dictionaries
+"""
+class Solution3:
+    def minWindow(self, s: str, t: str) -> str:
+        """
+        Brute Force:
+        the minimum length substring found in S must be 
+        at least length of string T
+        
+        start with substrings of length T
+        and then find all substrings of length T + 1
+        T + 2 ,etc
+        
+        Time Complexity: O(N*M*N) (two inner loops, size N and M, and isSubsetOf is O(N), so O(N * N * M))
+        
+        Another Approach:
+        Keep lengthening the size of the window until you've found a substring with all the characters
+        present
+        Use a while loop to decrease the size of the window until the string is no longer valid
+        
+        Time Complexity: O(N*N) if we keep the isSubsetOf function the same
+        Note we do have a while loop that shortens the string, but that will always be a constant size 
+        shorter than string N so it can be ignored
+        """
+        # parent must contain all the same keys as the child,
+        # and for each value, must have >= child's value
+        def isSubsetOf(child, parent):
+            for key in child:
+                if key in parent:
+                    if parent[key] < child[key]: 
+                        return False
+                    else:
+                        continue
+                else:
+                    return False
+            return True
+                        
+        from collections import Counter
+        from collections import defaultdict
+        chars = Counter(t)
+        m = len(s)
+        n = len(t)
+        # O(N^3 solution involves the two loops below)
+        # for k in range(m):
+        #     for i in range(m):
+        #         substringLen = i + n + k
+        #         if substringLen - 1 < m:
+        #             substring = s[i:substringLen]
+        #             substringMap = Counter(substring)
+        #             if isSubsetOf(chars, substringMap):
+        #                 return substring
+        substringMap = defaultdict()
+        cur = []
+        res = []
+        resLen = float("inf")
+        # O(N*M) solution involves only one loop
+        for k in range(m):
+            cur.append(s[k])
+            if s[k] in substringMap:
+                substringMap[s[k]] += 1
+            else:
+                substringMap[s[k]] = 1
+            if isSubsetOf(chars, substringMap):
+                # here we continue to shorten the string until the Counter of that substring no longer represents
+                # a subset of the substring T.
+                # after we've shortened the string (if we've done any shortening), we can
+                # update res if the length of our current substring is less than the length of res
+                while (cur):
+                    c = cur[0]
+                    # we need to make a copy of the dictionary to apply our changes
+                    # and see if we still have a valid Counter before we apply the actual changes
+                    copy = substringMap.copy()
+                    if c in copy and copy[c] > 0:
+                        copy[c] -= 1
+                    else:
+                        del copy[c]
+                    if not isSubsetOf(chars, copy):
+                        break
+                    else:
+                        substringMap = copy
+                        cur.pop(0)
+                if len(cur) < resLen:
+                    res = cur.copy()
+                    resLen = len(cur)
+
+        return "" if resLen == float("inf") else "".join(res)
+                
+"""
 revisited on 7-15-2023
 same solution as below from neetcode, O(N) time and O(N) space
 one slight difference is that the "need" variable is based off the length
@@ -16,7 +109,7 @@ as a result, when checking whether we need to increment the "have" variable,
 we increment only until we reach the amount of characters specified in letterCount,
 thus the initSubstringLetterCount[s[i]] <= letterCount[s[i]]
 """
- 
+
 class Solution2:
     def minWindow(self, s: str, t: str) -> str:
         letterCount = dict()
