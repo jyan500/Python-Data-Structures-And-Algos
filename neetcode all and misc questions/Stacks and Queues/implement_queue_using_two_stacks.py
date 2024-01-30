@@ -1,6 +1,51 @@
 """
 https://leetcode.com/problems/implement-stack-using-queues/
+
+Not the fully amortized version, but you can find that 
+at neetcode: https://www.youtube.com/watch?v=eanwa3ht3YQ&ab_channel=NeetCodeIO
+
+This version is O(N) pop and peek, while O(1) push and O(1) empty
 """
+class MyQueue:
+
+    def __init__(self):
+        self.s1 = []
+        self.s2 = []
+
+    def push(self, x: int) -> None:
+        self.s1.append(x)
+            
+    def pop(self) -> int:
+        # we need to pop off all the elements in stack 1,
+        # and append to stack 2 to reverse the order,
+        # this way the last element in stack 2 will act as the "front" of the queue
+        while (self.s1):
+            self.s2.append(self.s1.pop())
+        element = self.s2.pop()
+        # then we need to add all the elements back to stack 1 in their original order
+        for i in range(len(self.s2)):
+            self.s1.append(self.s2.pop())
+        return element
+        
+    def peek(self) -> int:
+        while (self.s1):
+            self.s2.append(self.s1.pop())
+        element = self.s2[-1]
+        # then we need to add all the elements back to stack 1 in their original order
+        for i in range(len(self.s2)):
+            self.s1.append(self.s2.pop())
+        return element
+
+    def empty(self) -> bool:
+        return len(self.s1) == 0 
+
+
+# Your MyQueue object will be instantiated and called as such:
+# obj = MyQueue()
+# obj.push(x)
+# param_2 = obj.pop()
+# param_3 = obj.peek()
+# param_4 = obj.empty()
 class MyStack:
 
     def __init__(self):
