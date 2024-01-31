@@ -74,6 +74,49 @@ final solution is
 
 """
 class Solution:
+	"""
+	Revisited on 1/31/2024,
+	Came up with a similar solution O(NLogN) using cmp_to_key, and sorting
+	by comparing the numbers a + b, or b + a and seeing which resulted in
+	a larger number
+
+	The only difference is that I manually removed leading zeroes to cover
+	this edge case: [0, 0],
+
+	whereas neetcode's solution just converts the string into an int, and back
+	to a string, which also handles it.
+	"""
+    def largestNumber(self, nums: List[int]) -> str:
+        from functools import cmp_to_key       
+        # custom sorting order, sort by
+        # whichever number would make a greater number when appending the two together
+        # determines the sorting order
+        # i.e 30 and 3
+        # 303 < 330, so the ordering should be 3 and then 30
+        def cmp_items(a, b):
+            config1 = str(a) + str(b)
+            config2 = str(b) + str(a)
+            if int(config1) > int(config2):
+                return -1
+            elif int(config1) < int(config2):
+                return 1
+            else:
+                return 0
+        nums.sort(key=cmp_to_key(cmp_items))
+        # this handles case of empty zeroes, like 
+        # [0, 0, 0], if i gets to len(nums)-1, 
+        # we slice out from [i: ]
+        # you only need to remove up to the last zero
+        i = 0
+        while (i < len(nums)-1):
+            if nums[i] != 0:
+                break
+            i += 1
+        removedZeroes = nums[i:]
+        return "".join([str(n) for n in removedZeroes])
+        
+
+class Solution:
     def largestNumber(self, nums: List[int]) -> str:
         import functools
         def sortKey(x, y):
