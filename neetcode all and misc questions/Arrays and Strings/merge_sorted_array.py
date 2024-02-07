@@ -3,6 +3,39 @@ https://leetcode.com/problems/merge-sorted-array/
 https://www.youtube.com/watch?v=P1Ic85RarKY&list=PLQdWvigIOnscz0Fgps9PtnymVkvJrZylH&index=3&t=303s&ab_channel=NeetCode
 '''
 
+# 2/5/2024 
+# O(N) Time, O(N) space
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        i = 0
+        j = 0
+        res = []
+        copy = nums1
+        while (i < m and j < n):
+            if copy[i] < nums2[j]:
+                res.append(copy[i])
+                i += 1
+            elif copy[i] > nums2[j]:
+                res.append(nums2[j])
+                j += 1
+            else:
+                res.append(copy[i])
+                res.append(nums2[j])
+                i += 1
+                j += 1
+        if j < n:
+            for k in range(j, n):
+                res.append(nums2[k])
+        elif i < m:
+            for k in range(i, m):
+                res.append(copy[k])
+        for i in range(len(res)):
+            nums1[i] = res[i]
+        
+        
 """
 revisited on 7/28/2023
 """
