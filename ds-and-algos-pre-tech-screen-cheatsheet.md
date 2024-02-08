@@ -218,4 +218,26 @@ while (queue):
 - Think about if you may need to loop through a set of constants within the recursion, if that happens, you'll need to store the result outside of the loop (i.e coin change)
 - In 2D DP problems such as edit distance, you may need to store a tuple as the key within the `dict()` instead.
 
+### Javascript
+- If you need to create a hashmap with a tuple as a key like in Python, in JS, there's no tuples so
+you need to convert it into a string key. For example, if storing coordinates 4, 9
+	```
+	let board = [[...], [...]]
+	let c = {}
+	let i = 4
+	let j = 9
+	let value = "Test" 
+	c[`${i},${j}`] = value
+	console.log(c["4,9"]) // evaluates to "Test"
+	```
+- If you need to pull the coordinates out and use them as indices, you'll need to call parseInt()
+	```
+	for (key of Object.keys(c)){
+		let stringKey = key.split(",") // evaluates from "4,9" to ["4","9"]	
+		let [stringI, stringJ] = stringKey
+		i = parseInt(stringI)
+		j = parseInt(stringJ)
+	}
+	```
+
 
