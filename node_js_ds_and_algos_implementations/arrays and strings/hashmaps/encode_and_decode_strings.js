@@ -1,4 +1,7 @@
 /*
+	https://neetcode.io/problems/string-encode-and-decode
+	(This is normally a leetcode premium problem)
+	
 	Without using the split and join method, the approach is:
 	1) Keep a hashmap that maps a dummy character to the actual string in the list. For example,
 	if we map each string in the list to its index, then we can freely add whichever delimiter
