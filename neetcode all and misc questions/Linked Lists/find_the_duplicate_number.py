@@ -60,5 +60,8 @@ class Solution:
       			break
 
       	slow2 = 0
-
-
+      	while (True):
+      		slow = nums[slow]
+      		slow2 = nums[slow2]
+      		if (slow == slow2):
+      			return slow
