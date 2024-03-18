@@ -61,11 +61,18 @@ class MedianFinder:
             if topMaxHeapA > topMinHeapB:
                 topMaxHeapA = -1 * heapq.heappop(self.maxHeapA)
                 heapq.heappush(self.minHeapB, topMaxHeapA)
-        # if the length difference is greater than one
+        # if the length difference between the two heaps is greater than one,
+        # either because we added too many elements to A OR 
+        # because of the operation above when we moved the max of A to B ...
         if (abs(len(self.maxHeapA) - len(self.minHeapB)) > 1):
+        	# if len(A) > len(B), that means we need to pop from A and add the
+        	# popped element to B
+        	# note that we need to convert the popped element by multiplying by -1
             if (len(self.maxHeapA) > len(self.minHeapB)):
                 topMaxHeapA = -1 * heapq.heappop(self.maxHeapA)
                 heapq.heappush(self.minHeapB, topMaxHeapA)
+            # otherwise, we need to pop from B and add to A,
+            # noting that since we're adding to A, we need to multiply by -1 first
             else:
                 topMinHeapB = heapq.heappop(self.minHeapB)
                 heapq.heappush(self.maxHeapA, -1 * topMinHeapB)
