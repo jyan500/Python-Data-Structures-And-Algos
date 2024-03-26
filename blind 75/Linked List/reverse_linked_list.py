@@ -72,6 +72,7 @@ class Solution:
 	            pointer = pointer.next
 	        return new_head
 	## O(N) time and O(1) space iterative solution
+	# Note this version does not mutate the head argument
 	def reverseList(self, head:ListNode) -> ListNode:
 		prev = None
 		cur = head
