@@ -7,7 +7,8 @@ var findRedundantConnection = function(edges) {
     https://leetcode.com/problems/redundant-connection/solution/
     https://leetcode.com/problems/redundant-connection/discuss/323625/JavaScript-DFS-Solution
     
-    given a [node, edge], find another node that goes to the same edge
+    if we find another vertex that points to the previous edge we passed in,
+    this is a cycle
     
     time complexity: O(N^2), where N is the amount of nodes. The worst case is that
     for every edge, we have to search every previously occuring edge of the graph
@@ -19,6 +20,9 @@ var findRedundantConnection = function(edges) {
     let curr;
     
     for(const [v, e] of edges){
+    	// if this is a cycle, we set this edge as our current,
+    	// but this can be replaced if there's another cycle (as stated in the requirements,
+    	// we want the last edge in the input)
         if(dfs(v, e, new Set())){
             curr = [v, e];
         }
