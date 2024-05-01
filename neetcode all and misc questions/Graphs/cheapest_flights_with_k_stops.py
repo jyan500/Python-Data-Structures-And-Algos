@@ -26,6 +26,105 @@ adjacency list = {0: [3], 1: [2,3], 2: [0, 4], 3: [1,4], 4: [0,2]}
 src = 0
 dest = 4
 '''
+class Solution:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        """
+        Bellman Ford's Algorithm
+        https://www.youtube.com/watch?v=5eIK3zUdYmE
+        O(E*K), k is the max amount of stops
+        Concept:
+        We continually iterate through all flights, the amount of times we iterate is based on k+1 (due to the way the problem is defined,
+        traveling across two edges is considered "one" stop)
+        and keep track of a prices array to check the smallest price needed to travel from one stop to another
+        
+        Example:
+        n = 3
+        flights = [[0,1,100],[1,2,100],[0,2,500]]
+        src = 0
+        dst = 2
+        k = 1
+        
+        initial setup:
+        prices = [float('inf'), float('inf'), float('inf')]
+        prices[src] = 0
+        
+        prices = [0, float('inf'), float('inf')]
+        
+        looping k + 1 times... (2)
+        
+        outer loop 1st iteration
+        i = 0
+        tmp = [0, float('inf'), float('inf')]
+        
+        inner loop 1st iteration 
+        [0, 1, 100]
+        from = 0, to = 1, price = 100
+        prices[from] + price = 0 + 100 = 100
+        is 100 < tmp[to] (100 < float('inf')), true
+        update tmp[1] = 100
+        
+        tmp = [0,100,float('inf')]
+        
+        inner loop 2nd iteration
+        [1, 2, 100]
+        from = 1, to = 2, price = 100
+        prices[from] == float('inf'), continue
+        
+        inner loop 3rd iteration
+        [0, 2, 500]
+        from = 0, to = 2, price = 500
+        prices[from] + price < tmp[to], 0 + 500 < float('inf'), true
+        tmp[to] = prices[from_] + price, tmp[2] = 500
+        tmp = [0, 100, 500]
+        
+        back to outer loop...
+        set prices = tmp, prices = [0, 100, 500]
+        
+        outer loop 2nd iteration
+        i = 1
+        tmp = [0, 100, 500]
+        
+        inner loop 1st iteration
+        [0, 1, 100]
+        from = 0, to = 1, price = 100
+        prices[from] + price < tmp[to], 0 + 100 < 100, false, 
+        so no need to set tmp
+        
+        inner loop 2nd iteration
+        [1, 2, 100]
+        from = 1, to = 2, price = 100
+        prices[from] + price < tmp[to], prices[1] + price < tmp[2],
+        100 + 100 < 500, true,
+        set tmp[2] = 200
+        tmp = [0, 100, 200]
+        
+        inner loop 3rd iteration
+        [0, 2, 500]
+        from = 0, to = 2, price = 500
+        prices[0] + 500 < tmp[2], 0 + 500 < 200, false
+        
+        inner loop ends
+        prices = tmp
+        prices = [0, 100, 200]
+        
+        outer loop also ends
+        
+        returns prices[dst], prices[2] = 200
+        final answer = 200
+        """
+        prices = [float("inf")] * n
+        prices[src] = 0
+        for i in range(k+1):
+            tmp = prices.copy()
+            for from_, to, price in flights:
+                if prices[from_] == float("inf"):
+                    continue
+                if prices[from_] + price < tmp[to]:
+                    tmp[to] = prices[from_] + price
+            prices = tmp
+        return -1 if prices[dst] == float("inf") else prices[dst]
+        
+
 
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
