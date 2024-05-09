@@ -18,6 +18,11 @@ i.e {1: A, 2: B, ..., 26: Z}
 3) The memoization aspect is that at a given i:
     save how many ways we could've decoded strings starting from i, and then return memo[i]
 
+Something that can be taken away from this problem is that its only asking for the 
+AMOUNT of ways it can be decoded, so no need to use a set to store results. At each i,
+we just need to check whether we CAN decode or not, if so, we move on with the recursion.
+Since if we can't decode, the amt will be 0 and that will be returned.
+
 Time Complexity: O(N) (with memoization)
 Space: O(N) recursive stack and the memoization dict
 */
