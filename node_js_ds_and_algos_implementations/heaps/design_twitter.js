@@ -78,7 +78,7 @@ Twitter.prototype.follow = function(followerId, followeeId) {
         this.db[followerId] = {"tweets": [], "followers": new Set(), "following": new Set()}
     }
     if (!(followeeId in this.db)){
-        this.db[followeeId] = {"tweets": [], "feed": new MaxPriorityQueue({priority: (p) => p.timestamp}), "followers": new Set(), "following": new Set()}
+        this.db[followeeId] = {"tweets": [], "followers": new Set(), "following": new Set()}
     }
     this.db[followerId].following.add(followeeId)
     this.db[followeeId].followers.add(followerId)
