@@ -36,9 +36,9 @@ class MedianFinder:
 
     There can also be a case where an element exists in A that is greater than elements in B, so you'd need to pop out the element from A
 
-    The benefit of this solution is that popping a min from min heap or max from max heap is O(1), and adding to a heap is O(LogN). 
+    The benefit of this solution is that popping a min from min heap or max from max heap is O(LogN), and adding to a heap is O(LogN). 
 
-    That way, the findMedian can also be O(1) since popping min from min heap, popping max from max heap, and then adding together and dividing by 2 is also O(1) (or if there's a length difference of 1, we can just take the max from the max heap if len(maxHeap) > len(minheap) OR we take the min of min heap if len(minHeap) > len(maxHeap)
+    That way, the findMedian can also be O(LogN) since popping min from min heap, popping max from max heap, and then adding together and dividing by 2 is also O(1) (or if there's a length difference of 1, we can just take the max from the max heap if len(maxHeap) > len(minheap) OR we take the min of min heap if len(minHeap) > len(maxHeap)
     """
     def __init__(self):
         self.maxHeapA = []
