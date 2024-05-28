@@ -48,6 +48,8 @@ This then skips to 5, and picks 5, for the last unique combination (1 1 1 1 1, 1
 
 This returns 4
 
+referenced solution from: https://leetcode.com/problems/coin-change-ii/discuss/1932377/Top-Down-Memo-technique
+
 */
 var change = function(amount, coins) {
     let memo = {}
