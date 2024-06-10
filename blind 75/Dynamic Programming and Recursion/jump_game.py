@@ -47,7 +47,7 @@ class Solution2:
             # can we reach the index of our goal post based on the max amount of 
             # jumps that can be taken?
             if i + nums[i] >= goalPost:
-                # if so, set the goal post to this potiion i, since we know we can reach
+                # if so, set the goal post to this position i, since we know we can reach
                 # the end from this position, so our new goal is to reach this position i
                 # instead of the end
                 goalPost = i
