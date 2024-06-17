@@ -24,20 +24,18 @@ var insert = function(intervals, newInterval) {
     }
     intervals.splice(k, 0, newInterval)
     // perform merge intervals
-    let prev = intervals[0]
-    let res = [prev]
+    let res = [intervals[0]]
     for (let i = 1; i < intervals.length; ++i){
-        let [prevStart, prevEnd] = prev
+        let [prevStart, prevEnd] = res[res.length-1]
         let [curStart, curEnd] = intervals[i]
         // if the previous endpoint is greater than the current's start, this is overlapping
         if (prevEnd >= curStart){
             // take the min of the two starts
             // take the max of the two ends, combine
-            prev = [Math.min(prevStart, curStart), Math.max(prevEnd, curEnd)]
-            res[res.length-1] = prev
+            res[res.length-1] = [Math.min(prevStart, curStart), Math.max(prevEnd, curEnd)]
+
         }
         else {
-            prev = intervals[i]
             res.push(intervals[i])
         }
     }
