@@ -46,7 +46,7 @@ var minInterval = function(intervals, queries) {
             minHeap.enqueue({intervalLength: r-l+1, tieBreaker: r})
             ++i
         }
-        // pop all the invalid intervals that are too far to the left
+        // pop all the invalid intervals that are too far to the left where the query does not exist in the range
         while (!minHeap.isEmpty() && minHeap.front().element.tieBreaker < q){
             minHeap.dequeue()
         }
