@@ -55,3 +55,65 @@ var reorderList = function(head) {
         
     }
 };
+
+/* 
+Slightly different solution that involves creating new nodes during the merging phase 
+If done this way, the algorithm is essentially insertion between every other node:
+assuming "temp" is the left half
+and "prev" is the reversed right half
+while (temp && temp.next && prev)
+1) saving the old next node
+2) creating the new next node
+3) setting the new next node's next value to be the old next node
+4) set temp.next to be the new next
+5) prev = prev.next
+6) temp = temp.next.next
+
+7) If there are any remaining prev nodes, 
+set temp.next = prev
+
+The reason why it's temp.next.next is because once we insert the node we want, we have
+the proper "configuration" for three nodes, so we need to get to the last node (the old "next")
+i.e 
+1 -> 2
+4 -> 3
+
+1 -> 4 -> 2 (this is correct), so we want to start at 2 now instead of 4 (which is temp.next.next)
+
+*/
+var reorderList = function(head) {
+    /*
+    split list in half
+    reverse the second half
+    interchange the first and reversed second half
+    */
+    let slow = head
+    let fast = head.next
+    while (fast && fast.next){
+        slow = slow.next
+        fast = fast.next.next
+    }
+    // slow should now be at the middle
+    let rightHalf = slow.next
+    // cut list in half
+    slow.next = null
+    
+    // reverse the right half
+    let prev = null
+    while (rightHalf){
+        let curr = rightHalf
+        rightHalf = rightHalf.next
+        curr.next = prev
+        prev = curr
+    }
+    let temp = head
+    while (temp && temp.next && prev){
+        let oldNext = temp.next
+        let newNext = new ListNode(prev.val)
+        newNext.next = oldNext
+        temp.next = newNext
+        prev = prev.next
+        temp = temp.next.next
+    }
+    temp.next = prev
+};

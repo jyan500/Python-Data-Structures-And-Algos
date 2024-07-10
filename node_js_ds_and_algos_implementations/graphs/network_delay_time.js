@@ -17,6 +17,18 @@ var networkDelayTime = function(times, n, k) {
         continue 
     }
     visited.add(dst)
+
+    Time Complexity:
+     O(ELogV), where E is the number of edges and V is the number of vertices
+    E = V^2, this is true because an a given graph, there could be bidirectional
+    edges between each vertex. In Djikstra's Algorithm, we use a min heap to store
+    all possible vertices. Therefore, it's possible we could have the same vertex on the min heap multiple times. So when we pop out of the min heap, it'll be 
+    at worst LogV^2, and we repeat this operation for the amount of edges,
+    E*LogV^2,
+    
+    This can be simplified to
+    2*E*LogV, and since 2 becomes constant, this further simplifies to
+    ELogV, O(ELogV)
     
     */
     let adjacency = {}

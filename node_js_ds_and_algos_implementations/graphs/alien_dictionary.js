@@ -70,12 +70,14 @@ class Solution {
             if (c in visited){
                 return visited[c]
             }
+            // setting visited[c] to true means it's on the current path
             visited[c] = true
             for (let neighbor of adjacency[c]){
                 if (dfs(neighbor)){
                     return true
                 }
             }
+            // setting visited[c] tp false means it's been visited, but not on the current path
             visited[c] = false   
             res.push(c)
         }
