@@ -6,6 +6,7 @@
 var timeRequiredToBuy = function(tickets, k) {
     /*
     Linear Time Solution (Neetcode)
+    https://youtu.be/cVmS9N6kf2Y
     You can skip the simulation and do this in one pass by recognizing this pattern:
     
     because we only want to know how much time is taken until the person at tickets[k] is finished,
