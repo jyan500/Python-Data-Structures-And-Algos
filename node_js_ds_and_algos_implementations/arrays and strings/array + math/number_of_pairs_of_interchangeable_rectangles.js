@@ -13,7 +13,7 @@ var interchangeableRectangles = function(rectangles) {
         5 = 10 pairs (4 + 3 + 2 + 1)
         
         the way to calculate the sum of consecutive numbers is 
-        (n * (n+1))/2
+        (n * (n-1))/2
 
         Time: O(N)
         Space: O(N)
