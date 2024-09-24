@@ -1,3 +1,79 @@
+// re-visited on 9/24/2024
+class Solution {
+    /**
+     * @param {character[][]} board
+     * @return {boolean}
+     */
+    isValidSudoku(board) {
+        /*
+        1) create a hashmap where the key is the row number and the value is a set, and iterate through all rows of the board and check if no digits repeat
+        2) create a hashmap where the key is the col number and the value is a set, and iterate through all columns of the board and check if no digits repeat
+        3) iterate through each 3x3 box on the board and check if no digits repeat
+            - create a hashmap where the key is the subsection index (i.e "0,0") and the value is
+            a set of all digits that were found in this subsection
+            - to create the key, you'd take i, j and perform floor division each by 3.
+            For example, i = 2, j = 2, would be 2 // 3 , 2 // 3 = 0,0, which corresponds
+            to the top left subsection of the 3x3 square 
+        */
+        // iterate through all rows and check for dups
+        let M = board.length
+        let N = board[0].length
+        let rows = {}
+        let cols = {}
+        for (let i = 0; i < M; ++i){
+            rows[i] = new Set()
+            for (let j = 0; j < N; j++){
+                if (rows[i].has(board[i][j])){
+                    return false
+                }
+                if (board[i][j] !== "."){
+                    rows[i].add(board[i][j])
+                }
+            }
+        }
+        // iterate through all cols and check for dups
+        // when iterating by column, make sure to 
+        // flip the indices (so start iterating through all columns, then rows)
+        // but still access the board by board[i][j]
+        for (let j = 0; j < N; ++j){
+            cols[j] = new Set()
+            for (let i = 0; i < M; ++i){    
+                if (cols[j].has(board[i][j])){
+                    return false
+                }
+                if (board[i][j] !== "."){
+                    cols[j].add(board[i][j])
+                }
+            }
+        }
+        // create a hashmap of the subsections
+        let subSections = {}
+        for (let i = 0; i < 3; ++i){
+            for (let j = 0; j < 3; ++j){
+                subSections[`${i},${j}`] = new Set()
+            }
+        }
+        for (let i = 0; i < M; ++i){
+            for (let j = 0; j < N; ++j){
+                // use floor division to map the 9x9 square into it's 3x3 subsection
+                let x = Math.floor(i/3)
+                let y = Math.floor(j/3)
+                let subKey = `${x},${y}`
+                if (subKey in subSections){
+                    if (subSections[subKey].has(board[i][j])){
+                        return false
+                    }
+                    if (board[i][j] !== "."){
+                        subSections[subKey].add(board[i][j])
+                    }
+                }
+            }
+        }
+        return true
+    }
+}
+
+
 /**
  * @param {character[][]} board
  * @return {boolean}
