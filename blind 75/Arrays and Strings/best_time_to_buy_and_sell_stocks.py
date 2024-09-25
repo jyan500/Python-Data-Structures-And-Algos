@@ -1,3 +1,22 @@
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        """
+        keep a pointer where if the current price is less than the buying price,
+        we can set the buying price to be the current price, as we can generate more profit this way.
+        If the price is greater than buying price, that means we are selling at a profit,
+        so we calculate max(current max, current price - buying price)
+		O(N) Time O(1) Space
+        https://neetcode.io/problems/buy-and-sell-crypto
+        """
+        buy = prices[0]
+        maxProfit = 0
+        for i in range(1, len(prices)):
+            if (prices[i] < buy):
+                buy = prices[i]
+            else:
+                maxProfit = max(maxProfit, prices[i] - buy)
+        return maxProfit
+        
 '''
 You are given an array prices where prices[i] is the price of a given stock on the ith day.
 

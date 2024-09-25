@@ -1,7 +1,52 @@
 '''
 https://leetcode.com/problems/trapping-rain-water/
-
 '''
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        """
+        9/25/2024
+        https://neetcode.io/problems/trapping-rain-water
+        Brute Force: O(N^2) Time O(1) Space
+        in order for water to be trapped, you need to have 3 indices where
+        the the middle height is less than both the height on the left and height on the right,
+        and the amount of water trapped is bounded by the min(height on left, height on right).
+        my approach would be to go column by column, iterate to the left and right to see
+        what the max height is on both sides. And then take the min between between these two values.
+        this value, which is min(max on left, max right) subtracted from the current height at this column i,
+        would be the max amount of water you can store at this column. 
+
+        the bottleneck is that you repeatedly calculate the max height on both the left and right side
+        of a given i, which could probably be stored in memory to further optimize the solution. You can see
+        this in the solutions below, which can be optimized from O(N^2) to O(3N)
+        """
+        total = 0
+        for i in range(len(height)):
+            l = i-1
+            r = i+1
+            maxHeightLeft = 0
+            maxHeightRight = 0
+            """
+            find the maximum height on the left and maximum height on the right
+            """
+            while l >= 0:
+                maxHeightLeft = max(height[l], maxHeightLeft)
+                l -= 1
+            while r < len(height):
+                maxHeightRight = max(height[r], maxHeightRight)
+                r += 1
+            """
+            the container is bounded by the minimum height between the left and right,
+            so find the minimum height, and then subtract the current height to give
+            the max amount of water that can be stored in this column.
+            However, in cases where the min(max height left, max height right) < height[i], this is not a valid
+            container, so we don't include this calculation. The container height must be greater than height[i]
+            in order to store water.
+            """
+            containerHeight = min(maxHeightLeft, maxHeightRight)
+            if (containerHeight > height[i]):
+                total += (containerHeight - height[i])
+        return total
+
 class Solution:
     def trap(self, height: List[int]) -> int:
         """

@@ -22,6 +22,44 @@ Example 4:
 Input: s = ""
 Output: 0
 '''
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        """
+        Revisited on 9/25/2024
+        https://neetcode.io/problems/longest-substring-without-duplicates
+        'abacde'
+        'abacfcghi'
+        'abbcdef'
+        O(N) Time O(N) Space solution
+        """
+        seen = set()
+        l = 0
+        r = 0
+        maxLength = 0
+        currentLength = 0
+        while (r < len(s)):
+            if (s[r] in seen):
+                """
+                if the character at the right pointer is already seen,
+                remove the character represented at the left pointer from the set,
+                and then shift the left pointer by one. And decrease current length
+                """
+                maxLength = max(currentLength, maxLength)
+                seen.remove(s[l])
+                currentLength-=1
+                l += 1
+            else:
+                """
+                if you see a non-duplicated character, then increase the current length
+                add the current character to the set
+                re-calculate the current length
+                increment right pointer
+                """
+                currentLength += 1
+                maxLength = max(currentLength, maxLength)
+                seen.add(s[r])
+                r += 1
+        return maxLength
 
 class Solution:
 	"""
