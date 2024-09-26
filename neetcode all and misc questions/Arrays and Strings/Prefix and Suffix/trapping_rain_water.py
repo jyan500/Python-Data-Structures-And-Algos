@@ -27,6 +27,7 @@ class Solution:
             maxHeightRight = 0
             """
             find the maximum height on the left and maximum height on the right
+            when optimized, this can actually be pre-calculated to avoid having to repeat this work
             """
             while l >= 0:
                 maxHeightLeft = max(height[l], maxHeightLeft)

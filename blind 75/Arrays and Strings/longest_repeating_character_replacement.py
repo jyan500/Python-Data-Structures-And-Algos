@@ -7,6 +7,65 @@ https://leetcode.com/problems/longest-repeating-character-replacement/
 https://www.youtube.com/watch?v=gqXU1UyA8pk&ab_channel=NeetCode
 '''
 
+class Solution:
+    """
+    https://neetcode.io/problems/longest-repeating-substring-with-replacement
+    """
+    def characterReplacement(self, s: str, k: int) -> int:
+        """
+        Optimized:
+        use a hashmap which keeps track of the amount of characters found so far,
+        as well as two pointers (left and right starting at 0)
+        the key is that given any substring, the amount of replacements that need to be made
+        is the length of the substring - the frequency of the most re-occuring character
+        if the amount of replacements > k, we need to shift the left pointer, and 
+        decrement the frequency of the character that was at the left pointer
+        O(26*N), the "26" comes from the max(frequency.values()) which is performed per iteration, as the hashmap 
+        has a max length of 26 characters since the string can only have 26 different possible combinations.
+
+        """
+        from collections import defaultdict
+        l = 0
+        r = 0
+        # using defaultdict to make the code more concise when initially adding
+        # characters into the dict that don't exist yet
+        frequency = defaultdict(int)
+        longest = 0
+        while (r < len(s)):
+            frequency[s[r]] += 1
+            # if there are too many replacements that need to be made,
+            # shift the left pointer by one and decrement the value in the frequency dict
+            while ((r - l + 1) - max(frequency.values()) > k):
+                frequency[s[l]]-=1
+                l+=1
+            longest = max(longest, r - l + 1)
+            r+=1
+        return longest
+
+    def characterReplacement(self, s: str, k: int) -> int:
+        """
+        Brute Force solution:
+        at each i, iterate until you reach a character that you can't replace, and all replacements
+        have run out. Try it with every possible unique character in the string
+        O(N * 26N solution), since there are only 26 possible unique characters so that aspect is constant
+        """
+        maxLength = 0
+        uniqueChars = set(list(s))
+        for i in range(len(s)):
+            for startingChar in uniqueChars:
+                numReplacements = 0
+                total = 0
+                for j in range(i, len(s)):
+                    if s[j] != startingChar:
+                        if (numReplacements < k):
+                            numReplacements+=1
+                        else:
+                            break
+                    total+=1
+                    maxLength = max(total, maxLength)
+            
+        return maxLength
+
 class Solution2:
     """
     Revisited 7/7/2023

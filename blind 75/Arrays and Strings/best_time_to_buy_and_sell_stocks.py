@@ -6,6 +6,7 @@ class Solution:
         If the price is greater than buying price, that means we are selling at a profit,
         so we calculate max(current max, current price - buying price)
 		O(N) Time O(1) Space
+		Revisited 9/25/2024
         https://neetcode.io/problems/buy-and-sell-crypto
         """
         buy = prices[0]
