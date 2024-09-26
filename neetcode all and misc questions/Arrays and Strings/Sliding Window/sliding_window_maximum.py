@@ -1,6 +1,48 @@
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         """
+        Revisited 9/26/2024
+        https://neetcode.io/problems/sliding-window-maximum
+        optimized solution uses a queue where each element is in decreasing order 
+        (so smallest element is at the end)
+        instead of storing the element, store the index of that element instead
+        to make it easier to tell when that element is no longer in the window
+        """
+        from collections import deque
+        q = deque()
+        res = []
+        l = 0
+        r = 0
+        while (r < len(nums)):
+            """
+            when adding a new element onto the window, if the last element in the queue (right side)
+            is less than the current, pop the last element 
+            """
+            while (len(q) > 0 and nums[q[-1]] < nums[r]):
+                q.pop()
+            q.append(r)
+            """
+            if the left pointer is greater than the index that represents our current max,
+            pop the current max
+            """
+            if q[0] < l:
+                q.popleft()
+            
+            """
+            if we've exceeded the window size, take the current max and append to our res
+            to represent the current max of this window, increment left pointer
+            """
+            if r - l + 1 >= k:
+                res.append(nums[q[0]])
+                l += 1
+
+            r += 1
+
+        return res
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        """
         Brute Force:
         Iterate through nums via windows of K, and then find the max at each window
         O(N*(N-K+1)), where N - K is the amount of windows you can make
