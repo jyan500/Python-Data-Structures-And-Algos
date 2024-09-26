@@ -7,8 +7,75 @@ https://leetcode.com/problems/minimum-window-substring/
 https://www.youtube.com/watch?v=jSto0O4AJbM&t=615s&ab_channel=NeetCode
 '''
 
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        """
+        Revisited again on 9/25/2024 with Brute Force
+        Note this wouldn't pass on Leetcode, but it does pass on Neetcode
+        https://neetcode.io/problems/minimum-window-with-characters
+
+        Keep increasing a window until you find what you're looking for,
+        and then see how much you can shrink the window since we're looking for the 
+        minimum window size
+
+        The containsAllChars function determines whether all the characters in counter c1 exists in c2,
+        and also if c2 contains at least all the counts of each characters in c1 (so c1[key] <= c2[key])
+
+        The solution uses a while (containsAllChars) to determine whether we can keep shrinking
+        the substring after finding a suitable substring with all chars. The while loop does overshoot
+        by one character on the left, so we have to add that character back after the while loop breaks out,
+        and then check what the substring by slicing based on the left and right pointers.
+
+        t = "CABC"
+        s = "EABCECECFBACC"
+        first window we find is "EABCEC", where all characters in T are found in this substring
+        we can then try shrinking the left side until this condition is no longer met,
+        in this case, "ABCEC" is the most we can shrink
+
+        Time Complexity would be O(N * (N+M)), the additional N+M is for checking the dictionaries every iteration
+        Space: O(N+M)
+
+        """
+        from collections import Counter
+        from collections import defaultdict
+        if (len(t) > len(s)):
+            return ""
+        counter1 = Counter(t)
+        def containsAllChars(c1, c2):
+            for key in c1:
+                # as long as the frequency in c1 is <= frequency in c2 (since sometimes c2 can contain more characters than necessary)
+                # this meets the condition. So the inverse of these conditions would return false
+                if not (key in c2 and c1[key] <= c2[key]):
+                    return False
+            return True
+        l = 0
+        r = 0
+        counter2 = defaultdict(int)
+        shortest = ""
+        while r < len(s):
+            counter2[s[r]] += 1
+            if containsAllChars(counter1, counter2):
+                # as long as we have all the characters needed in counter2, continue shrinking the substring
+                # by incrementing the left pointer
+                while containsAllChars(counter1, counter2):
+                    counter2[s[l]] -= 1
+                    if (counter2[s[l]] == 0):
+                        del counter2[s[l]]
+                    l+=1
+                # once the while loop breaks, we actually overshoot by one on the left,
+                # so we have to add that back in
+                l-=1
+                counter2[s[l]] += 1
+                cur = s[l:r+1]
+                if (shortest == ""):
+                    shortest = cur
+                elif (len(cur) < len(shortest)):
+                    shortest = cur
+            r+=1
+        return shortest
+
 """
-Revisited on 1/24
+Revisited on 1/24/2024
 This approach is O(N*(N+M)), not as efficient as the O(N+M) solution
 from neetcode but easier to remember.
 
