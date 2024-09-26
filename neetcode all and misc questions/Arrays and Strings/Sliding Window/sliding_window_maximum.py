@@ -29,10 +29,10 @@ class Solution:
                 q.popleft()
             
             """
-            if we've exceeded the window size, take the current max and append to our res
+            if we've reached the window size, take the current max and append to our res
             to represent the current max of this window, increment left pointer
             """
-            if r - l + 1 >= k:
+            if r - l + 1 == k:
                 res.append(nums[q[0]])
                 l += 1
 
