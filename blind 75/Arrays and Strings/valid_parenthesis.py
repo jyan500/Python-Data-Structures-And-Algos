@@ -1,3 +1,20 @@
+class Solution:
+    """
+    https://neetcode.io/problems/validate-parentheses
+    revisited 9/26/2024
+    """
+    def isValid(self, s: str) -> bool:
+        stack = []
+        for c in s:
+            if len(stack) > 0:
+                top = stack[-1]
+                if ((top == "[" and c == "]") or 
+                   (top == "(" and c == ")") or 
+                   (top == "{" and c == "}")):
+                   stack.pop()
+                   continue
+            stack.append(c)
+        return len(stack) == 0
 '''
 Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
 
