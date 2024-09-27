@@ -3,6 +3,49 @@ https://leetcode.com/problems/car-fleet/
 https://www.youtube.com/watch?v=Pr6T-3yB9RM&ab_channel=NeetCode
 """
 class Solution:
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        """
+        how long does it take for each to reach the destination?
+
+        0                  10
+            4     6    8
+        (target - position)/speed = time
+        I'd first put the position and speed together, and then sort it in reverse order,
+        so you know which car is likely to reach the target first
+
+        9/26/2024 I managed to successfully solve this problem, I recalled some aspects
+        of the neetcode solution such as determining intersection by calculating the time needed to reach the target, 
+        but I think this solution seems to make more sense to me.
+        This seems similar to a "merge intervals" style problem where you merge together the cars 
+        based on the time it takes to reach the target.
+        Time: O(NLogN)
+        Space: O(N)
+        """
+        # sort by position, and then speed, so that we can see which car is closest to the target
+        posSpeed = []
+        for i in range(len(position)):
+            posSpeed.append((position[i], speed[i]))
+        posSpeed.sort(key=lambda x: (x[0], x[1]), reverse=True)
+        # keep a stack which shows the vehicle that's closest to the target
+        res = [posSpeed[0]]
+        for i in range(1, len(posSpeed)):
+            # get the car that's in front of the current car
+            prevPos, prevSpeed = res[-1]
+            pos, speed = posSpeed[i]
+            prevTimeToTarget = (target - prevPos)/prevSpeed
+            timeToTarget = (target - pos)/speed
+            # if it takes the current car less time to reach the target then the previous,
+            # that means they will intersect, so we merge the previous with the current
+            # inheriting the slower car's speed since the cars cannot pass each other
+            if (timeToTarget <= prevTimeToTarget):
+                res[-1] = (prevPos, prevSpeed)
+            else:
+                # otherwise, just append the current car as the previous and current will not intersect
+                res.append((pos, speed))
+        return len(res)
+                
+             
+        class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int: 
         """
         Important Concepts:
