@@ -63,6 +63,42 @@ don't use that here
 """
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
+        """
+        Note the problem assumes that you'll always have
+        two numbers before an operator
+        
+        use a stack to push digits onto the stack, and then pop
+        the last two digits if the current character is an operator,
+        evaluate, and then push the result back onto the stack.
+
+        for division, negative numbers will
+        truncate towards 0, in Python you can do this within int() conversion
+        
+        https://neetcode.io/problems/evaluate-reverse-polish-notation
+        """
+        from math import floor
+        stack = []
+        for i in range(len(tokens)):
+            if len(stack) >= 2:
+                if tokens[i] == "+" or tokens[i] == "-" or tokens[i] == "*" or tokens[i] == "/":
+                    res = 0
+                    n1 = stack.pop()
+                    n2 = stack.pop()
+                    if tokens[i] == "+":
+                        res = n1 + n2
+                    elif tokens[i] == "-":
+                        res = n2 - n1
+                    elif tokens[i] == "*":
+                        res = n2 * n1
+                    elif tokens[i] == "/":
+                        res = int(n2/n1)
+                    stack.append(res)
+                    continue
+            stack.append(int(tokens[i]))
+        return stack[-1]
+            
+        class Solution:
+    def evalRPN(self, tokens: List[str]) -> int:
         stack = []
         for i in range(len(tokens)):
             token = tokens[i]

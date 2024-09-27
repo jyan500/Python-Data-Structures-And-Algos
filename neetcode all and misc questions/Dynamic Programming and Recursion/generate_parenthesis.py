@@ -12,6 +12,27 @@ Output: ["()"]
 
 '''
 """
+Revisited on 9/26/2024, still same solution in 2^n time
+"""
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        def search(leftCount, rightCount, cur, res):
+            if (leftCount == n and rightCount == n):
+                res.append(cur)
+                return
+            if (leftCount < n):
+                search(leftCount+1, rightCount, cur + "(", res)
+            """ 
+            as long as there are more left parens then right parens, we can use a right parens,
+            this prevents us from choosing a right parens before a left parens, which would
+            create an invalid combination
+            """
+            if (leftCount > rightCount and rightCount < n):
+                search(leftCount, rightCount+1, cur + ")", res)
+        valid = []
+        search(0, 0, "", valid)
+        return valid
+"""
 Revisited on 9/8/2023
 Time: O(2^n), for a given index there can be two combinations here, so 2 * 2 * 2 ... n which is 2^n
 Space: O(2^n)

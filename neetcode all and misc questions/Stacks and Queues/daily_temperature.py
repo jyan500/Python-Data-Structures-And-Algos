@@ -30,9 +30,31 @@ https://leetcode.com/problems/daily-temperatures/
 https://www.youtube.com/watch?v=cTBiBSnjO3c&ab_channel=NeetCode
 
 '''
-
 """
-Revisited on 8/15, watching Neetcode
+Revisited again on 9/26/2024
+Have to remember about the monotonic stack where descending order is kept, this can be helpful
+when you need to know a previous max
+"""
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        res = [0] * len(temperatures)
+        stack = []
+        for i in range(len(temperatures)):
+            if (len(stack) > 0):
+                prevTemp, prevIndex = stack[-1]
+                # if the current temperature is greater than the top of the stack,
+                # that means we've found the first possible day where a temp was greater than
+                # the temperature at the top of the stack, so we record the difference in indices
+                # if we continue to pop, it's possible we continue finding temperatures that are less
+                while (len(stack) > 0 and temperatures[i] > prevTemp):
+                    stack.pop()
+                    res[prevIndex] = i - prevIndex
+                    if (len(stack) > 0):     
+                        prevTemp, prevIndex = stack[-1]
+            stack.append((temperatures[i], i))
+        return res
+"""
+Revisited on 8/15/2023, watching Neetcode
 
 Concept:
 iterate through temps, push a tuple containing the value and the index
