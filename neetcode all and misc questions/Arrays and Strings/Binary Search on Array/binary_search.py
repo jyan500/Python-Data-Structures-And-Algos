@@ -23,9 +23,9 @@ class Solution:
         elif (left >= right):
             return -1
         ## if our target element is less than the midpoint, we need to search the half of the array
-        ## from the left index to our midpoint - 1
+        ## from the left index to our midpoint 
         elif (target < nums[midpoint]):
-            return self.helper(nums, left, midpoint-1, target)
+            return self.helper(nums, left, midpoint, target)
         ## if our target element is greater than the midpoint, we need to search the half of the array
         ## from the midpoint + 1, to our right index
         elif (target > nums[midpoint]):

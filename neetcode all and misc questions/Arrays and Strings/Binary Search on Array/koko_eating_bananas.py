@@ -2,7 +2,69 @@
 https://leetcode.com/problems/koko-eating-bananas/
 """
 class Solution:
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        """
+        Revisited 9/27/2024
+        1,4,3,2
+        k = bananas/hour
+        bananas * hour/bananas = hours
+        k = 1
+        1/1 = 1 hour needed
+        4/1 = 4 hour needed
+        3/1 = 3 hour needed
+        2/1 = 2 hour needed
+        10 hours needed which exceeds our hour limit, which is 9
+        k = 2
+        1/2 = 1 hour needed
+        4/2 = 2 hour needed
+        3/2 = 2 hour needed
+        2/2 = 1 hour needed
+        total 6 hours
+        k = 3
+        1/3 = 1 hour needed
+        4/3 = 2 hour needd
+        3/3 = 1 hour needed
+        2/3 = 1 hour needed
+        total 5 hours
 
+        So at some threshold, your total hours would exceed K OR be less than K,
+        so you want to find that threshold.
+
+        binary search can help with this, because if you land somewhere in a threshold,
+        you know that any K value before will result in taking MORE hours, and any K value
+        above it will result in taking LESS hours
+
+        Time Complexity: O(N*LogN)
+        Space: O(1)
+        """
+        import math
+        def calculateTotalHours(piles, k):
+            totalHours = 0
+            for i in range(len(piles)):
+                totalHours += math.ceil(piles[i]/k)
+            return totalHours
+        
+        maxBananaRate = max(piles)
+
+        def binarySearch(left, right):
+            mid = left + (right-left)//2
+            totalHours = calculateTotalHours(piles, mid)
+            # eventually, our binary search will bring us to as close the threshold as possible,
+            # so once the pointers cross, we've exhausted our search space,
+            # so mid should represent the minimum k we could pick.
+            if (left >= right):
+                return mid
+            # if we're equal to under the limit, potentially we could find a better answer
+            # by decreasing k, meaning it'd take a bit longer, increasing totalHours,
+            # we want to get it as close to completion as possible
+            if totalHours <= h:
+                return binarySearch(left, mid)
+            else:
+                return binarySearch(mid+1, right)
+        
+        return binarySearch(1, maxBananaRate)
+
+class Solution:
     def minEatingSpeedOptimized(self, piles: List[int], h: int) -> int:
         import math
         """
