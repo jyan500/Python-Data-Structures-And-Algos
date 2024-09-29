@@ -1,4 +1,68 @@
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        """
+        Revisited 9/29/2024
+        https://neetcode.io/problems/find-minimum-in-rotated-sorted-array
+        in the rotated sorted array, there's always an index where the number immediately 
+        to the right is larger than the number on the left like normal, 
+        but the number to the left is larger than the number on the right, which indicates
+        this is the rotation point.
+        i.e 
+        6,7,8,9,10,11,3,4,5
+        here the rotation point is 3, normally the numbers on the left of 3
+        should be less than 3 in normal ascending order, but in this case it is greater.
+
+        In order to find this number in LogN, use binary search. But after find the mid point,
+        compare it to the numbers at the LEFT pointer and the numbers at the RIGHT pointer, since otherwise,
+        you wouldn't know which section of the array to search without making this comparison (since
+        if you do the numbers of mid - 1 and mid + 1, you might get into a section where it's valid both ways
+        and not know which way to look). 
+        Also we know that if the number at the right pointer is less than nums[mid],
+        then we look to the right, since the rotation factor should be in that section of the array,
+        as we'd expect nums[right] to be greater than nums[mid], otherwise, we'd search to the left.
+        
+        In a case where the array is not rotated at all (or is rotated at a factor of the length of the array,
+        which would just create the same array as if it were not rotated at all),
+        the number at left is less and the number at right is greater all the time, 
+        we'd just search the left side repeatedly
+
+        for example, above. L starts out at 0, R is at 8
+        6,7,8,9,10,11,3,4,5
+        mid = L + (R - L)//2
+        0 + (8//2) = 4
+        nums[4] is 10
+        here, the number on nums[0] is 6, but nums[8] is 5, which is also less.
+        In that case, we have to search to the right, as the rotation factor would be
+        that half of the array
+        6,7,8,9,10,11,3,4,5
+        L should now be 4 + 1 = 5
+        R = 8
+        mid = 5 + (8-5)//2 = 5 + 3//2 = 6
+        nums[mid] is 3, so the left is greater but the right is also greater,
+        so we have to search left
+        L is now 5 and R is now 6,
+        5 + (6-5)//2 = 5
+        in this case, we'd do another right half search, making
+        L = 6 and R = 6.
+        The midpoint would end up being 6, L >= R, so return nums[6]
+        """
+        def binarySearch(left, right):
+            mid = left + (right - left)//2
+            # if the left >= right, we've exhausted our search, and should've
+            # found the rotation point in the sorted array (which is also the minimum)
+            if (left >= right):
+                return nums[mid]
+            # number at right less than mid,
+            # search the right
+            if nums[right] < nums[mid]:
+                return binarySearch(mid+1,right)
+            # otherwise, search the left
+            else:
+                return binarySearch(left, mid)
+
+        return binarySearch(0, len(nums)-1)
 '''
+
 Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, the array nums = [0,1,2,4,5,6,7] might become:
 
 [4,5,6,7,0,1,2] if it was rotated 4 times.
