@@ -19,7 +19,56 @@ Note: Solution MUST BE IN O(LogN)
 ## 2. Apply binary search on the subarray, if the target is smaller than the peak element, search the left
 ## if the target is bigger, search right.
 '''
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        """
+        Revisited on 9/29/2024
+        find the rotation point of the rotated sorted array:
+        by comparing the number at the left and the number at the right to the number at mid,
+        if the number at the right < nums[mid], we search right, as the rotation point should be
+        in this section since we'd expect nums[right] > nums[mid].
+        Otherwise, we'd search to the left.
 
+        Once we figure out the rotation point, we'd essentially have two separate sorted arrays
+        split by the rotation point. If we check if the target is in bounds of the right side,
+        meaning the nums[rotationPoint] <= target <= nums[right], that means we search the right side,
+        so the left would be rotationPoint, otherwise, we search the left side.
+        
+        """
+        def findRotationPoint(left, right):
+            mid = left + (right-left)//2
+            if left >= right:
+                return mid
+            if nums[right] < nums[mid]:
+                return findRotationPoint(mid+1, right)
+            else:
+                return findRotationPoint(left, mid)
+        # perform regular binary search, where if the target < nums[mid],
+        # we need to search left, otherwise, search right
+        def findTarget(left, right):
+            mid = left + (right-left)//2
+            if (target == nums[mid]):
+                return mid
+            if (left >= right):
+                return -1
+            if target < nums[mid]:
+                return findTarget(left, mid)
+            else:
+                return findTarget(mid+1, right)
+        left = 0
+        right = len(nums)-1
+        rotationPoint = findRotationPoint(0, len(nums)-1)
+        # if target is in bounds of the rotation point and the right side
+        # search on the right side by setting left at the minIndex
+        if nums[rotationPoint] <= target <= nums[right]:
+            left = rotationPoint
+        # otherwise, search on the left side by setting right to the minIndex
+        else:
+            right = rotationPoint
+        return findTarget(left, right)
+        
+
+        
 """
 revisited on 7/5/2023
 approach:
