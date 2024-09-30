@@ -4,6 +4,25 @@ Given the head of a singly linked list, reverse the list, and return the reverse
 https://leetcode.com/problems/reverse-linked-list/
 
 '''
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    	"""
+    	Revisited 9/29/2024
+    	In this version, 3 pointers are used. Curr points to head so that we don't mutate the original head
+    	save the position of curr in temp
+    	advance curr
+    	set the temp pointer's next backwards towards prev
+    	and then advance prev to where temp is
+    	"""
+        prev = None
+        curr = head
+        while (curr != None):
+            temp = curr
+            curr = curr.next
+            temp.next = prev
+            prev = temp
+        return prev
+
 class Solution2:
 	def reverseList(self, head: ListNode) -> ListNode:
 		""" 
