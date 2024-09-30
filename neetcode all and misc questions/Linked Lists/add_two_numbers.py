@@ -30,7 +30,79 @@ Output: [8,9,9,9,0,0,0,1]
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        """
+        Revisited 9/30/2024
+        This solution is improved and doesn't use any intermediate arrays
+        https://neetcode.io/problems/add-two-numbers
+
+        because the numbers are stored in reverse order, we can start adding the two digits
+        starting from the beginning of each linked list, as this is the same order as we'd do 
+        by-hand addition.
+
+        track a carryover at 0, and whenever we add the values + existing carryover, 
+        check if the sum >= 10
+        if so, the value we set is 10 - 10, and the carryover is 1. If the sum is < 10,
+        we just set the value as the sum and set the carryover to 0
+
+        In the case we finish iterating and there's still carryover,
+        set a remaining next node with a value of 1
+
+        In the case the linked lists are not the same length, it's easier to pad the shorter
+        linked list with nodes with value 0 to make edge case handling easier. So I would first
+        iterate through both linked lists until you get to the last non-null value, and as the other LL continues,
+        I'd add new list nodes onto the shorter linked list with value 0.
+        """
+        tmp1 = l1
+        tmp2 = l2
+
+        # get to the last non-null value of each linked list
+        while (tmp1.next and tmp2.next):
+            tmp1 = tmp1.next
+            tmp2 = tmp2.next
+        # pad the shorter linked list with zeroes to prevent edge cases
+        # when one linked list is longer than the other while adding
+        if tmp1.next == None and tmp2.next != None:
+            while (tmp2.next != None):
+                tmp1.next = ListNode(0)
+                tmp1 = tmp1.next
+                tmp2 = tmp2.next
+        elif tmp1.next != None and tmp2.next == None:
+            while (tmp1.next != None):
+                tmp2.next = ListNode(0)
+                tmp2 = tmp2.next
+                tmp1 = tmp1.next
+
+        # begin performing addition,
+        # tracking carryover. sum at each point is always carryover + the two values
+        dummy = ListNode()
+        cur = dummy
+        carryover = 0
+        while (l1 != None and l2 != None):
+            sumVal = carryover + l1.val + l2.val
+            newNode = None
+            if (sumVal >= 10):
+                newNode = ListNode(sumVal - 10)
+                carryover = 1
+            else:
+                newNode = ListNode(sumVal)
+                carryover = 0
+            cur.next = newNode
+            cur = cur.next
+            l1 = l1.next
+            l2 = l2.next
+        # if there's still carryover, set the next node to be a new node with the carryover value 
+        if (carryover > 0):
+            cur.next = ListNode(carryover)
+        return dummy.next
+            
 """
 Revisited 9/8/2023
 O(N) Time and O(N) memory solution
