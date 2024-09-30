@@ -27,6 +27,78 @@ which is 6, "bar3", therefore the answer is left - 1
 
 """
 class TimeMap:
+    """
+    Revisited on 9/29/2024
+    https://neetcode.io/problems/time-based-key-value-store
+    """
+    def __init__(self):
+        import heapq
+        """
+        dictionary?
+        {
+            key1: [[value, timestamp1], [value, timestamp2], etc],
+            key2: [...]
+        }
+        """
+        self.table = {}
+
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        if key not in self.table:
+            self.table[key] = []
+        # heapq.heappush(self.table[key], [timestamp, value])
+        self.table[key].append([timestamp, value])
+
+    def get(self, key: str, timestamp: int) -> str:
+        """
+        since the calls to set have timestamps in strictly increasing order,
+        we can assume the array is already sorted by timestamps ascending.
+        this allows us to use binary search to find the timestamp
+        """
+
+        def binarySearch(left, right, target, values):
+            mid = left + (right-left)//2
+            timestamp, value = values[mid]    
+            if timestamp == target:
+                return value
+            """
+            if the timestamp is not found and we've exhausted our search, 
+            we should be at the next closest timestamp that is either 
+            greater or less than what we're looking for.
+            The condition is that
+            prev timestamp <= timestamp, however, since our recursion "overshoots" by one value,
+            that would gives us the next greatest value, so the value that's one "less" is mid - 1.
+            However, in the case mid - 1 is out of bounds, we return "".
+            If we run into a case where the 
+            timestamp we're looking for is greater than all of our existing timestamps,
+            then we just return mid, as the midpoint would give us the timestamp which meets the condition
+            of prev timestamp < target timestamp, so we wouldn't have overshot in this case.
+            for example
+            2,3,5
+            If target timestamp is 4, we would return the value at timestamp 3, since 4 > 3
+            If the timestamp was 6, we would return 5
+            If the timestamp was 1 however, we can't return 2, since that would mean
+            our currentTimestamp would be greater than the target timestamp
+            """
+            if left >= right:
+                if timestamp > target and mid - 1 >= 0:
+                    closestTimestamp, closestValue = values[mid-1]
+                    return closestValue
+                elif timestamp < target:
+                    closestTimestamp, closestValue = values[mid]
+                    return closestValue
+                return ""
+
+            if timestamp > target:
+                return binarySearch(left, mid, target, values)
+            else:
+                return binarySearch(mid+1,right, target, values)
+        if (key in self.table):
+            left = 0
+            right = len(self.table[key])-1
+            return binarySearch(left, right, timestamp, self.table[key])
+        return ""
+
+class TimeMap:
 
     def __init__(self):
         # timestamps are always increasing, meaning it'll be in sorted order
