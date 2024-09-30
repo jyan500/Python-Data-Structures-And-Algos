@@ -8,6 +8,41 @@ class ListNode:
         self.val = x
         self.next = None
 
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        """
+        https://neetcode.io/problems/merge-two-sorted-linked-lists
+        Revisited 9/30/2024
+        use two pointers
+        iterate through the two lists simultaneously until one of the lists becomes None
+        at each point, compare which node's value is greater. If so, set the curr.next
+        to be the remainder of that list, then increment the pointer for that list,
+        as well as curr's pointer. The reason why this works is because each time,
+        you are basically overwriting the remainder of the list with the other "remainder of the list"
+        and then moving the curr pointer, while not mutating the original list1 and list2 (except for when you increment
+        the pointers on each list)
+        """
+        dummy = ListNode()
+        curr = dummy
+        while (list1 != None and list2 != None):
+            if (list1.val < list2.val):
+            	# set the next to the remainder of list1, then increment list1.
+                curr.next = list1
+                list1 = list1.next
+            # this accounts for cases when list1.val >= list2.val
+            else:
+            	# set the next to the remainder of list2
+                curr.next = list2
+                list2 = list2.next
+            curr = curr.next
+               
+        if (list1 != None):
+            curr.next = list1
+        elif (list2 != None):
+            curr.next = list2
+        
+        return dummy.next
+
 """
 Revisited in 7/26/2023
 Key concept:
