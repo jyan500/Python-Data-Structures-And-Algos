@@ -10,11 +10,39 @@ class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
+
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        """
+        Revisited 9/30/2024
+        this solution uses a dummy node to prevent the edge case when deleting the head of the linked list
+        iterate to the end of the linked list to get the length of the list
+        iterate through the list again, but this keeping track of an index, as well
+        as a previous pointer
+        once we get to length of list - n, delete this node from the linked list
+        by setting the previous pointer's next to be the current node's next
+        """
+        length = 0
+        temp = head
+        while (temp != None):
+            temp = temp.next
+            length += 1
+        i = 0
+        dummy = ListNode()
+        prev = dummy
+        temp2 = head
+        indexToRemove = length - n
+        while (temp2 != None):
+            if (i == indexToRemove):
+                prev.next = temp2.next
+                temp2 = temp2.next
+            else:
+                prev.next = temp2
+                temp2 = temp2.next
+                prev = prev.next
+            i+=1
+        return dummy.next
+
 """
 Revisited on 7-8-2023
 Two Pass solution (O(2N))

@@ -11,6 +11,51 @@ https://www.youtube.com/watch?v=xRYPjDMSUFw&t=611s&ab_channel=NickWhite
 #         self.val = val
 #         self.next = next
 
+class Solution:
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        """
+        Revisited on 9/30/2024 with the same solutions as below
+        https://neetcode.io/problems/reorder-linked-list
+        find the middle of the linked list and cut the linked list in half
+        reverse the 2nd half
+        interchange the two nodes from each linked list
+        """
+        # find middle using two pointers
+        # slow pointer starts at head, but fast pointer starts at head.next
+        # move fast pointer twice as fast as the slow, so once fast becomes None
+        # the slow pointer should be in the middle
+
+        slow = head
+        fast = head.next
+
+        while (fast != None and fast.next != None):
+            slow = slow.next
+            fast = fast.next.next
+        
+        # cut the linked list in half by setting the second half to be
+        # slow.next, and then setting slow.next to be None
+        secondHalf = slow.next
+        slow.next = None
+
+        prev = None
+        curr = secondHalf
+
+        while (curr != None):
+            temp = curr
+            curr = curr.next
+            temp.next = prev
+            prev = temp
+        
+        curHead = head
+        curPrev = prev
+        while (curHead != None and curPrev != None):
+            tmp1 = curHead.next
+            tmp2 = curPrev.next
+            curHead.next = curPrev
+            curPrev.next = tmp1
+            curHead = tmp1
+            curPrev = tmp2
+
 """
 Revisited 9/25/2023
 https://www.youtube.com/watch?v=S5bfdUTrKLM&ab_channel=NeetCode
