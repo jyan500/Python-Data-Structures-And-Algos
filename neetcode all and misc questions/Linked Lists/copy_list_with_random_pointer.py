@@ -6,6 +6,57 @@ class Node:
         self.next = next
         self.random = random
 """
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+
+class Solution:
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        """
+        https://neetcode.io/problems/copy-linked-list-with-random-pointer
+        Revisited 9/30/2024
+        This solution appears to be cleaner than my last solution, using only 2 maps instead of 3
+
+        2 Hashmaps:
+        hashmap #1: the key is the old pointer memory address, and the value
+        is its new LL node.
+        hashmap #2: the new LL memory address is mapped to old Node
+        create a new linked list with the next nodes, at the same time,
+        we build hashmap #2, mapping id(newNode) to old node and hashmap #1, mapping id(old node) to newNode
+        Loop through the new linked list again, but this time, call id() on the new linked list node,
+        and use the id access hashmap #2 to find the old counterpart. Then, use the id() of the old counterpart's random pointer
+        to access hashmap #1, which will help determine which new LL node the random pointer
+        should point to. 
+        Note that if the old counterpart's random pointer is pointing to None, just set the new node's random
+        to be None as well so we don't call id() on None
+        """
+        temp1 = head
+        newList = Node(0)
+        map1 = {}
+        map2 = {}
+        ptr = newList
+        while (temp1 != None):
+            newNode = Node(temp1.val)
+            ptr.next = newNode
+            map2[id(newNode)] = temp1
+            map1[id(temp1)] = newNode
+            ptr = ptr.next
+            temp1 = temp1.next
+        temp2 = newList.next
+        while (temp2 != None):
+            old = map2[id(temp2)]
+            if (old.random):
+                newValForRandom = map1[id(old.random)]
+                temp2.random = newValForRandom
+            else:
+                temp2.random = None
+            temp2 = temp2.next
+        return newList.next
 
 class Solution:
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
