@@ -52,7 +52,7 @@ We can do this by keeping track of a min and max as we traverse the tree
 
  no children here, starting from the case above where root = 1, we go to the right subtree instead.
  Update min because each value in the right subtree must be > min
- we keep the maximum the same, as tthe value must also be < 3, which is the max
+ we keep the maximum the same, as the value must also be < 3, which is the max
  root = 2
  min = 1
  max = 3
@@ -68,7 +68,42 @@ We can do this by keeping track of a min and max as we traverse the tree
 #         self.val = val
 #         self.left = left
 #         self.right = right
+# Definition for a binary tree node.
 
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def search(root, currMin, currMax):
+            """ 
+            Revisited 10/1/2024 
+            https://neetcode.io/problems/valid-binary-search-tree
+            at each new node, we update the currMin to be the node's value 
+            when going to the right to ensure that each node > currMin, 
+            and update the currMax to be the node's value when going to the left to ensure
+            that the values at each nodes < currMax, to ensure that every node in the subtree
+            on the respective side follows this BST property.
+            the left and right children immediately below the current node must also
+            follow BST properties where the left val < root.val and right.val > root.val
+
+            Cleaned up logic:
+            rather than checking the existence of the left and right nodes each time and comparing
+            it to node, we can check node against the currMin and currMax values, as this one of these 
+            values will contain the parent value since we're passed in root.val on each recursive call
+            """
+            if root:
+                if root.val >= currMax or root.val <= currMin:
+                    return False
+                """
+                on the left subtree, we update our currMax value, as every node
+                on the left subtree must be less than currMax
+                whereas on the right subtree, we update currMin value to be root.val,
+                as every node must be greater than current min
+                """
+                return search(root.left, currMin, root.val) and search(root.right, root.val, currMax)
+            # if neither side exists, this is a just a node with two leaf nodes with value None,
+            # and this is by definition, a binary search tree since it's a single node by itself
+            return True
+        
+        return search(root, float("-inf"), float("inf"))
 """ 
 8/3, same idea but shorter solution 
 """
