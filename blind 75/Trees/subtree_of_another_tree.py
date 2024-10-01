@@ -31,7 +31,47 @@ given subtree. Use the same algorithm as isSameTree to solve this
 2) If it's the same, we can return true
 otherwise, we continue down the left and right. We can return
 whether the subtree is found in the left OR right sides
+
 '''
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:   
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        """
+        Revisited on 9/30/2024
+        https://neetcode.io/problems/subtree-of-a-binary-tree
+        write a function to determine if two trees are the same
+        going through each node, run the function to check if the remainder of that node
+        is the same tree as the tree defined by subroot
+        O(N*M)
+        """
+        def isSameTree(p, q):
+            if p is None and q is None:
+                return True
+            elif not p and q or p and not q:
+                return False
+            else:
+                if p.val != q.val:
+                    return False
+                return isSameTree(p.left, q.left) and isSameTree(p.right, q.right)
+        # if the subroot is None, it's a subtree of the main tree
+        # by default because each child Node has two leaves of value None by default
+        if not subRoot:
+            return True
+        # if the root is None but the subRoot is not None, the subroot cannot be a subtree
+        if not root:
+            return False
+        isSame = isSameTree(root, subRoot)
+        if isSame:
+            return True
+        # if this particular root was not the same as the subroot, continue searching left and right
+        # as long as one side yields the same tree, this will return True
+        return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+
 class Solution2:
     def isSameTree(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> bool:
         if root1 == None and root2 == None:

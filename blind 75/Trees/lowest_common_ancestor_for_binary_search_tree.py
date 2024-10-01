@@ -20,6 +20,28 @@ https://www.youtube.com/watch?v=kulWKd3BUcI&ab_channel=KevinNaughtonJr.KevinNaug
 ## however, once p and q are no longer on the same side of the tree (which means they have split, i.e either p is greater than root, but q is not greater), then the root is the lowest common ancestor
 
 """
+Revisited 9/30/2024 with the same solution
+"""
+class Solution:
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        """
+        in a binary search tree, all nodes to the left of root.left are less,
+        and all nodes on the right of root.right are greater. Therefore, the lowest 
+        common ancestor is where both p and q are no longer on the same subtree.
+        """
+        # if both p and q are less than the root, search the left side
+        if p.val < root.val and q.val < root.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        # if both p and q are greater than the root, search the right side
+        elif p.val > root.val and q.val > root.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        # in the else statement, this is catching the cases where
+        # p and q are no longer on the same side (i.e if the nodes p and q are on opposite sides,
+        # if one of p or q is equal to the root, and the other is a child of that root)
+        else:
+            return root
+            
+"""
 Revisited on 7/20/2023, coming up with the same solution
 OLogN time because it's a binary search tree
 Key Concepts:
@@ -38,13 +60,4 @@ class Solution2:
         # this could just be an else statement like below, but for explanation purposes,
         # but clearer for learning purposes
         if p.val >= root.val and q.val <= root.val or p.val <= root.val and q.val >= root.val:
-            return root
-
-class Solution:
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        if (p.val < root.val and q.val < root.val):
-            return self.lowestCommonAncestor(root.left, p, q)
-        elif (p.val > root.val and q.val > root.val):
-            return self.lowestCommonAncestor(root.right, p, q)
-        else:
             return root
