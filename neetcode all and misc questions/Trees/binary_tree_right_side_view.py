@@ -34,6 +34,7 @@ Revisited on 8/9/2023
 One important note is that we save the length of the queue before we start popping out elements from the level
 so we know which element was last in the level
 
+
 '''
 # Definition for a binary tree node.
 # class TreeNode:
@@ -41,6 +42,32 @@ so we know which element was last in the level
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        """
+        Revisited on 9/30/2024 with the same solution as below
+        """
+        from collections import deque
+        q = deque()
+        q.append(root)
+        res = []
+        if not root:
+            return []
+        while (q):
+            N = len(q)
+            for i in range(N):
+                node = q.popleft()
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+                # we want to add the right most node on each level of the binary tree
+                # which is the last item in the queue
+                if i == N - 1:
+                    res.append(node.val)
+        return res
+
 class Solution:
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
         if (not root):
