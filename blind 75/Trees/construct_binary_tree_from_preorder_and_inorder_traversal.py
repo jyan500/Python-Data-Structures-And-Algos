@@ -118,6 +118,49 @@ which is technically the postorder traversal, and it makes sense: left, right an
 
 
 """
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        """
+        Revisited 10/1/2024 
+        https://neetcode.io/problems/binary-tree-from-preorder-and-inorder-traversal
+        preorder tells us the order of the roots
+        inorder tells us the left and right subtree of each root
+        Time Complexity: O(N^2), calling .index() is an O(N) operation per recursive call
+        """
+        # if preorder list is empty, this root is null
+        if len(preorder) > 0:
+            root = preorder[0]
+            rootIndex = inorder.index(root)
+            # left and right subtrees
+            inOrderLeft = inorder[:rootIndex]
+            inOrderRight = inorder[rootIndex+1:]
+            """ 
+            preorder left and right which will contain the roots on the left subtrees
+            and the roots on the right subtrees
+            example:
+            [1,2,4,5,3,6,7]
+            [4,2,5,1,6,3,7]
+            the inorder left is [4,2,5]
+            the inorder right is [6,3,7]
+            the preorder left is [2,4,5], which is preorder[1:4]
+            the preorder right is [3,6,7], which is preorder[4:7]
+            """
+            preOrderLeft = preorder[1:1+len(inOrderLeft)]
+            preOrderRight = preorder[len(preorder)-len(inOrderRight): ]
+            # pass in the left subtree with the inorder, and the roots of the left subtree
+            # with the postorder, and with the right subtree for the right side
+            left = self.buildTree(preOrderLeft, inOrderLeft)
+            right = self.buildTree(preOrderRight, inOrderRight)
+            # return the root with the left and right subtrees
+            return TreeNode(root, left, right)
+
 class Solution2:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
         # root is always the first element of the preorder list

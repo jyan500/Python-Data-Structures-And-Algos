@@ -29,6 +29,35 @@ we're at the k element
 If so, this is the value we're looking for so set it (either in global variable,
 or via an array like the first solution)
 """
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        """
+        Revisited on 10/1/2024
+        https://neetcode.io/problems/kth-smallest-integer-in-bst
+        in the BST, by definition, the smallest value will always be the left-most
+        non-null node's value. So we can do an inorder traversal based on that, so we go all the way to
+        the left first, and as we backtrack,
+        we increment a value until it reaches k. That would mean we're at the kth smallest value.
+        To make things easier, keeping a global variable that is an array that contains both the
+        current k value, and the actual value at the node will make it easier to return at the end,
+        otherwise we'd lose the value in the process of recurring and traversing the nodes.
+        """
+        self.res = [0,0]
+        def search(root):
+            if root:
+                search(root.left)
+                # starting at the leftmost element, we increment the index by 1
+                # since it's 1 indexed, so initially our first element is at index 1
+                self.res[0] += 1
+                # once index == k, we stop updating 
+                if self.res[0] == k:
+                    self.res[1] = root.val
+                    return
+
+                search(root.right)
+        search(root)
+        return self.res[1]
+
 class Solution2:
     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int: 
         self.res = 0
