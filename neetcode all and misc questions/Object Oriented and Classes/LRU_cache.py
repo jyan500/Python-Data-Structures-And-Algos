@@ -44,7 +44,44 @@ just remove the first item in the dict
 O(1) get and O(1) put
 O(N) space
 '''
-from collections import OrderedDict
+"""
+Revisited on 9/30/2024 
+https://neetcode.io/problems/lru-cache
+Used the same ordered dict idea, which acts as a dictionary and a queue
+"""
+class LRUCache:
+    from collections import OrderedDict
+    def __init__(self, capacity: int):
+        self.cache = OrderedDict()
+        self.maxCapacity = capacity
+        self.capacity = 0
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            res = self.cache[key]
+            # delete and add to the end of the cache to show
+            # that it has been used
+            del self.cache[key]
+            self.cache[key] = res
+            return res
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            # updating the existing value means that we're accessing it, so we need
+            # pop out and add to the back
+            del self.cache[key]
+            # when adding back, update it to the new value instead of the old
+            self.cache[key] = value
+        else:
+            # before inserting... if we're at max capacity
+            if self.capacity == self.maxCapacity:
+                # remove the very first item in the ordered dict
+                # as this would mean it hasn't been used (i.e popped out and appended to the back)
+                self.cache.popitem(last=False)
+                self.capacity-=1
+            self.cache[key] = value
+            self.capacity += 1
 
 """
 Second try using ordereddict solution 8/15/2023

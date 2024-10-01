@@ -11,6 +11,38 @@ https://leetcode.com/problems/same-tree/
 #         self.left = None
 #         self.right = None
 
+"""
+Revisited on 9/30/2024
+This is a similar logic to the first attempt,
+but it splits into three different segments
+if both nodes do not exist:
+    return True
+elif one node exists but not the other
+    return False
+else (if both nodes exist):
+    if one node's value != the other node's value:
+        return False
+    # continue to compare the left subtrees and the right subtrees, if both sides remain True,
+    # this means the parent tree is the same
+    return recur(subtree1 left, subtree2 left) and recur(subtree1 right, subtree2 right)
+"""
+class Solution:
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        # if neither node exists, we'd return true
+        if not p and not q:
+            return True
+        # if one node exists in the tree and not the other, return False
+        elif not p and q or p and not q:
+            return False
+        # if both nodes exist
+        else:
+            # if the values are not equal, return False
+            if p.val != q.val:
+                return False
+            # continue to compare the left subtrees of p and q and the right subtrees of p and q
+            return self.isSameTree(p.left,q.left) and self.isSameTree(p.right,q.right)
+
+        
 class Solution:
     def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
         ## base case #1: if the two roots are null, then they're same trees

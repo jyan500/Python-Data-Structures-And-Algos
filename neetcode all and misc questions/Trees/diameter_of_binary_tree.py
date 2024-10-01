@@ -80,6 +80,26 @@ maxDiameter is now 6, tree height is 5
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+class Solution:
+    """
+    revisited on 9/30/2024 using the same approach as below
+    https://neetcode.io/problems/binary-tree-diameter
+    """
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        self.maxDiameter = 0
+        def getHeight(root):
+            if (root):
+                leftHeight = getHeight(root.left)
+                rightHeight = getHeight(root.right)
+                diameter = leftHeight + rightHeight
+                if (diameter > self.maxDiameter):
+                    self.maxDiameter = diameter
+                return 1 + max(leftHeight, rightHeight)
+            return 0
+        getHeight(root)
+        return self.maxDiameter
+
 class Solution:
 
     def __init__(self):

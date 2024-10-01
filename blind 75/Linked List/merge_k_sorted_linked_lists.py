@@ -6,6 +6,54 @@ Merge all the linked-lists into one sorted linked-list and return it. '''
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:    
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        """
+        Revisited 9/30/2024
+        https://neetcode.io/problems/merge-k-sorted-linked-lists
+        Brute Force solution
+        O(N*M)
+        merge two sorted lists together and return them, and then merge the next list
+        together with the previous merged list, etc
+        """
+        def mergeTwoSortedLists(list1, list2):
+            tmp1 = list1
+            tmp2 = list2
+            dummy = ListNode()
+            res = dummy
+            while (tmp1 != None and tmp2 != None):
+                if (tmp1.val < tmp2.val):
+                    res.next = tmp1
+                    tmp1 = tmp1.next
+                else:
+                    res.next = tmp2
+                    tmp2 = tmp2.next
+                res = res.next
+                
+            if (tmp1 != None):
+                res.next = tmp1
+            elif (tmp2 != None):
+                res.next = tmp2
+
+            return dummy.next
+        if len(lists) == 0:
+            return None
+        elif len(lists) == 1:
+            return lists[0]
+        else:
+            i = 1
+            cur = lists[0]
+            while (i < len(lists)):
+                cur = mergeTwoSortedLists(cur, lists[i])
+                i+=1
+            return cur
+
 class Solution:
 	### make use of the merge two lists solution
     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:

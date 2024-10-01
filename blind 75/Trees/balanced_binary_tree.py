@@ -22,6 +22,24 @@ in the same recursive call
 
 In each recursive call, return both the height, as well as whether the subtree is balanced
 """
+"""
+Revisited on 9/30/2024
+same solution as below
+"""
+class Solution:
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        self.isBalanced = True
+        def getHeight(root):
+            if (root):
+                leftHeight = getHeight(root.left)
+                rightHeight = getHeight(root.right)
+                if abs(leftHeight-rightHeight) > 1:
+                    self.isBalanced = False
+                return 1 + max(leftHeight, rightHeight)
+            return 0
+                
+        getHeight(root)
+        return self.isBalanced
 
 """ 
     10/23 even simpler solution with the same concept, determine the balancing AS we calculate the 
