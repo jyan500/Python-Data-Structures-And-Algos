@@ -42,6 +42,34 @@ Final result is 4
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+class Solution:
+    def goodNodes(self, root: TreeNode) -> int:
+        """
+        Revisited 10/1/2024, same solution as below
+        at a given node, it would be helpful if we knew the values of the nodes
+        before it on the path. Specifically, we're interested in what the "max"
+        we've found so far on this path. Whenever the current max is updated, this means
+        this is a "good" node, as there shouldn't be any node we've visited in this path
+        with a value greater than this current max.
+        
+        Traverse the tree, passing down the current max with each recursive call. Whenever
+        the current node val >= currentMax (meaning previous nodes CAN be equal to the current max but not exceeding it), increment the count of good nodes by 1,
+        and in the next recursive call, pass in the
+        current node val instead of currentMax to update it
+        """
+        self.count = 0
+        def search(root, currentMax):
+            if root:
+                curMax = currentMax
+                if root.val >= currentMax:
+                    self.count+=1
+                    curMax = root.val
+                search(root.left, curMax)
+                search(root.right, curMax)
+        search(root, float("-inf"))
+        return self.count            
+
 class Solution:
     def goodNodes(self, root: TreeNode) -> int:
         self.res = 0
