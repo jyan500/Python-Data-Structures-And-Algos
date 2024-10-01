@@ -4,6 +4,31 @@ Given the root of a binary tree, return the level order traversal of its nodes' 
 
 https://www.youtube.com/watch?v=XZnWETlZZ14&ab_channel=KevinNaughtonJr.
 '''
+
+"""
+Revisited on 9/30/2024 with the same solution
+"""
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        from collections import deque
+        q = deque()
+        q.append(root)
+        levels = []
+        if not root:
+            return []
+        while (q):
+            N = len(q)
+            level = []
+            for i in range(N):
+                node = q.popleft()
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+                level.append(node.val)
+            levels.append(level)
+        return levels
+
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
