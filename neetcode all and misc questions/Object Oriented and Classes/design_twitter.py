@@ -43,6 +43,96 @@ https://www.youtube.com/watch?v=pNichitDD2E&ab_channel=NeetCode
 
 """
 class Twitter:
+    """
+    Revisited on 10/2/2024
+    using the heap solution suggested by Neetcode,
+    https://neetcode.io/problems/design-twitter-feed
+    but a slight difference where the tweets are kept per user in the self.users dict,
+    and uses a max heap, with the 
+    count of tweets set to negative right before pushing into the max heap.
+    Time: O(10LogK * KLogK), where K is the amount of tweets in each following list, and 10 is the amount of tweets that we need
+    to retrieve in the newsfeed. 
+    The 10LogK is because in the while (maxHeap) loop, we might need to do a heappush, which is LogK,
+    up to 10 times. 
+    Whereas for KLogK, that is the initial loop where we push the last index of each tweet list from each user onto the maxheap.
+    Space: O(N), where N is the total amount of tweets made
+    """
+    import heapq
+    def __init__(self):
+        self.users = {}
+        self.numTweets = 0
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        if (userId not in self.users):
+            self.users[userId] = {"tweets": [], "followers": set(), "following": set()}
+        self.users[userId]["tweets"].append((self.numTweets, tweetId))
+        self.numTweets += 1
+        
+    def getNewsFeed(self, userId: int) -> List[int]:
+        """
+        at the time of the call, create the news feed so it takes into account
+        changes to the users followings
+        """
+        if (userId not in self.users):
+            self.users[userId] = {"tweets": [], "followers": set(), "following": set()}
+        maxHeap = []
+        res = []
+
+        # we include the user themselves into the "following" list
+        # since we need to include the users' own tweets in their newsfeed
+        self.users[userId]["following"].add(userId)
+
+        # the algorithm involves pushing the last tweet in each individual
+        # list of tweets to the max heap, and then popping them out until
+        # 10 are reached. However, if 10 tweets are not reached, we then
+        # decrement the indices and take the second to last tweet of each
+        # list, etc
+        for followeeId in self.users[userId]["following"]:
+            tweets = self.users[followeeId]["tweets"]
+            # if this user has no tweets, continue
+            if (len(tweets) == 0):
+                continue
+            # we start from the back as this will be the most "recent" tweet
+            index = len(tweets) - 1
+            count, tweetId = tweets[index]
+            # we include the count (negative since it's a max heap),
+            # the tweetId, followeeId (so we can retrieve the next set of tweets from this user in the 
+            # while loop below),
+            # as well as the index (decrement by one since, if we need to retrieve the next set),
+            # it'll be this index
+            heapq.heappush(maxHeap, [-count, tweetId, followeeId, index - 1])
+        while (maxHeap and len(res) < 10):
+            _, tweetId, followeeId, index = heapq.heappop(maxHeap)
+            res.append(tweetId)
+            if index >= 0:
+                # retrieve the next most recent tweet from this user
+                count, tweetId = self.users[followeeId]["tweets"][index]
+                heapq.heappush(maxHeap, [-count, tweetId, followeeId, index - 1])
+        return res
+            
+    def follow(self, followerId: int, followeeId: int) -> None:
+        if (followerId not in self.users):
+            self.users[followerId] = {"tweets": [], "followers": set(), "following": set()}
+        if (followeeId not in self.users):
+            self.users[followeeId] = {"tweets": [], "followers": set(), "following": set()}
+
+        """ add the followeeId to the userId's 'following' list"""
+        self.users[followerId]["following"].add(followeeId)
+        """ vice versa, also add the followerId to the followee's list of followers """
+        self.users[followeeId]["followers"].add(followerId)
+
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        if (followerId not in self.users):
+            self.users[followerId] = {"tweets": [], "followers": set(), "following": set()}
+        if (followeeId not in self.users):
+            self.users[followeeId] = {"tweets": [], "followers": set(), "following": set()}
+        if followerId in self.users[followeeId]["followers"]:
+            self.users[followeeId]["followers"].remove(followerId)
+        if followeeId in self.users[followerId]["following"]:
+            self.users[followerId]["following"].remove(followeeId)
+
+class Twitter:
 
     def __init__(self):
         """
