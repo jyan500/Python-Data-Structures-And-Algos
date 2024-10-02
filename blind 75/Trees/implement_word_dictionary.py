@@ -1,12 +1,85 @@
+"""
+Revisited on 10/2/2024
+I think this is similar to neetcode's solution, but for the "search" function,
+I was able to solve it using recursive DFS, 
+by passing in the current TrieNode, the current index of the word, and the total length of the word.
+
+Base Case:
+if i >= N, this means we've reached the end of the word.
+Set a global variable to true if the current TrieNode is marked as "end of word"
+without returning any boolean in the recursion. 
+
+If a wildcard character is found, you would then run DFS on all the valid children nodes based on
+the current TrieNode that you're at.
+If not a wildcard, just call DFS on the child node at the non-wildcard character
+
+Time Complexity: The depth of the Trie is based on the amount of characters in the longest word in the input,
+in this case the length is bounded by 20 characters. Also within each child TrieNode, there can only be up to 26 different possible
+characters since each character of the word must be lowercase english characters only. If we had 
+word that consisted of 20 wildcard characters, we'd have to do 26 different searches per level, which would be O(26^N), in this
+case, since the depth of the tree is bounded by 20, it'd be 26^20
+
+Space: O(N), where the Trie is based on the depth of the longest word in the input
+
+"""
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.endOfWord = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    
+    def insert(self, word):
+        cur = self.root
+        for c in word:
+            if c not in cur.children:
+                cur.children[c] = TrieNode()
+            cur = cur.children[c]
+        cur.endOfWord = True
+
+class WordDictionary:
+
+    def __init__(self):
+        self.wordDict = Trie()
+
+    def addWord(self, word: str) -> None:
+        self.wordDict.insert(word)
+
+    def search(self, word: str) -> bool:
+        """
+        the special case is if the word contains a dot.
+        If so, we stop and call a DFS function instead.
+        The dfs function will pass in the current TrieNode, and go character by character,
+        if it reaches a *, it will loop through all children at that TrieNode
+        and run DFS on them
+        """
+        self.dfsFound = False
+        def dfs(cur, i, N):
+            # if we've reached the length of the word,
+            # check to see if the current TrieNode is at the endOfWord
+            if i >= N:
+                # if we've found the end of a word, mark the self.dfsFound flag to be true
+                # and return out
+                if cur.endOfWord:
+                    self.dfsFound = True
+                return
+            if word[i] == ".":
+                # if it's a wildcard, recur into all valid children at this TrieNode
+                for c in cur.children:
+                    dfs(cur.children[c], i+1, N)
+            else:
+                # if it's not an asterisk, check to see if the character is 
+                # in the TrieNode's children
+                if word[i] in cur.children:
+                    dfs(cur.children[word[i]], i+1, N)
+
+        cur = self.wordDict.root
+        dfs(cur, 0, len(word))
+        return self.dfsFound
+
 '''
-Design a data structure that supports adding new words and finding if a string matches any previously added string.
-
-Implement the WordDictionary class:
-
-WordDictionary() Initializes the object.
-void addWord(word) Adds word to the data structure, it can be matched later.
-bool search(word) Returns true if there is any string in the data structure that matches word or false otherwise. word may contain dots '.' where dots can be matched with any letter.
-
 https://leetcode.com/problems/design-add-and-search-words-data-structure/
 https://www.youtube.com/watch?v=O5yxoFS_diY&ab_channel=SaiAnishMalla
 

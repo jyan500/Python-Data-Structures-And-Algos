@@ -26,6 +26,8 @@ then we'll just return False. If we iterated through the whole word, then the pr
 
 https://leetcode.com/problems/implement-trie-prefix-tree/
 https://www.youtube.com/watch?v=oobqoCJlHA0&ab_channel=NeetCode
+
+Revisited on 10/2/2024 with the same solution
 '''
 class TrieNode:
 	def __init__(self):
