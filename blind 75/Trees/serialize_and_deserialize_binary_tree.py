@@ -5,7 +5,6 @@ Design an algorithm to serialize and deserialize a binary tree. There is no rest
 
 Clarification: The input/output format is the same as how LeetCode serializes a binary tree. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
 
-
 '''
 # Definition for a binary tree node.
 # class TreeNode(object):
@@ -13,6 +12,65 @@ Clarification: The input/output format is the same as how LeetCode serializes a 
 #         self.val = x
 #         self.left = None
 #         self.right = None
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Codec:
+    # Encodes a tree to a single string.
+    def serialize(self, root: Optional[TreeNode]) -> str:
+        """
+        Revisited 10/1/2024
+        Another O(N^2) solution due to the deserialize involving the buildTree
+        https://neetcode.io/problems/serialize-and-deserialize-binary-tree
+
+        can serialize into a string containing the preorder and inorder traversals,
+        convert each traversal into a string, with a delimiter in between to separate the two
+        """
+        self.preorder = []
+        self.inorder = []
+        def preorder(root):
+            if (root):
+                self.preorder.append(str(root.val))
+                preorder(root.left)
+                preorder(root.right)
+        def inorder(root):
+            if (root):
+                inorder(root.left)
+                self.inorder.append(str(root.val))
+                inorder(root.right)
+        preorder(root)
+        inorder(root)
+        return ",".join(self.preorder) + ";" + ",".join(self.inorder)
+    # Decodes your encoded data to tree.
+    def deserialize(self, data: str) -> Optional[TreeNode]:
+        """
+        parse the serialized string containing the preorder and inorder traversals
+        back into the original tree
+        """
+        preOrderString, inOrderString = data.split(";")
+        if preOrderString == "" and inOrderString == "":
+            return None
+        preOrder = preOrderString.split(",")
+        inOrder = inOrderString.split(",")
+        def buildTree(preOrder, inOrder):
+            if len(preOrder) > 0:
+                root = preOrder[0]
+                inOrderRoot = inOrder.index(root)
+                # inorder determines the left and right subtrees
+                inOrderLeft = inOrder[:inOrderRoot]
+                inOrderRight = inOrder[inOrderRoot+1:]
+                # the preorder left and right determines where the roots are within
+                # the left and right subtrees as defined by the inorder left and right
+                preOrderLeft = preOrder[1:len(inOrderLeft)+1]
+                preOrderRight = preOrder[len(preOrder)-len(inOrderRight): ]
+                left = buildTree(preOrderLeft, inOrderLeft)
+                right = buildTree(preOrderRight, inOrderRight)
+                return TreeNode(int(root), left, right)
+        return buildTree(preOrder, inOrder)
 
 ## Very slow solution (O(N^2))
 ## My idea was to use level order traversal to get a tree with similar configuration to the array
