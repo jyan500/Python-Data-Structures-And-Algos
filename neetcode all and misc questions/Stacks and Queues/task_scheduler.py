@@ -190,6 +190,67 @@ Both empty, iteration ends
 """
 class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
+        """      
+        10/2/2024
+        https://neetcode.io/problems/task-scheduling
+        I was able to recall some of the solution and reverse engineer it.
+        The time complexity: O(NLogN) + O(N * KLogN) , where K is the max frequency of a task and N 
+        is the amount of tasks. O(NLogN) for building the max heap initially
+
+        "A" "A" "A" "B" "C"
+        n = 3
+        a -> b -> c -> idle -> a -> idle -> idle -> idle -> a
+        (idle because 3 tasks have already been done)
+
+        For example, I pick A, so the next time I can pick A is currentTime + n
+        I'd then remove A from the heap that tracks available tasks (call it heap #1), and place it
+        on a different heap that tracks the next available time this task can be picked (heap #2). 
+        And then increment currentTime by one. 
+        Then in the next iteration, check to see if a task on heap #2 is available. If so, I can pop off
+        heap #2 and put it back on heap #1
+
+        Another key is picking the element that has the most frequencies first, so that
+        you can pick the next most frequent element within the cooldown time period. Using a max heap
+        would help for this, as the tasks that have the most frequencies always ends up in the front.
+        """
+        import heapq
+        from collections import Counter
+        counter = Counter(tasks)
+        processing = []
+        tasks = []
+        # use a max heap so that the tasks that are the most frequently occurring are processed first
+        for task in counter.keys():
+            heapq.heappush(tasks, (-counter[task], task))   
+        currentTime = 0
+        while (len(counter) > 0):
+            while (len(processing) > 0 and processing[0][0] == currentTime):
+                time, task, amt = heapq.heappop(processing)
+                if task in counter and counter[task] > 0:
+                    heapq.heappush(tasks, (amt, task))    
+            """
+            find an available task on tasks. If there's no tasks that can be done,
+            this would be considered "idle" time, so the currentTime gets incremented by one        
+            if there's still more of this task, add the task
+            onto the processing min heap, with currentTime + n, to show that this is the next time
+            this task can be processed.
+            decrement the counter to show one of these tasks has been processed
+            """
+            for amt, task in tasks:
+                if counter[task] > 0:
+                    # because tasks is a max heap, the amt is negative, so convert back to positive
+                    # and decrement.
+                    newAmt = (-1 * amt) - 1
+                    heapq.heappush(processing, (currentTime + n + 1, task, -newAmt))
+                    heapq.heappop(tasks)
+                    counter[task] -= 1
+                    if (counter[task] == 0):
+                        del counter[task]
+                    break
+            currentTime += 1
+        return currentTime
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
         from collections import deque
         import heapq
         if n == 0:

@@ -19,6 +19,8 @@ Time complexity: O(N) to call heapify, however for each K, we're calling heappop
 Therefore, the total time is O(N) + O(K * LogN), roughly O(NLogN)
 Space complexity: O(N) to store the heap
 
+Revisited on 10/1/2024 with the same solution as before.
+
 '''
 class Solution:
     import heapq
