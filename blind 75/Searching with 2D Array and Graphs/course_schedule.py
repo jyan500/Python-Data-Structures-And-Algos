@@ -9,7 +9,48 @@ Create adjacency list using a dict, mapping the course as the key, and the prere
 loop through all courses and run DFS on each course, keeping track of visited set
 within DFS, 
 '''
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        """
+        Revisited 10/2/2024
+        https://neetcode.io/problems/course-schedule
+        (Note that I found out about this via the youtube comments on the course-schedule-ii solution video)
+        This can be solved in the same way as course schedule II by keeping track of two sets,
+        one set is the visited set which tracks whether the courses could be fully completed, and
+        tracks progress across multiple DFS calls. This is to prevent us from making the same
+        recursive calls on courses that we know are valid and can be fully completed including all of its prereqs.
 
+        The other set is the cycle set, which only checks within one DFS call of whether a course
+        was already seen in this path. In that case, return False
+        """
+        adjacency = {}
+        for i in range(numCourses):
+            adjacency[i] = []
+        for i in range(len(prerequisites)):
+            course, prereq = prerequisites[i]
+            if course in adjacency:
+                adjacency[course].append(prereq)
+        
+        cycle = set()
+        visited = set()
+
+        def dfs(course):
+            if course in cycle:
+                return False
+            if course in visited:
+                return True
+            cycle.add(course)
+            for prereq in adjacency[course]:
+                if (not dfs(prereq)):
+                    return False
+            cycle.remove(course)
+            visited.add(course)
+            return True
+        
+        for i in range(numCourses):
+            if (not dfs(i)):
+                return False
+        return True
 '''
 Revisited on 7/19/2023
 https://www.youtube.com/watch?v=EgI5nU9etnU&ab_channel=NeetCode

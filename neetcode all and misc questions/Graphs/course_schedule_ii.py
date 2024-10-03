@@ -1,4 +1,67 @@
 """
+Revisited on 10/2/2024
+I forgot about keeping two different sets, one to track progress over time
+between DFS calls, and one specifically within each DFS call to track cycles.
+Will need to revisit this one again in the future.
+Is the same solution from Neetcode.
+https://neetcode.io/problems/course-schedule-ii
+Note that you can solve course schedule 1 problem using the same concept of two sets
+"""
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        """
+        Create an adjacency list, where each course is a key,
+        and the values are the list of prerequisite courses
+        """
+        adjacency = {}
+        for i in range(numCourses):
+            adjacency[i] = []
+        for i in range(len(prerequisites)):
+            course, prereq = prerequisites[i]
+            if course in adjacency:
+                adjacency[course].append(prereq)
+        # visited determines whether we've followed a course all the way to its completion
+        # meaning all prereqs were finished, in that case, we wouldn't need to revisit
+        # the same course in a future DFS call, so we track these values here.
+        visited = set()
+        # cycle means that while we're performing DFS, we want to check to see if 
+        # any courses are prerequisites of each other, creating a cycle. If we were able to
+        # complete a course to its completion, we would have to remove that course from the cycle
+        # set after we're done
+        cycle = set()
+        
+        # output will show the order required to finish the courses (by taking their prereqs first)
+        output = []
+        def dfs(course):
+            # if we've already visited this course within this DFS path, this means
+            # there is a cycle, so it's not possible to complete all the prereqs
+            if course in cycle:
+                return False
+            # if we know that this course and its prereqs can be completed, we don't need
+            # to re-run DFS again, so return True
+            if course in visited:
+                return True
+            cycle.add(course)
+            for prereq in adjacency[course]:
+                if (not dfs(prereq)):
+                    return False
+            # we were able to successfully finish this course and all of its prereqs,
+            # so add to visited set
+            visited.add(course)
+            # add this course to the output to show its completion
+            output.append(course)
+            # remove this course from the cycle list to show that it's no longer on the path,
+            # this is in case we backtrack to a previous course which also needs to visit
+            # this course in the future on this DFS path
+            cycle.remove(course)
+            return True
+
+        for i in range(numCourses):
+            if (not dfs(i)):
+                return []
+        return output
+
+"""
 Revisited on 8/22/2023
 """
 class Solution:
