@@ -7,6 +7,49 @@ test case #2: [[3,3,3],[3,1,3],[0,2,4]]
 '''
 
 """
+Revisited 10/2/2024 with a similar solution, except
+the placement of when to add the cell to visited is moved into the if () statement,
+and the DFS call doesn't return anything. It just sets a res array which contains two flags
+[isPacific, isAtlantic]. When starting from an (i, j) and running DFS until it reaches both the pacific
+and atlantic, this would set both flag values to true within the array. Immediately after if both
+flags are True, we can just return nothing to stop the recursion.
+"""
+class Solution:
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        def isPacific(i, j):
+            return i == 0 or j == 0
+        def isAtlantic(i, j):
+            return i == len(heights)-1 or j == len(heights[0])-1
+        def inBounds(i, j):
+            return 0 <= i < len(heights) and 0 <= j < len(heights[0])
+
+        def dfs(i, j, visited, res):
+            if isPacific(i, j):
+                res[0] = True
+            if isAtlantic(i, j):
+                res[1] = True
+            if res[0] and res[1]:
+                return 
+            for x, y in directions:
+                newX = i + x
+                newY = j + y
+
+                # important that the height of the next grid cell must be less than or equal to the current cell in order for the water to flow
+                if inBounds(newX, newY) and (newX, newY) not in visited and heights[newX][newY] <= heights[i][j]:
+                    visited.add((newX, newY))
+                    dfs(newX, newY, visited, res)
+
+        res = []
+        for i in range(len(heights)):
+            for j in range(len(heights[0])):
+                pacificAtlantic = [False, False]
+                dfs(i, j, set(), pacificAtlantic)
+                pacific, atlantic = pacificAtlantic
+                if (pacific and atlantic):
+                    res.append([i,j])
+        return res
+"""
 8-18-2023
 Condensed Solution
 """

@@ -1,9 +1,61 @@
 """
 https://www.lintcode.com/problem/663/
+https://neetcode.io/problems/islands-and-treasure
 """
 from typing import (
     List,
 )
+
+class Solution:
+    def islandsAndTreasure(self, grid: List[List[int]]) -> None:
+        from collections import deque
+        """
+        Revisited on 10/2/2024, wrote the brute force approach
+        -1 cannot move onto
+        0 treasure chest
+        INF can be traversed
+        BFS
+        store a queue with all grid[i][j] == 0
+        on the queue, store a tuple containing the cell value, and the cumulative distance
+        from the treasure chest cell. If it's a land cell, we can update it with the distance.
+
+        Note that if another path crosses this cell, we can take the min() between the existing cell value
+        and the cumulative distance from a different treasure chest to see if it's smaller
+
+        We will also re-run the BFS separately per treasure cell instead of running them at once
+        to avoid conflicts with visited cells.
+        """
+        
+        def inBounds(x,y):
+            return 0 <= x < len(grid) and 0 <= y < len(grid[0])
+        LAND = 2**31 - 1
+        treasureCells = []
+        directions = [(0,1),(0,-1),(1,0),(-1,0)]
+        visited = set()
+        distanceMap = {}
+
+        def bfs(i, j):
+            q = deque()
+            q.append((i,j,0))
+            visited = set()
+            while (q):
+                i, j, distance = q.popleft()
+                for x, y in directions:
+                    newX = x + i
+                    newY = y + j
+                    if inBounds(newX, newY) and (newX, newY) not in visited and grid[newX][newY] == LAND:
+                        distanceMap[(newX,newY)] = min(distanceMap[(newX,newY)], distance + 1) if (newX,newY) in distanceMap else distance + 1
+                        visited.add((newX, newY))
+                        q.append((newX, newY, distance + 1))
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == 0:
+                    bfs(i,j)
+            
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if (i,j) in distanceMap:
+                    grid[i][j] = distanceMap[(i,j)]
 
 class Solution:
     """

@@ -10,13 +10,44 @@ class Node:
         self.val = val
         self.neighbors = neighbors if neighbors is not None else []
 """
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val = 0, neighbors = None):
-        self.val = val
-        self.neighbors = neighbors if neighbors is not None else []
-"""
+
+class Solution:
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        """
+        Revisited on 10/2/2024, tried for a DFS approach this time from Neetcode
+        As we traverse the graph, we can create the graph copy at the same time
+        start by creating a graph node with empty neighbors. 
+        https://neetcode.io/problems/clone-graph
+        IMPORTANT:
+        I got stuck on this, but you need to use a hashmap that maps the old node to the new node,
+        this is used instead of a "visited" set like normal DFS.
+        This is important because this is an undirected graph, so if you're at a node,
+        you would need to add the backwards relationship too. So if you go to a neighbor that we already
+        visited for the backwards relationship, 
+        we'd look this up in our hashmap, and see that the old node was already visited and cloned,
+        then return the new Node.
+
+        Time: O(E + V)
+        Space: O(E + V)
+        """
+        self.oldToNew = {}
+        def dfs(node):
+            # important! if we're at the backwards relationship, we should've seen node already, 
+            # so return the cloned new node and don't continue
+            # to avoid an infinite loop
+            if node in self.oldToNew:
+                return self.oldToNew[node]
+            root = Node(node.val)
+            self.oldToNew[node] = root
+            neighbors = []
+            for neighbor in node.neighbors:
+                # each DFS will return the cloned node for each neighbor with all of its corresponding neighbors intact
+                n = dfs(neighbor)
+                neighbors.append(n)
+            root.neighbors = neighbors
+            return root
+        
+        return dfs(node)
 
 """
 revisited on 7/19/2023
