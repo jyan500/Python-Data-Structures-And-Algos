@@ -24,6 +24,61 @@ Space Complexity: O(N) to hold the start and end times separately
 
 """
 
+"""
+Definition of Interval:
+class Interval(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+"""
+
+class Solution:
+    def minMeetingRooms(self, intervals: List[Interval]) -> int:
+        """
+        Revisited 10/3/2024
+        https://neetcode.io/problems/meeting-schedule-ii
+        separate out the starting and ending times into two separate lists
+        and sort them
+        Use two pointers
+        track num rooms
+        0 5 15
+        10 20 40
+        at 0, one meeting starts
+        0     5          15
+                 10          20         40
+        this is less than 10, which is the first ending of a meeting
+        at 5, another meeting starts, this is still less than 10
+        (at this point, we have 2 rooms needed)
+        at time 15, this is greater than the end time, so we keep the start pointer
+        the same and increment end pointer. We also decrement the amount of rooms needed by one
+        next iteration, compares 15 and 20, 15 is the start of one meeting, so we increment the
+        start pointer and count of rooms by one.
+
+        At this point, there are no more meetings that are started, so the remaining rooms
+        are ending, which will decrement the count of rooms back to 0.
+
+        At it's maximum value, the amount of rooms needed was 2
+        """
+        startTimes = [interval.start for interval in intervals]
+        endTimes = [interval.end for interval in intervals]
+        startTimes.sort()
+        endTimes.sort()
+        startTimePtr = 0
+        endTimePtr = 0
+        maxCount = 0
+        count = 0
+        while (startTimePtr < len(startTimes) and endTimePtr < len(endTimes)):
+            startTime = startTimes[startTimePtr]
+            endTime = endTimes[endTimePtr]
+            if startTime >= endTime:
+                count -= 1
+                endTimePtr += 1
+            else:
+                count += 1
+                startTimePtr += 1
+            maxCount = max(count, maxCount)
+        return maxCount
+
 from typing import (
     List,
 )

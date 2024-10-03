@@ -37,6 +37,52 @@ explanation:
 youtube.com/watch?v=eeTToT5JUUY&list=PLJjp1UcO5B7d7Fm3e45xO74UBf0QiN-wn&index=18&t=339s&ab_channel=TimothyHChang
 '''
 """
+Revisited on 10/3/2024
+"""
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        """
+        figure out where the new interval belongs based on start time as the initial intervals list 
+        is already sorted
+        starting from the beginning, check to see if the new interval overlaps with previous intervals,
+        if so merge them
+        [[1,3],[4,6]] newInterval = [2,5]
+        based on start points
+        [[1,3], [2,5], [4,6]]
+        2,5 overlaps with 1,3 because the start point of 2 is less than the previous endpoint of 3
+        prev = [1,3]
+        cur = [2,5]
+        if my current overlaps with prev, merge and set prev
+        prev = [1,5]
+        cur = [4,6]
+        if my current overlaps with prev, merge
+        prev = [1,6]
+        """
+        if len(intervals) == 0:
+            return [newInterval]
+        i = 0
+        # find out where the interval should be inserted by checking if 
+        # the current interval's start time is less than the new interval's start time
+        # if this is no longer true, it should break.
+        # if the new interval is less than all existing intervals, i should be 0
+        # if the new interval is greater than all existing intervals, i should be the length of the 
+        # intervals list
+        while (i < len(intervals) and intervals[i][0] < newInterval[0]):
+            i += 1
+        leftHalf = intervals[:i]
+        rightHalf = intervals[i:]
+        intervals = leftHalf + [newInterval] + rightHalf
+        
+        res = [intervals[0]]
+        for i in range(1, len(intervals)):
+            curStart, curEnd = intervals[i]
+            prevStart, prevEnd = res[-1]
+            if curStart <= prevEnd:
+                res[-1] = [min(curStart, prevStart), max(prevEnd, curEnd)]
+            else:
+                res.append(intervals[i])
+        return res
+"""
 Revisited again on 7/31/2023,
 slightly cleaner solution than the original 
 """
