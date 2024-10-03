@@ -1,6 +1,7 @@
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         """
+        Revisited on 10/2/2024 with this solution
         Neetcode:
         https://www.youtube.com/watch?v=EaphyqKU4PQ&ab_channel=NeetCode
         Approach:

@@ -110,6 +110,44 @@ class Solution2:
 
 		return result
 
+class Solution:
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        """
+        Revisited on 10/2/2024 
+        with another DFS solution:
+        create adjacency list
+        run DFS on each of the nodes, and track a visited set that keeps track
+        of all nodes visited.
+        Each time we finish DFS on one node, we can increment the connected component
+        count by one, since because of the visited set, if we try running DFS on the next node,
+        if we already visited, we won't re-run it. The only time we'll re-run is if we visit
+        the next connected component which isn't connected to the first one we've already seen.
+      
+        """
+        # create adjacency list
+        adjacency = {} 
+        for i in range(n):
+            adjacency[i] = []
+        for i in range(len(edges)):
+            vertex, edge = edges[i]
+            # because this is an undirected graph, we have to add both relationships
+            # forward and backward
+            adjacency[vertex].append(edge)
+            adjacency[edge].append(vertex)
+        
+        visited = set()
+        def dfs(vertex):
+            visited.add(vertex)
+            for edge in adjacency[vertex]:
+                if edge not in visited:
+                    dfs(edge)
+        res = 0
+        for i in range(n):
+            if i not in visited:
+                dfs(i)
+                res += 1
+        return res
+
 """ 
 DFS Solution:
 1) Create adjacency list with node as an edge and vice versa
