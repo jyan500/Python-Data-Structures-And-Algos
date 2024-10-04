@@ -36,8 +36,30 @@ Output: [[1,1]]
 
 https://stackoverflow.com/questions/49773957/confusing-about-passing-list-in-recursion-function-of-python
 
+Update to this point ^^: you can concatenate an array to an existing one to create a new array and avoid
+the issues caused due to pass by reference (where you append, and then have to pop out like in the first solution)
+
 Time Complexity: O(2^target) exponential
 '''
+class Solution:
+    def combinationSum(self, nums: List[int], target: int) -> List[List[int]]:
+        nums.sort()
+        self.res = []
+        self.N = len(nums)
+        def search(i, curSum, cur):
+            if curSum == target:
+                self.res.append(cur)
+                return
+            elif i >= self.N or curSum > target:
+                return
+            # keep picking the same number until
+            # you're at the end of the list, or the cur sum exceeds target sum
+            search(i, curSum + nums[i], cur + [nums[i]])
+            # move onto the next index, and then repeat the process for that next index and so on
+            search(i+1, curSum, cur)
+        search(0, 0, [])
+        return self.res
+
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         return self.combinationSumHelper(candidates, target, 0, [], [])
