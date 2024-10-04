@@ -61,17 +61,23 @@ cur which is the empty list so it doesn't get duplicated
 Final result: [[], [1], [1,2], [2]]
         
 """
+""" 
+Note I revisited this on 10/4/2024 and also updated the solution because the previous one 
+appended the subset outside of the base case instead of inside of it, which complicates things.
+"""
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
         self.res = []
-        def knapsack(i, cur):
-            self.res.append(cur)
-            if i == len(nums):
+        self.N = len(nums)
+        # knapsack relation
+        def search(i, cur):
+            if i >= self.N:
+                self.res.append(cur)
                 return
-       
-            knapsack(i+1, cur + [nums[i]])
-            knapsack(i+1, cur)
-            self.res.remove(cur)
-            
-        knapsack(0, [])
+            # include the element at the current index
+            search(i+1, cur + [nums[i]])
+            # don't include it
+            search(i+1, cur)
+        search(0, [])
         return self.res
+            
