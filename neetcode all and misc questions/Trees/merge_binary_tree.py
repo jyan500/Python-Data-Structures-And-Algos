@@ -38,6 +38,16 @@ Space complexity: O(max(T1,T2)), as the space will need to be enough to include 
 #         self.val = val
 #         self.left = left
 #         self.right = right
+""" Revisited 10/5/2024 """
+class Solution:
+    def mergeTrees(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> Optional[TreeNode]:
+        if root1 and root2:
+            return TreeNode(root1.val + root2.val, left=self.mergeTrees(root1.left, root2.left), right=self.mergeTrees(root1.right, root2.right))
+        elif root1:
+            return TreeNode(root1.val, left=self.mergeTrees(root1.left, None), right=self.mergeTrees(root1.right, None))
+        elif root2:
+            return TreeNode(root2.val, left=self.mergeTrees(None, root2.left), right=self.mergeTrees(None, root2.right))
+        return None
 
 # Revisited on 12/26/2023
 class Solution:
