@@ -28,7 +28,21 @@ our current permutation into our total.
 During the backtracking, the current permutation will then look for a different number to permute
 
 '''
-
+class Solution3:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        """
+        Revisited on 10/6/2024 with a similar solution as below
+        """
+        self.res = []
+        def search(searchSpace, cur):
+            if len(searchSpace) == 0:
+                self.res.append(cur)
+                return
+            for i in range(len(searchSpace)):
+                search(searchSpace[:i]+searchSpace[i+1:], cur + [searchSpace[i]])
+            
+        search(nums, [])
+        return self.res
 """
 Revisited on 8/4/2023
 Same concept as above, but a slightly shorter solution that populates 
