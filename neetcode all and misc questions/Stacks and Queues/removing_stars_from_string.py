@@ -1,5 +1,6 @@
 """
 https://leetcode.com/problems/removing-stars-from-a-string/
+Revisited 10/8/2024
 """
 class Solution:
     def removeStars(self, s: str) -> str:

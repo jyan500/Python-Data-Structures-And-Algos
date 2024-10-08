@@ -18,6 +18,26 @@ O(1)
 
 """
 class Solution:
+    # revisited on 10/7/2024, same solution as below but simpler code
+    def maxVowels(self, s: str, k: int) -> int:
+        vowels = set(["a","e","i","o","u"])
+        l = 0
+        maxCount = 0
+        count = 0
+        for r in range(len(s)):
+            # if the right most character is a vowel, increment count
+            if s[r] in vowels:
+                count += 1
+                maxCount = max(count, maxCount)
+            # if we've reached the threshold of k, remove the leftmost character. If it's a vowel,
+            # also decrement the count of vowels, and then increment left pointer to shift window
+            if r - l + 1 == k:
+                if s[l] in vowels:
+                    count -= 1
+                l += 1
+        return maxCount
+
+class Solution:
     def maxVowels(self, s: str, k: int) -> int:
         from collections import Counter
         vowels = set(["a", "e", "i", "o", "u"])
