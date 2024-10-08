@@ -5,6 +5,8 @@ Not the fully amortized version, but you can find that
 at neetcode: https://www.youtube.com/watch?v=eanwa3ht3YQ&ab_channel=NeetCodeIO
 
 This version is O(N) pop and peek, while O(1) push and O(1) empty
+
+Revisited 10/8/2024
 """
 class MyQueue:
 
