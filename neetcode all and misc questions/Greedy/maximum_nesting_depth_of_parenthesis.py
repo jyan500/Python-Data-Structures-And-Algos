@@ -5,6 +5,9 @@ Same as valid parenthesis, except the trick is that the max depth of the parenth
 when you continually add opening braces, and then as soon as you see a closing brace,
 you check the length of the stack, as this tells you the depth based on the amount of opening braces. As you
 see closing braces, these will pop out the opening braces on the stack.
+
+The input string also contains other characters besides opening and closing braces, so only append to the stack
+if it's an opening brace
 """
 class Solution:
     def maxDepth(self, s: str) -> int:
