@@ -19,7 +19,7 @@ class Solution:
         Using BFS, if we start from 0, we check whether there's any nodes that 0 points to based on the directed version of the adjacency list, if so go down that path, and then increment a "total" counter by one to indicate that this edge would need to be reversed
 
         Time: O(E+V) (normal time for BFS)
-        Space: O(E+V) (technically two times since there's both directed and undirected adjacency list versions)
+        Space: O(E+V) (technically two times since there's both directed and undirected adjacency list versions), also visited set
         
         """
         from collections import deque
