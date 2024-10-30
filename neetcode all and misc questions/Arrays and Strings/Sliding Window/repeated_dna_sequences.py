@@ -1,6 +1,19 @@
 class Solution:
     def findRepeatedDnaSequences(self, s: str) -> List[str]:
         """
+        Revisited 10/30/2024
+        """
+        from collections import defaultdict
+        c = defaultdict(int)
+        for i in range(len(s)):
+            # ensure that we have at least 10 characters to slice
+            if i + 10 <= len(s):
+                sequence = s[i:i+10]
+                c[sequence] += 1
+        return [key for key in c if c[key] > 1] 
+
+    def findRepeatedDnaSequences(self, s: str) -> List[str]:
+        """
         https://leetcode.com/problems/repeated-dna-sequences/
         
         A A A A A C C C C C A  A  A  A  A  C  C  C  C  C  C  A  A  A  A  A  G  G  G  T  T  T
