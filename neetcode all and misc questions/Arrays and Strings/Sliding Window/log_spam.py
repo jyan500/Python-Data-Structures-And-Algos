@@ -1,12 +1,11 @@
 """
-Not a leetcode question, but still good sliding window variation nonetheless.
-Was asked this during an interview.
-
-Given a list of JSON objects containing a user ID and timestamp in milliseconds, 
+(Not a leetcode question but was asked this during an interview.)
+Given a list of JSON objects containing a user ID and timestamp in milliseconds, N representing the limit on the 
+amount of requests, and K representing a time range in milliseconds, 
 return all user IDs that have made >= N requests within a span of K milliseconds,
 these user IDs would be flagged as "spam".
 Assume the data is sorted by timestamp ascending.
-
+ 
 Input:
 [
 	{"userId": 1, "timestamp": 1},
@@ -26,33 +25,49 @@ Input:
 	{"userId": 4, "timestamp": 2799},
 	{"userId": 4, "timestamp": 2800},
 ]
-
+ 
 N = 5
 K = 1000
-
+ 
 Output:
 [1, 4]
-
+ 
+Explanation:
+userId 1 makes 5 requests between 1 and 1001 milliseconds, meaning this user has made >= 
+5 requests in this time range.
+userId 4 makes 5 requests betwen 2001 and 3001 milliseconds, meaning this user has made >= 5 requests
+in this time range.
+ 
 Input:
 [
-	{"userId": 2, "timestamp": 1001200},
-	{"userId": 1, "timestamp": 1001201},
-	{"userId": 1, "timestamp": 1001202},
-	{"userId": 1, "timestamp": 1001203},
-	{"userId": 1, "timestamp": 1001204},
-	{"userId": 1, "timestamp": 1002500},
-	{"userId": 2, "timestamp": 1003000},
-	{"userId": 2, "timestamp": 2003000},
-	{"userId": 2, "timestamp": 4003000},
-	{"userId": 2, "timestamp": 4003001},
-	{"userId": 2, "timestamp": 4003002},
+	{"userId": 1, "timestamp": 1},
+    {"userId": 2, "timestamp": 1},
+    {"userId": 3, "timestamp": 1},
+	{"userId": 1, "timestamp": 2},
+	{"userId": 1, "timestamp": 3},
+	{"userId": 2, "timestamp": 4},
+	{"userId": 1, "timestamp": 1590},
+	{"userId": 1, "timestamp": 1600},
+	{"userId": 4, "timestamp": 1700},
+	{"userId": 1, "timestamp": 1998},
+	{"userId": 4, "timestamp": 5001},
+	{"userId": 4, "timestamp": 5002},
+	{"userId": 1, "timestamp": 5003},
+	{"userId": 2, "timestamp": 5004},
+	{"userId": 3, "timestamp": 5205},
+	{"userId": 4, "timestamp": 5305},
+	{"userId": 4, "timestamp": 5799},
+	{"userId": 4, "timestamp": 5800},
 ]
 N = 5
 K = 1000
-
+ 
 Output:
-[1]
-
+[4]
+ 
+Explanation:
+userId 4 makes 5 requests between 5001 and 3601 milliseconds, meaning this user has made >= 5 requests
+in this time range.
 """
 
 """
