@@ -35,7 +35,7 @@ Output:
 Explanation:
 userId 1 makes 5 requests between 1 and 1001 milliseconds, meaning this user has made >= 
 5 requests in this time range.
-userId 4 makes 5 requests betwen 2001 and 3001 milliseconds, meaning this user has made >= 5 requests
+userId 4 makes 5 requests between 2001 and 3001 milliseconds, meaning this user has made >= 5 requests
 in this time range.
  
 Input:
@@ -66,7 +66,7 @@ Output:
 [4]
  
 Explanation:
-userId 4 makes 5 requests between 5001 and 3601 milliseconds, meaning this user has made >= 5 requests
+userId 4 makes 5 requests between 5001 and 6001 milliseconds, meaning this user has made >= 5 requests
 in this time range.
 """
 
