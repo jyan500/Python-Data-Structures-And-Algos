@@ -20,6 +20,88 @@ O(NLogN) time O(1) memory solution
 until we reach a case with individual nodes
 3) Apply adding two sorted linked lists (simplest case being two individual nodes)
 """
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        """
+        Revisited on 11/8/2024
+        Merge Sort
+        1) Split the lists in half
+        2) Perform merge sorted lists algorithm
+        """
+        
+        def mergeSort(head):
+            def split(node):
+                slow = node
+                fast = node.next
+                while (fast and fast.next):
+                    slow = slow.next
+                    fast = fast.next.next
+                # slow will be the middle of the list
+                return slow
+
+            def merge(h1, h2):
+                """
+                example:
+                1 -> 3
+                2 -> 4
+                cur = 0 -> null
+                1 < 2, so we set cur.next to be 0 -> 1 -> 3 
+                and then move, the temp1 pointer to 3
+                cur = cur.next, so cur is now 1
+
+                3 > 2, so we want to set cur.next to temp2 now
+                0 -> 1 -> 2 -> 4
+
+                temp2 = temp2.next, which brings from 2 to 4
+                cur is now 2
+
+                comparing temp1 to temp2, 3 < 4, so we now set cur.next to temp1 again, temp1 = temp1.next, is now null
+                0 -> 1 -> 2 -> 3 -> null
+
+                cur is now 3
+
+                because temp1 is now null, we can set the remainder
+                of list to temp2
+                """
+                temp1 = h1
+                temp2 = h2
+                dummy = ListNode(0)
+                cur = dummy
+                while temp1 and temp2:
+                    # if the current val of temp1 is less,
+                    # we can set the next value of cur to be 
+                    # the remainder of list1
+                    if temp1.val < temp2.val:
+                        cur.next = temp1
+                        temp1 = temp1.next
+                    else:
+                        cur.next = temp2
+                        temp2 = temp2.next
+                    cur = cur.next
+                if temp1:
+                    cur.next = temp1
+                elif temp2:
+                    cur.next = temp2
+                return dummy.next
+            if head.next:
+                mid = split(head)
+                second = mid.next
+                # split in half
+                mid.next = None
+                firstHalf = mergeSort(head)
+                secondHalf = mergeSort(second)
+                merged = merge(firstHalf, secondHalf)
+                return merged
+            return head
+        
+        if head:
+            return mergeSort(head)
+
 class Solution2:
     def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         """
