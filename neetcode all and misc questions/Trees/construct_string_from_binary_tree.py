@@ -1,5 +1,6 @@
 """
 https://www.youtube.com/watch?v=b1WpYxnuebQ&ab_channel=NeetCode
+Revisited on 11/13/2024 with the same solution
 Key Concepts:
 1) Preorder Traversal
 Node -> Left Subtree -> Right Subtree
@@ -95,14 +96,14 @@ self.s = ["(", "1", "(", "2", "()"]
 we go down left but there's nothing, so we return to 2nd call and go down right side
 
 3rd call
-self.s = ["(", "1", "(", "2", "()", "4", "("]
+self.s = ["(", "1", "(", "2", "()", "(", "4"]
 
 we go down the left and right but there's nothing here, so we return to the 3rd call
 and append the closing brace
-self.s = ["(", "1", "(", "2", "()", "4", "(", ")"]
+self.s = ["(", "1", "(", "2", "()", "(", "4", ")"]
 
 we go back to the 2nd call, since we've gone down right, append the closing brace
-self.s = ["(", "1", "(", "2", "()", "4", "(", ")", ")"]
+self.s = ["(", "1", "(", "2", "()", "(", "4", ")", ")"]
 
 the remainder is the same as the first problem
 
