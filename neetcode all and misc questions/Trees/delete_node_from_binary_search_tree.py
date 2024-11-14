@@ -14,6 +14,7 @@ class Solution:
         # the right subtree is everything to the right of mid
         # (Note that it may be possible to do this problem by removing the node and bubbling up the proper node to become
         # the new root, but I decided to take this more straight forward approach instead)
+        # revisited on 11/14/2024 with the same solution
         # Time: O(N) 
         # Space: O(N) 
         self.l = []

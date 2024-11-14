@@ -15,6 +15,8 @@ Same if it's on the right side
 
 Time Complexity:
 O(LogN) to find out the proper insertion spot via binary search since this is a BST
+
+Revisited on 11/14/2024 with the same solution
 """
 class Solution:
     def insertIntoBST(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
