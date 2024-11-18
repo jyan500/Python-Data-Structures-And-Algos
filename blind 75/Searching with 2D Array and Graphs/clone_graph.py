@@ -51,6 +51,7 @@ class Solution:
 
 """
 revisited on 7/19/2023
+revisited on 11/15/2024 with the same solution
 Used BFS again
 Key concepts:
 1) similar to a linked list problem, you need to track
@@ -67,7 +68,7 @@ and the created node
 3) as we traverse the graph using BFS, we should be able to create new nodes, and then 
 in the following iteration, we can then set the neighbors for that node based 
 on the neighbors list given for each existing node. If we've already created a node, we can
-find it in our dict.
+find it in our dict. This case will also account for the backwards relationship between nodes.
 
 
 """
