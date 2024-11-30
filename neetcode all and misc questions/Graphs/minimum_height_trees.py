@@ -4,6 +4,64 @@ https://leetcode.com/problems/minimum-height-trees/
 class Solution:
     def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
         """
+        Need to revisit:
+        https://youtu.be/wQGQnyv_9hI
+        each time you pick a different node with 0 ... n - 1 as the root, you end up with a different tree 
+        configuration. Some of these tree configurations have a smaller minimum height than others,
+        so the goal is to find the nodes where it creates the tree with the smallest heights when chosen as the root.
+        
+        Brute Force:
+        finding the height of a tree is O(N), and doing N times would be O(N^2)
+        And then finding the min of the heights
+        
+        Optimal:
+        1) The theory is that given a tree with n nodes, there can only be a max of 2 roots that product MHT's,
+        and these roots will be in the "center" of the graph
+        2) The idea is to run BFS, while at the same time, trimming away and nodes that don't have neighbors,
+        until you're left with 2 or less nodes
+
+        Time: O(E+V)
+        Space: O(E+V)
+        """
+        # edge case, if there's only one edge, we just return that single node
+        if n == 1:
+            return [0]
+        adj = {}
+        for i in range(n):
+            adj[i] = []
+        for src, dst in edges:
+            adj[src].append(dst)
+            adj[dst].append(src)
+        # identify the leaf nodes and place into queue
+        # count the amount of edges of each node
+        edgeCount = {}
+        leaves = deque()
+        for node in adj:
+            neighbors = adj[node]
+            if len(neighbors) == 1:
+                leaves.append(node)
+            edgeCount[node] = len(neighbors)
+        
+        while (leaves):
+            # if there are at least two nodes left, we return
+            if n <= 2:
+                return list(leaves)
+            # this solution applies the loop within BFS to go layer by layer
+            for i in range(len(leaves)):
+                node = leaves.popleft()
+                # decrement the number of nodes since we've popped off
+                n -= 1
+                for neighbor in adj[node]:
+                    # we trim by reducing the edge count
+                    edgeCount[neighbor] -= 1
+                    # if the edge count for this neighbor is now 1, this is now a leaf node,
+                    # so we append to the queue
+                    if edgeCount[neighbor] == 1:
+                        leaves.append(neighbor)
+
+class Solution:
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        """
         Optimal Solution:
         https://leetcode.com/problems/minimum-height-trees/solution/
         Short Summary:
