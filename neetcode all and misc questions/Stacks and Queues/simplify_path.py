@@ -58,8 +58,28 @@ stack = []
 build our path from the remaining stack, assuming we always have a / as the first character for the root
 /a/d
 
+Revisited on 12/4/2024 with a similar solution
 
 '''
+class Solution:
+    def simplifyPath(self, path: str) -> str:
+        parts = list(filter(lambda x: x != "", path.split("/")))
+        stack = []
+        for part in parts:
+            if len(stack) > 0:
+                if part == ".":
+                    continue
+                elif part == "..":
+                    stack.pop()
+                    continue
+            # edge case if the first part is a .., this isn't valid since you can't go backwards
+            # from the root directory, so we just ignore .., same with . as well, since the current directory
+            # is just the root
+            if part != ".." and part != ".":
+                stack.append(part)
+        # put the root directory slash back into the directory path, using the "/" as delimiter
+        return "/" + "/".join(stack)
+
 class Solution:
     def simplifyPath(self, path: str) -> str:
         '''
