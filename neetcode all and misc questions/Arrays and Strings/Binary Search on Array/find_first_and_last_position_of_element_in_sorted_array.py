@@ -43,6 +43,102 @@ from target_index to the end of the list to get the last position of the element
 '''
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
+        """
+        Revisited on 12/10/2024 with a cleaner solution than my first attempt
+        Solution from: https://www.youtube.com/watch?v=UKXsZBHmmFk&ab_channel=Insidecode
+
+        numbers in sorted ascending order, so binary search is a good candidate.
+        
+        in traditional binary search, we compare the mid point to the target and see if 
+        we need to search the left side or the right side depending on whether the midpoint value > target
+        
+        however in this problem, we want the starting and ending positions of the target value. 
+        so in traditional binary search, we'd be able to find a position where the target value occurs,
+        but not know what the boundaries are.
+        
+        5 7 7 8 8 8 10
+        
+        if you found the target and iterate outwards, that would no longer be O(LogN), because if the entire
+        array was all had the same value, then you'd iterate the whole array which is O(N)
+        
+        Instead, you have to run binary search twice, where for the first time, you want to look for the left most element
+        where the mid == target, and then for the second time, you want to look for the right most elmeent
+        where the mid == target.
+        
+        In order to know that you are at the leftmost element, you have to check whether
+        array[mid] == target AND array[mid-1] < target, as the previous element should be smaller to show that
+        we're at the leftmost
+        
+        And vice versa for the rightmost element,
+        array[mid] == target AND array[mid+1] > target.
+        
+        You also need to check edge cases such that you don't go out of bounds when making this check.
+        
+        *** Note that in the remainder of the search, THERES A DIFFERENCE in the ordering
+        of which you apply binary search when searching for leftmost vs rightmost. ***
+        
+        when searching for the leftmost element,
+        if you haven't found it yet,
+        you'll want to bias towards searching the left side first. Because there's a chance you could have 
+        found an element inside the sequence of elements like so:
+        
+        1 2 2 2 3 3
+            ^
+        
+        therefore we add if array[nums] >= target, so that if its equal to target, we continue our search on the left side
+        to find smaller elements, since the ** leftmost element in the sequence will need to be on the left side of the array. **
+        
+        same for the right side, in the case array[nums] <= target, so that in the case its equal to target, we bias
+        towards searching the right side, since the rightmost element in the sequence must be on the right side of the array.
+        
+        Time Complexity: O(LogN)
+        Space: O(1)
+        
+        """
+        
+        def findFirst(array, target):
+            l = 0
+            r = len(array)-1
+            if array[0] == target:
+                return 0
+            while (l <= r):
+                mid = l + (r-l)//2
+                if array[mid] == target and array[mid-1] < target:
+                    return mid
+                if array[mid] >= target:
+                    r = mid - 1
+                else:
+                    l = mid + 1
+            return -1
+                
+    
+        def findLast(array, target):
+            l = 0
+            r = len(array)-1
+            if array[-1] == target:
+                return len(array)-1
+            while (l <= r):
+                mid = l + (r-l)//2
+                if array[mid] == target and array[mid+1] > target:
+                    return mid
+                if array[mid] <= target:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+                    
+            return -1
+        
+        # since the list is in sorted order, if the target is less than the first element,
+        # or the target is greater than the last element, it's reasonable to assume it doesn't exist
+        # in the given list.
+        if len(nums) == 0 or target < nums[0] or target > nums[-1]:
+            return [-1,-1]
+        start = findFirst(nums, target)
+        end = findLast(nums, target)
+        return [start, end]
+
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
         ## binary search
         left = 0
         right = len(nums)-1
