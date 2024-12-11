@@ -1,3 +1,13 @@
+"""
+Time: O(N)
+Space: O(1)
+
+Approach: Similar to merge sorted lists, using two pointers.
+The trick is that whenever the end time A < end time B, you shift the pointer for A,
+as you want to check the next greater end time. 
+
+Then, there's four cases to handle when the intervals intersect, which can be seen in the code comments.
+"""
 class Solution:
     def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
         l = 0
