@@ -30,6 +30,29 @@ https://leetcode.com/problems/daily-temperatures/
 https://www.youtube.com/watch?v=cTBiBSnjO3c&ab_channel=NeetCode
 
 '''
+
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        """
+        Revisited again on 12/13/2024
+        monotonic stack, where you keep the elements values in a specific order,
+        and then pop out the stack if you find an element that breaks the order
+        
+        in this case on the stack, you want to store a tuple of the temperature value and its index,
+        the next time you see a value that is greater than the top of the stack, that means we've found a temperature
+        that's warmer, so you can subtract the difference in indices to get the number of days when a warmer temperature was found.
+        Therefore, the stack's elements should be in decreasing order
+        """
+        
+        stack = []
+        res = [0] * len(temperatures)
+        for i in range(len(temperatures)):
+            while len(stack) > 0 and stack[-1][0] < temperatures[i]:
+                element, index = stack.pop()
+                res[index] = abs(i - index)
+            stack.append((temperatures[i],i))
+        return res
+
 """
 Revisited again on 9/26/2024
 Have to remember about the monotonic stack where descending order is kept, this can be helpful
