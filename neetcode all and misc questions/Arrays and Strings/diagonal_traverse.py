@@ -103,6 +103,7 @@ class Solution:
         while (cur[0] < M):
             x, y = cur
             inner = []
+            # iterate diagonal from top right to bottom left, which is adding (+1, -1) to the current until you're out of bounds
             while (inBounds(x, y, M, N)):
                 inner.append(mat[x][y])
                 x += 1
