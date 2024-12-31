@@ -91,3 +91,116 @@ class Solution:
 # Your Solution object will be instantiated and called as such:
 # obj = Solution(w)
 # param_1 = obj.pickIndex()
+
+class Solution:
+
+    def __init__(self, w: List[int]):
+        self.weights = []
+        """ 
+        https://algo.monster/liteproblems/528
+        First Approach:
+        to bias the weight such that you have a specific probability of picking a certain element,
+        duplicate the element by the amount of times indicated by its weight.
+        
+        For example:
+        w = [1, 3]
+        the numbers we choose from are the indices of w, so 0 and 1
+        since index 0 has a weight 1, we duplicate "0" one time
+        since index 1 has a weight of 3, we duplicate "1" three times
+        
+        self.weights = [0, 1, 1, 1]
+        
+        by definition, there should be a 75% chance of picking 1, and a 25% chance of picking 0 
+        if randomly choosing within self.weights
+        
+        The issue with this solution is that it's not very memory efficient.
+        
+        --------------------
+        More optimized using Prefix Sum:
+        
+        Rather than duplicating each number by the same amount of times as its weight,
+        you can keep a running total of the amount of times each number should appear (prefix sum)
+        
+        w = [1, 3]
+        self.weights = []
+        total = 0
+        
+        total += w[0] = 1
+        self.weights = [1]
+        
+        total += w[1] = 4
+        self.weights = [1, 4]
+        
+        self.total = 4
+        
+        Next, when picking the index,
+        you can generate a number between 1 and self.total randomly.
+        
+        then, iterate through self.weights, and check whether the picked number <= self.weights[i],
+        if so, this means that this randomly chosen number corresponds to the current index i
+        
+        for example:
+        rand(1, self.total) 
+        
+        if 2 is chosen
+        [1, 4], 
+        2 is greater than 1, but less than 4. Therefore, the index chosen would correspond to the index where 4 is (which is 1)
+        
+        ------------------
+        Further optimized with binary search
+        
+        In pickWeight function, apply binary search to determine the corresponding index of the chosen random number.
+        
+        Whenever the value at our midpoint > randomly chosen number,
+        we search left, since we need a smaller number, because we want to find the point where our midpoint value == randomly chosen number
+        Otherwise,
+        we search right
+        
+        if randomly chosen == self.weights[mid], return mid
+        however, if the left >= right, return left, because this left will contains the closest index where the randomly chosen number is greater
+        
+        for example:
+        w = [1, 2, 3]
+        self.weights = [1, 3, 6]
+        
+        self.total = 6
+        when a random number between 1, self.total is chosen, i.e 4
+        when performing binary search,
+        since 4 > the midpoint of 3, we search right
+        4 < 6, so we search right
+        the left index is >= right index now, so we return the left index, which is 2
+        
+        i.e if 2 is chosen,
+        2 < 3, so the index at 3 is chosen 
+        
+        if 1 is chosen
+        1 < 3, so search left
+        1 == 1, return midpoint here which is 0
+        
+        """ 
+        self.weights = []
+        total = 0
+        for i in range(len(w)):
+            total += w[i]
+            self.weights.append(total)
+        self.total = total
+        
+    def pickIndex(self) -> int:
+        import random
+        rand = random.randint(1, self.total)
+        def binarySearch(left, right):
+            mid = left + ((right-left)//2)
+            if self.weights[mid] == rand:
+                return mid
+            if left == right:
+                return left
+            if self.weights[mid] > rand:
+                return binarySearch(left, mid)
+            else:
+                return binarySearch(mid+1, right)
+        return binarySearch(0, len(self.weights)-1)
+
+
+# Your Solution object will be instantiated and called as such:
+# obj = Solution(w)
+# param_1 = obj.pickIndex()
