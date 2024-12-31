@@ -1,6 +1,9 @@
 '''
 https://leetcode.com/problems/random-pick-index/
 '''
+""" 
+Revisited on 12/31/2024
+"""
 import random
 class Solution:
     ## two solutions
