@@ -1,3 +1,44 @@
+"""
+Revisited on 1/10/2025 with a shorter solution
+Instead of using additional memory for the queue solution below to store the first instance of zero,
+just perform a while loop, incrementing the left pointer until you reach the first instance of zero.
+
+O(N) Time
+O(1) Space
+"""
+class Solution:
+    def longestOnes(self, nums: List[int], k: int) -> int:
+        l = 0
+        r = 0
+        flipped = 0
+        maxDistance = float("-inf")
+        while (l < len(nums) and r < len(nums)):
+            if nums[r] == 0:
+                if flipped < k:
+                    flipped += 1
+                else:
+                    # it's r - l because we don't include r since index r is the zero value we can't flip yet
+                    distance = r - l
+                    maxDistance = max(distance, maxDistance)
+                    # shrink the window until we hit a "zero" that we can flip from zero back to one
+                    # to make room
+                    while (nums[l] != 0):
+                        l += 1
+                    # we then increase l by one more, so we skip this zero
+                    l += 1
+                    # flipped -= 1 since we unflip the zero at index l, 
+                    # and then += 1 because we flip the zero at index r
+                    r += 1
+                    continue
+            # if we haven't hit our limit on zeroes that we can flip, 
+            # keep updating the distance. Note we include index r this time
+            # since it's either a 1, or zero that's been flipped to one, hence r - l + 1
+            distance = r - l + 1
+            maxDistance = max(distance, maxDistance)
+            r += 1
+        return maxDistance
+
+
 class Solution:
     """
     Approach:
