@@ -1,4 +1,30 @@
 """
+Revisited on 1/13/2025
+"""
+class Solution:
+    def asteroidCollision(self, asteroids: List[int]) -> List[int]:
+        stack = []
+        for i in range(len(asteroids)):
+            if len(stack) > 0:
+                # the asteroids only collide if the top of the stack is positive (moving right)
+                # and the current asteroid is negative (moving left)
+                while (len(stack) > 0 and stack[-1] > 0 and asteroids[i] < 0 and abs(asteroids[i]) > abs(stack[-1])):
+                    stack.pop()
+                if len(stack) > 0:
+                    # if the current asteroid is the same and moving in opposite directions, pop()
+                    if stack[-1] > 0 and asteroids[i] < 0 and abs(stack[-1]) == abs(asteroids[i]):
+                        stack.pop()
+                    # if the current asteroid is moving in the same direction
+                    # or the top most is negative and the current is positive (Which means
+                    # they are not going to collide), append
+                    elif (asteroids[i] < 0 and stack[-1] < 0) or (asteroids[i] > 0 and stack[-1] > 0) or (asteroids[i] > 0 and stack[-1] < 0):
+                        stack.append(asteroids[i])
+                    continue
+
+                    
+            stack.append(asteroids[i])
+        return stack
+"""
 https://leetcode.com/problems/asteroid-collision/
 Time: O(N)
 Space: O(N)
