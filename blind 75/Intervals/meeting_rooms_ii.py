@@ -1,4 +1,91 @@
 """
+Definition of Interval:
+class Interval(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+"""
+import heapq
+class Solution:
+    def minMeetingRooms(self, intervals: List[Interval]) -> int:
+        """
+        Min Heap Solution:
+        https://neetcode.io/problems/meeting-schedule-ii
+        O(NLogN) time, O(N) space
+
+        Sort intervals by start time
+        Create empty min heap
+        Iterate through the intervals
+            If min heap is not empty:
+                if top of min heap end time <= current interval's start:
+                    pop from min heap
+            Push the END time of the interval onto the min heap
+        
+        Example:
+        [(0,40), (5,10), (15,20)]
+
+        in this example, the intervals are sorted by start time
+        minHeap = []
+        
+        1st iteration
+        first, the first end time (40) is pushed on the min heap
+        minHeap = [40]
+
+        2nd iteration
+        min heap is not empty, 
+        is top of min heap end time <= start time (40 <= 5)? , false
+        push the end time of the interval onto the min heap,
+        minHeap = [10, 40]
+
+        3rd iteration
+        min heap is not empty
+        is top of min heap end time <= start time (10 <= 15), True
+            pop from the min heap 
+        
+        minHeap = [40]
+        push the end time of the interval onto the min heap
+        minHeap = [20, 40]
+
+        Since we've now iterated all of the intervals, the only remaining 
+        end times left on the min heap are 20 and 40. The length of the min heap
+        is the amount of rooms needed. 
+
+        The reasoning is that:
+        Since there are no more meetings that are starting,
+        can assume that the meeting that ends at 20 would be one room,
+        and the meeting that ends at 40 would be another room. 
+
+        In an example like so:
+        [(0, 40), (5, 20), (10, 30)]
+        You can see that originally, we'll have
+        minHeap = [40]
+
+        and then, because the next meeting at 5 starts, and the meeting
+        with end time 40 hasn't ended yet,
+        minHeap = [20, 40]
+
+        after that, the next meeting at 10 starts, but the meeting
+        at 20 hasn't ended yet,
+
+        minHeap = [20,30,40]
+
+        so in this case, three separate rooms would be required
+        """
+
+        intervals.sort(key=lambda x: x.start)
+        minHeap = []
+        for interval in intervals:
+            if len(minHeap) > 0:
+                previousEnd = minHeap[0]
+                currentStart = interval.start
+                # if previousEnd <= currentStart, this means a meeting has ended, so another meeting can take its place
+                # within the same room
+                if previousEnd <= currentStart:
+                    heapq.heappop(minHeap)
+            heapq.heappush(minHeap, interval.end)
+        return len(minHeap)
+
+"""
 https://www.lintcode.com/problem/919/
 https://www.youtube.com/watch?v=FdzJmTCVyJU&ab_channel=NeetCode
 1) get all start times and end times for all meetings,
