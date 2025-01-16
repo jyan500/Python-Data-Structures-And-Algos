@@ -12,9 +12,14 @@ class Solution:
         Min Heap Solution:
         https://neetcode.io/problems/meeting-schedule-ii
         O(NLogN) time, O(N) space
+    
+        Key:
+        By using a min heap to store only the end times, 
+        it tells us the earliest time when a meeting can end, 
+        thus freeing up a room for another meeting to start
 
         Sort intervals by start time
-        Create empty min heap
+        Create empty min heap 
         Iterate through the intervals
             If min heap is not empty:
                 if top of min heap end time <= current interval's start:
