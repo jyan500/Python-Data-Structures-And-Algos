@@ -1,3 +1,40 @@
+# revisited on 1/28/2025 with a similar solution
+class Solution:
+    def reorganizeString(self, s: str) -> str:
+        """
+        1) keep track of the counts of characters using hashmap
+        2) Place the counts and the character as a tuple onto a max heap.
+        3) since none of the characters can be next to each other,
+        you'd want to keep track of the previous character that was picked,
+        and then choose a different character. Another condition is that you want
+        to pick a different character that has the highest count among all the others, since
+        you don't want to end up in a situation where you still have only one type of
+        character left, and end up having to place them all next to each other.
+        4) If the result string == original string, that means we were able to successfully place all characters
+        alternately, otherwise return ""
+        """
+        from collections import Counter
+        import heapq
+        counter = Counter(s)
+        maxHeap = []
+        for key, value in counter.items():
+            # negative value because it's a max heap
+            heapq.heappush(maxHeap, (-value, key))
+        prev = tuple()
+        res = []
+        while (maxHeap):
+            count, char = heapq.heappop(maxHeap)
+            count = -1 * count
+            # if the previous character has a count greater than 0,
+            # add it back to the max heap
+            if (len(prev) > 0):
+                prevCount = -1 * prev[0]
+                if prevCount > 0:
+                    heapq.heappush(maxHeap, prev)
+            prev = (-1 * (count-1), char)
+            res.append(char)
+        return "".join(res) if len(res) == len(s) else ""
+
 class Solution:
     def reorganizeString(self, s: str) -> str:
         """
