@@ -19,13 +19,15 @@ class Solution:
         because nums[mid] = 2, and nums[left] = 2, and nums[right] also is 2,
         it's not possible to tell which side to search using binary search.
 
+        For this problem, you have to combine the pivot index idea with
+        binary search + linear scanning. Linear scanning comes in when
+        the nums[l] == nums[mid]. You increment the left pointer by one 
+        as neither the left and mid can be the pivot index since they are the same element.
+
         """
 
         def search(l, r, nums, target):
             mid = (l + (r-l)//2)
-            # need to search the left side if the cur mid is bigger than
-            # the target to find smaller elements
-
             if nums[mid] == target:
                 return True
             if l >= r:
