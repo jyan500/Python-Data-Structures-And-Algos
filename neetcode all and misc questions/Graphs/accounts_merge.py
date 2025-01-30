@@ -19,6 +19,69 @@ Space complexity:
 O(N*K) for the adjacency list
 
 """
+
+# Revisited on 1/3/2025
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        """
+        represent as a graph where the emails are the nodes and the edges
+
+        index 0: [johnsmith@mail.com, john_newyork@mail.com],
+        index 1: [johnsmith@mail.com, john00@mail.com]
+        index 2: [mary@mail.com]
+        index 3: [johnnybravo@mail.com]
+
+        each email within the account array is paired with each other as an edge, so if another account shares
+        the same email, that would also be an edge
+
+        john_newyork@mail.com : [johnsmith@mail.com],
+        johnsmith@mail.com: [john_newyork@mail.com, john00@mail.com],
+        johnnybravo@mail.com: []
+        mary@mail.com: [],
+
+        Perform DFS on the emails to check for the connected component
+
+        """
+        from collections import defaultdict
+        adj = defaultdict(set)
+        emailsToNames = defaultdict(str)
+        # also map emails to name once the connected
+        # components are found to tie the emails to a name
+        for account in accounts:
+            name = account[0]
+            emails = account[1:]
+            for i in range(len(emails)):
+                emailsToNames[emails[i]] = name
+                root = emails[i]
+                neighbors = emails[:i] + emails[i+1:]
+                if root not in adj:
+                    adj[root] = set()
+                for nei in neighbors:
+                    adj[root].add(nei)
+        def dfs(node, graph, connected, visited):
+            if node in connected:
+                return
+            visited.add(node)
+            connected.add(node)
+            for neighbor in graph[node]:
+                dfs(neighbor, graph, connected, visited)
+        
+        visited = set()
+        mergedAccounts = []
+        for key in adj:
+            # to avoid processing the same connected components,
+            # keep global visited list
+            if key not in visited:
+                connected = set()
+                dfs(key, adj, connected, visited)
+                mergedAccount = list(connected)
+                # taking the first email in the list of connected emails and mapping
+                # to the name should be a safe assumption to make, since all the 
+                # emails in the connected component should be tied to the same name
+                # according to the problem statement.
+                mergedAccounts.append([emailsToNames[mergedAccount[0]]] + sorted(mergedAccount))
+        return mergedAccounts
+
 class Solution:
     def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
         # concept: find connected components
