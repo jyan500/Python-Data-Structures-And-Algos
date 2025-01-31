@@ -100,6 +100,36 @@ combinations = dfs("b", [["d", "e", "f"], ["g", "h", "i"]]) and the process repe
 
 
 """
+
+# Revisited on 1/30/2025, Time: O(N^4), where 4 represents the max amount of characters
+# per digit
+class Solution3:
+    def letterCombinations(self, digits: str) -> List[str]:
+        if digits == "":
+            return []
+        combinations = {
+            "2": ["a","b","c"],
+            "3": ["d","e","f"],
+            "4": ["g","h","i"],
+            "5": ["j","k","l"],
+            "6": ["m","n","o"],
+            "7": ["p","q","r","s"],
+            "8": ["t","u","v"],
+            "9": ["w","x","y","z"],
+            "0": ["+"]
+        }
+        res = []
+        N = len(digits)
+        def search(i, cur):
+            if i >= N:
+                res.append("".join(cur))
+                return
+            characters = combinations[digits[i]]
+            for char in characters:
+                search(i+1, cur + [char])
+        search(0, [])
+        return res
+
 class Solution2:
     def letterCombinations(self, digits: str) -> List[str]:
         digitMap = {
