@@ -11,6 +11,39 @@ Input: n = 1
 Output: ["()"]
 
 '''
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        """
+        Backtracking:
+        n = 3
+        ((())) first case
+        backtracks to ...
+        (( openingCount = 2 and closingCount = 3
+        as long as there are more closing than opening,
+        we can choose closing as an option here. 
+        (()
+        this next call, we can go back to choosing an opening brace by default
+        since opening braces always come before closing
+        """
+        res = []
+        def search(openingCount: int, closingCount: int, cur: str) -> None:
+            # base case: no more braces to choose here
+            if openingCount == 0 and closingCount == 0:
+                res.append(cur)
+                return
+            # default to choose opening brace before closing
+            if openingCount > 0:
+                search(openingCount - 1, closingCount, cur + "(")
+            # if we're out of opening braces and there are 
+            # still closing braces, choose closing brace
+            # also if we have more closing braces than opening,
+            # we can also choose a closing brace
+            if (openingCount == 0 and closingCount > 0) or (closingCount > openingCount):
+                search(openingCount, closingCount - 1, cur + ")")
+
+        search(n,n,"")
+        return res
+
 """
 Revisited on 9/26/2024, still same solution in 2^n time
 """
