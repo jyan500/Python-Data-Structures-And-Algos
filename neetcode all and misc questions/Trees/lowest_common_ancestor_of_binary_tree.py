@@ -18,6 +18,60 @@ as this would represent the lowest common ancestor before the paths diverged
 #         self.val = x
 #         self.left = None
 #         self.right = None
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        """
+        Revisited 2/3/2025 with the same solution
+
+        This works on the assumption that every node in the tree is unique,
+        which means that there is only ONE valid path to p and q
+        1) store the tree node path from the root node to p in a list
+        2) store the tree node path from the root node to q in a list
+        3) Use a while loop to compare the two lists simultaneously until the node
+        is no longer the same. This means that the path has diverged.  
+        """
+        # get path from root to target
+        def getPath(root: 'TreeNode', target: 'TreeNode', path: ['TreeNode']) -> bool:
+            if root:
+                path.append(root)
+                # once we've found the path, return True
+                if root.val == target.val:
+                    return True
+                # continue searching for the node
+                found = getPath(root.left, target, path) or getPath(root.right, target, path)
+                # if we didn't find the proper path, we backtrack path so we don't
+                # include the unnecessary nodes
+                if not found:
+                    path.pop()
+                return found
+            return False
+        
+        pathP = []
+        pathQ = []
+        getPath(root, p, pathP)
+        getPath(root, q, pathQ)
+        
+        lenP = len(pathP)
+        lenQ = len(pathQ)
+        i = 0
+        j = 0      
+        while (i < lenP and j < lenQ):
+            if pathP[i].val != pathQ[j].val:
+                # get the previous node, this was the LCA since the paths have differed
+                return pathP[i-1]
+            i += 1
+            j += 1
+        # if one of the lists ended, that means all the nodes were the same up until
+        # the end of one path, which means the previous node before the end is the LCA,
+        return pathP[i-1]
+
 
 """
 Revisited on 8/5/2023
