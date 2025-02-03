@@ -24,6 +24,15 @@ class Solution:
         (()
         this next call, we can go back to choosing an opening brace by default
         since opening braces always come before closing
+
+        https://christinalalay.medium.com/crack-leetcode-22-generate-parentheses-895de3a677c7
+        
+        According to the article above, you can see based on the tree that the backtracking generates,
+        there are 2 possible choices (most of the time once a left brace is chosen), and the height
+        of the tree is 2n. However, because there are cases where the tree does not finish due to the if
+        statements, it's a more complex representation (catalan number)
+        Time complexity: ~ O(4^N/N^1/2), which is actually O((4^N)/sqrt(N))
+        Space complexity: ~ O((4^N)/sqrt(N)) to hold every valid sequence
         """
         res = []
         def search(openingCount: int, closingCount: int, cur: str) -> None:
@@ -45,7 +54,7 @@ class Solution:
         return res
 
 """
-Revisited on 9/26/2024, still same solution in 2^n time
+Revisited on 9/26/2024
 """
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
@@ -67,8 +76,6 @@ class Solution:
         return valid
 """
 Revisited on 9/8/2023
-Time: O(2^n), for a given index there can be two combinations here, so 2 * 2 * 2 ... n which is 2^n
-Space: O(2^n)
 1) The concept is that we start with one opening brace, and then 
 we can continually pick an opening brace until the number of opening braces is equal to our n
 2) Then, we can continually pick closing braces
