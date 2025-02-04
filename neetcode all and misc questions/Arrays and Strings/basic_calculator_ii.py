@@ -28,6 +28,40 @@ one last case is at the end of our iteration, we need to make sure to evaluate t
 since normally, we don't make an evaluation until we see another operator (but we're at the end of the string so we won't see another one)
 finally, at the end, sum up all values in the stack
 '''
+# revisited 2/4/2025, was asked this on interview today
+# https://www.youtube.com/watch?v=2EErQ25kKE8&ab_channel=SaiAnishMalla 
+# same solution as below
+class Solution:
+    def calculate(self, s: str) -> int:
+        curNumber = 0
+        operator = ""
+        digits = set([str(i) for i in range(10)])
+        operators = set(["+","-","/","*"])
+        stack = []
+        for i in range(len(s)):
+            if s[i] in digits:
+                curNumber = (curNumber * 10) + int(s[i])
+            # we evaluate the numbers in the stack as soon as we reach another operator
+            # the goal is to evaluate all multiplication and division signs first, then
+            # evaluate addition and subtract after
+            if s[i] in operators or i == len(s) - 1:
+                # the operator == "" condition is only for the first time an operator is seen,
+                # because we still need to add the current number the first time we see an operator
+                # (no matter what the operator is)
+                if operator == "+" or operator == "":
+                    stack.append(curNumber)
+                if operator == "-":
+                    stack.append(-curNumber)
+                if operator == "*":
+                    # evaluate the previous element on the stack
+                    stack[-1] = curNumber * stack[-1]
+                if operator == "/":
+                    # evaluate the previous number / cur number
+                    stack[-1] = int(stack[-1]/curNumber)
+                curNumber = 0
+                operator = s[i]
+        return sum(stack)
+
 from math import ceil
 class Solution:
 	def calculate(self, s: str) -> int:
