@@ -28,7 +28,63 @@ Output: "abccdcdcdxyz"
 
 https://leetcode.com/problems/decode-string/
 '''
+class Solution:
+    def decodeString(self, s: str) -> str:
+        """
+        Revisited 2/5/2025
+        Time: O(N)
+        Space: O(N)
+        Approach:
+        stack = []
+        curNumber = 0
+        iterate through s
+            if the current number is a digit, 
+                continue building the digit by multiplying the current number by 10,
+                and then adding the current digit (since the number can be greater than 9)
+            if you reach an "[". 
+                add the current number and then the "[" to the stack
+                reset current number back to 0
+            otherwise, if it's a letter
+                add it to the stack normally
 
+            if you reach a "]", 
+                you need to pop off the stack until you reach
+                a "[", all the while you need to be saving the popped off characters 
+                as this will contain the sequence of characters that needs to be multiplied
+
+                Once you reach the "[", pop off once more as this will be the number. 
+                Multiply the number by the sequence of characters, and add to the stack
+
+        At the end, join the stack and return
+
+        """
+        stack = []
+        curNumber = 0 
+        for i in range(len(s)):
+            if s[i].isdigit():
+                curNumber = (curNumber * 10) + int(s[i])
+                continue
+            if s[i] == "]":
+                char = ""
+                while (len(stack) > 0 and stack[-1] != "["):
+                    char = stack[-1] + char
+                    stack.pop()
+                # pop off the opening brace
+                stack.pop()
+                # the number should now be the top of the stack
+                # evaluate and pop off the number 
+                number = stack.pop()
+                result = number * char
+                stack.append(result)
+                continue
+            if s[i] == "[":
+                stack.append(curNumber)
+                stack.append("[")
+                curNumber = 0
+            else:
+                stack.append(s[i])
+        return "".join(stack)
+        
 """
 Revisited on 1/23/2024
 Took around ~25 mins to do after some refreshing on the solution

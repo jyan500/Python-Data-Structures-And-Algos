@@ -1,6 +1,8 @@
 class Solution:
     def makesquare(self, matchsticks: List[int]) -> bool:
         """
+        Note: revisited on 2/6/2025 with the same solution as below
+        
         https://www.youtube.com/watch?v=hUe0cUKV-YY&ab_channel=NeetCode
         https://leetcode.com/problems/matchsticks-to-square/submissions/ 
 
