@@ -5,6 +5,66 @@ https://www.youtube.com/watch?v=Pr6T-3yB9RM&ab_channel=NeetCode
 class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         """
+        Revisited on 2/7/2025
+        Brainstorming:
+        position = [10,8,0,5,3]
+        speed = [2,4,1,1,3]
+
+        the car at position 10 will reach the target in 1 hrs (10 + 1(2))
+        the car at position 8 will reach the target in 1 hr (8 + 1(4))
+        the car at position 0 will reach the target in 11 hours (1 + 11(1))
+        the car at position 5 will reach the target in 7 hours (5 + 7(1)))
+        the car at position 3 will reach the target in 3 hours (3 + 3(3))
+
+        Note that we don't need to know the exact point at which two cars intersect,
+        just that they will intersect or not
+        For example, the car at position 10 and position 8 intersect because
+        they both reach the target at the same time
+        The car at position 3 intersects with position 5 because it takes 
+        7 hours to get to the target, and only 3 hours for the car at position 3,
+        so they will intersect at some point, and become a fleet. At this point,
+        you'd set the stack element to be the slower of the two cars, and 
+        assume that the position would be the position of the car that was further ahead.
+
+        Approach:
+        1) Create an array of tuples like so (position ,speed), and then sort by
+        position in descending order
+        2) Create a stack that represents the car fleets, add tuple at index 0
+        to the stack
+        3) iterate through arr starting at index 1
+            calculate time it takes for top of stack to reach target
+            calculate time it takes for arr[i] to reach target
+            if arr[i] time <= top of stack:
+                stack[-1] = (position of car that has greater position, speed of slower car)
+        4) return length of stack
+
+        This question is more of an intervals style question of constantly
+        updating the top of the stack, rather than having to use an inner while loop to 
+        pop out the stack until a condition is reached.
+
+        Time: O(NLogN)
+        Space: O(N)
+
+        """
+        cars = sorted([(position[i], speed[i]) for i in range(len(position))], key=lambda x: x[0], reverse=True)
+        stack = [cars[0]]
+        for i in range(1, len(cars)):
+            curPosition, curSpeed = cars[i]
+            prevPosition, prevSpeed = stack[-1]
+            curTimeToTarget = (target - curPosition)/curSpeed
+            prevTimeToTarget = (target - prevPosition)/prevSpeed
+            # the current car will intersect with the previous,
+            # so we need to merge them, taking the prevPosition (since we sorted
+            # and that position is further ahead) 
+            if curTimeToTarget <= prevTimeToTarget:
+                stack[-1] = (prevPosition, min(curSpeed, prevSpeed))
+            else:
+                stack.append(cars[i])
+        return len(stack)
+
+class Solution:
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        """
         how long does it take for each to reach the destination?
 
         0                  10
