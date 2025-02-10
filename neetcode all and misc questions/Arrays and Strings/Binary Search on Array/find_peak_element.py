@@ -25,7 +25,8 @@ class Solution:
 
         Same logic applies if the array is monotonically decreasing,
         If the element to the right is less than the current, we have to search the left side instead,
-        as this means the the element to the left might be greater than the current.
+        as this means the the element to the left is greater than the current, so the peak element
+        is on the left side (with the last possible peak element being the element at index 0)
 
         Time: O(LogN)
         Space: O(LogN) (recursive stack)
