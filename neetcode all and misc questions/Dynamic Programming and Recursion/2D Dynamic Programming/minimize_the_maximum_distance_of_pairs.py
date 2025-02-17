@@ -40,10 +40,20 @@ class Solution:
 
         Base Case:
         ----------
+        Note there are two base cases where you've made enough pairs, or you're at the end of the array and
+        cannot make any more pairs
+
+        in the example: [1 1 0 3], [0 1 1 3] (when sorted), p = 2
+        it makes sense that if you pick [0 1] and [1 3], there are no pairs that can be chosen,
+        because you can only pick [1 1], and inf or [1 3] and inf as the remaining
+
         if pairs == p,
-            that means we've found enough pairs to make a comparison, return 0
+            that means we've found enough pairs to make a comparison, return 0 (technically you just return
+            the smallest element that will result in MAX(element, placeholder) = element), but 0 works here
+            because it meets the edge case where p = 0, return 0)
         if i >= N - 1:
-            return float("inf"), this is because we can't compare an element that's out of bounds, so we pick a placeholder.
+            return float("inf"), this is because we can't compare an element that's out of bounds, this also means
+            we cannot make any more pairs.
             What usually ends up happening is that you will the compare the MAX(previous pair, float("inf")) and return float("inf"
             )
         Recurrence relation (knapsack, with a variation):
@@ -146,8 +156,8 @@ class Solution:
         7th call
         i = 2
         pairs = 0
-        picks nums[i+1] and nums[i], for [3, 0], difference of 3
-        max(3, search(i+2, pairs+1))
+        picks nums[i+1] and nums[i], for [3, 1], difference of 2
+        max(2, search(i+2, pairs+1))
 
         8th call
         i = 4
@@ -159,7 +169,7 @@ class Solution:
         i = 2
         pairs = 0
         search(i+2, pairs+1) evaluates to float("inf")
-        choose = max(3, float("inf")) = float("inf")
+        choose = max(2, float("inf")) = float("inf")
 
         skip(i+1, pairs) => will go ahead and skip this one, as it also returns float("inf"), backtracking
         to this call...
