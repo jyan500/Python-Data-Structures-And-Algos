@@ -2,6 +2,8 @@ class Solution:
     def numRescueBoats(self, people: List[int], limit: int) -> int:
         """
         https://www.youtube.com/watch?v=XbaxWuHIWUs&ab_channel=NeetCode
+        
+        Revisited on 2/18/2025 with the same solution
 
         Should try to optimize the amount of people per boat to be closest
         to the limit
@@ -43,19 +45,34 @@ class Solution:
         res = 3
         
         """
+        # people.sort()
+        # l = 0
+        # r = len(people)-1
+        # res = 0
+        # while (l <= r):
+        #     if l == r and people[r] < limit:
+        #         res += 1
+        #         break
+        #     if people[r] + people[l] > limit:
+        #         res += 1
+        #         r -= 1
+        #     else:
+        #         res += 1
+        #         l += 1
+        #         r -= 1
+        # return res
         people.sort()
         l = 0
         r = len(people)-1
-        res = 0
-        while (l <= r):
-            if l == r and people[r] < limit:
-                res += 1
-                break
-            if people[r] + people[l] > limit:
-                res += 1
+        amt = 0
+        while (l < r):
+            if people[l] + people[r] > limit:
+                amt += 1
                 r -= 1
             else:
-                res += 1
+                amt += 1
                 l += 1
                 r -= 1
-        return res
+        if l == r and people[l] <= limit:
+            amt += 1
+        return amt
