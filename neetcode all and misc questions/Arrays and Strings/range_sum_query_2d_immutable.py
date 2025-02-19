@@ -35,6 +35,81 @@ subtracking the outer parts of the rectangle that are not part of the range we'r
 
 Check out: https://www.youtube.com/watch?v=KE8MQuwE2yA&ab_channel=NeetCode
 """
+
+# O(M) solution
+# revisited using the O(M) solution on 2/19/2025 with an explanation:
+"""
+O(M) subregion instead of O(1)
+    Using a prefix matrix, we can get the cumulative sums inside a 
+    specific region based on the upper left hand corner
+    and the bottom right hand corner of the region
+
+    3 0 1 4 2
+    5 6 3 2 1
+    1 2 0 1 5
+    4 1 0 1 7
+    1 0 3 0 5
+
+    The first thing is to calculate the prefix matrix for the whole matrix,
+    so each row contains the cumulative sum 
+
+    3 3  4  8  10
+    5 11 14 16 17
+    1 3  3  4  9
+    4 5  5  6  13
+    1 1  4  4  9
+
+    For example, if the subregion parameter listed is
+    2 1 4 3
+
+    this means the upper left hand corner is 2, 1
+    and the bottom right hand corner is 4, 3,
+    which is denoted by this subregion
+
+    2 0 1 
+    1 0 1
+    0 3 0
+
+    in the prefix matrix, this translates over to:
+
+    3 3 4
+    5 5 6
+    1 4 4
+
+    therefore, we can identify that the sums of each row
+    of this subregion should be the rightmost element of each row,
+    4 
+    6
+    4
+
+    However, because this is a CUMULATIVE sum of the WHOLE row,
+    we have to account for any previous numbers that were included in 
+    the sum that are NOT part of the subregion, so they need to be
+    subtracted out.
+
+    Thankfully, it's easy to tell what this is because the sum
+    we need to remove is just one column to the left
+    |
+    v
+    1  3 3 4
+    4  5 5 6
+    1  1 4 4
+
+    so to get the true cumulative sum of each row in the subregion,
+    it would be 
+    4 - 1 = 3
+    6 - 4 = 2
+    4 - 1 = 3
+
+    You can see that matches up with the original:
+
+    2 0 1, cumulative sum = 3
+    1 0 1, cumulative sum = 2
+    0 3 0, cumulative sum = 3
+    
+    Note that there is an edge case where if there is NO column to the left
+    of the subregion (i.e col1 - 1 < 0), you don't need to subtract
+"""
 class NumMatrix:
 
     def __init__(self, matrix: List[List[int]]):
