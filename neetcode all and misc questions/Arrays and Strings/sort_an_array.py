@@ -1,6 +1,41 @@
 class Solution:
     def sortArray(self, nums: List[int]) -> List[int]:
         """
+        Revisited 2/21/2025 with same solution
+        merge sort
+        split the array in half
+        merge the split arrays in sorted order and return
+        """     
+        def merge(leftHalf, rightHalf):
+            M = len(leftHalf)
+            N = len(rightHalf)
+            i = 0
+            j = 0
+            res = [] 
+            while (i < M and j < N):
+                if leftHalf[i] < rightHalf[j]:
+                    res.append(leftHalf[i])
+                    i += 1
+                else:
+                    res.append(rightHalf[j])
+                    j += 1
+            if i < M:
+                for k in range(i, M):
+                    res.append(leftHalf[k])
+            if j < N:
+                for k in range(j, N):
+                    res.append(rightHalf[k])
+            return res
+        if len(nums) > 1:
+            mid = len(nums)//2
+            leftHalf = self.sortArray(nums[:mid])
+            rightHalf = self.sortArray(nums[mid:]) 
+            return merge(leftHalf, rightHalf)
+        return nums
+
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        """
         Merge Sort
         
         Continually split down the middle until the lengths of the arrays are 1

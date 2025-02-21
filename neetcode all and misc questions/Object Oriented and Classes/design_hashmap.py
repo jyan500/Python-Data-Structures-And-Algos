@@ -36,6 +36,54 @@
     
     
 """
+
+# revisited on 2/20/2025
+class ListNode:
+    def __init__(self, key=None, value=None, next=None):
+        self.value = value
+        self.key = key
+        self.next = next
+    def __str__(self):
+        return f"value: {self.value} next: {self.next}"
+
+class MyHashMap:
+
+    def __init__(self):
+        self.hashmap = [ListNode() for i in range(10**4)]
+
+    def put(self, key: int, value: int) -> None:
+        index = key % len(self.hashmap)
+        head = self.hashmap[index]
+        while (head.next):
+            if head.next.key == key:
+                head.next.value = value
+                return
+            head = head.next
+        head.next = ListNode(key, value) 
+
+    def get(self, key: int) -> int:
+        index = key % len(self.hashmap)
+        head = self.hashmap[index]
+        while (head.next):
+            if head.next.key == key:
+                return head.next.value
+            head = head.next
+        return -1
+
+    def remove(self, key: int) -> None:
+        index = key % len(self.hashmap)
+        head = self.hashmap[index]
+        while (head.next):
+            if head.next.key == key:
+                head.next = head.next.next
+                return
+            head = head.next
+
+# Your MyHashMap object will be instantiated and called as such:
+# obj = MyHashMap()
+# obj.put(key,value)
+# param_2 = obj.get(key)
+# obj.remove(key)
 class ListNode:
     def __init__(self, k= None, v= None, n = None):
         self.keyPair = (k, v)
