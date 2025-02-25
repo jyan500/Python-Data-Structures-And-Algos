@@ -18,6 +18,8 @@ keep two pointers, beginning and end
 swap the values located at the two pointers as you move the two pointers towards each other
 this will reverse the array in place
 
+Revisited 2/25/2025
+
 '''
 class Solution:
     def reverseString(self, s: List[str]) -> None:
