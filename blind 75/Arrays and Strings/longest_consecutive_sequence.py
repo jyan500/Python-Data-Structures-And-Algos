@@ -13,28 +13,27 @@ see if the number - 1 exists, which is the "left neighbor".
 2) If it does, continue to increase the length of the sequence by adding 1
 3) If the number no longer exists, check the max length of the sequence and reset the current
 sequence
+
+2/25/2025
+Update: 
+Instead of looping through the original nums array, loop through the set to avoid duplicated numbers
+for a slight optimization. Should now pass on LC.
 """
 class Solution2:
     def longestConsecutive(self, nums: List[int]) -> int:
-        if len(nums) == 0:
+       if len(nums) == 0:
             return 0
-        numsSet = set(nums)
-        longestSeq = 1
-        curSeq = 1
-        for i in range(len(nums)):
-            left = nums[i] - 1
-            # if there's no left neighbor with number - 1, this is the start of a sequence
-            if left not in numsSet:
-                nextNum = nums[i] + 1
-                # keep incrementing by 1 until we can longer find the next
-                # consecutive number 
-                while nextNum in numsSet:
-                    nextNum += 1
-                    curSeq += 1
-                longestSeq = max(curSeq, longestSeq)
-                # reset current sequence after it has ended
-                curSeq = 1
-        return longestSeq
+        lookup = set(nums)
+        maxLen = 1
+        for num in lookup:
+            if num - 1 not in lookup:
+                cur = num
+                curLen = 1
+                while (cur + 1 in lookup):
+                    curLen += 1
+                    cur += 1
+                maxLen = max(curLen, maxLen)
+        return maxLen
             
 class Solution:
 	## O(N^2) time and O(N) space
