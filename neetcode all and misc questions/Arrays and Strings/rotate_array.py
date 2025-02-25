@@ -35,7 +35,52 @@ output should be
 
 O(N) time
 O(N) space
+
 """
+
+class Solution3:
+    def rotate(self, nums: List[int], k: int) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        """
+        Revisited on 2/25/2025, with the same O(N) space solution
+        rotation factor k = 3, len(nums) = 7
+        nums = 1 2 3 4 5 6 7
+        0 -> 3
+        1 -> 4
+        2 -> 5
+        3 -> 6
+        4 -> 7, needs to become 0
+        5 -> 8, needs to become 1 
+        6 -> 9, needs to become 2
+
+        7 % len(nums) = 0
+        8 % len(nums) = 1
+        9 % len(nums) = 2
+
+        because of how mod works, this should also work with any length,
+        where the number needs to "wrap around" after exceeding the length
+        of the array
+
+        you can set an initial "rotation" array that's the same length
+        as nums, but all 0's. And then apply the rotation factor
+        to each index, setting the value at rotatedIndex within the "rotation" array
+        to the nums[i]
+
+        Then iterate through the rotation array, and set each value in rotation[i] = nums[i]
+        to satisfy the in-place requirement
+        """
+        N = len(nums)
+        rotated = [0 for i in range(N)]
+        for i in range(N):
+            rotationIndex = i + k
+            if rotationIndex >= N:
+                rotationIndex = rotationIndex % N 
+            rotated[rotationIndex] = nums[i]
+        for i in range(len(nums)):
+            nums[i] = rotated[i]
+
 class Solution2:
     def rotate(self, nums: List[int], k: int) -> None:
         """
