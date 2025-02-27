@@ -3,6 +3,39 @@ Given an array nums of n integers, are there elements a, b, c in nums such that 
 
 Notice that the solution set must not contain duplicate triplets.
 '''
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        """
+        Revisited 2/27/2025
+        1) sort the numbers
+        2) Do an initial loop through all numbers:
+            hold the first element constant, and then apply
+            the two pointer strategy where the pointers move 
+            inwards from opposite ends
+            if the first element + (the two pointers) is greater than 0,
+            you have to move the right pointer to decrease the overall
+            value since you're now adding a smaller number
+            if its less than, you need to move the left pointer
+            to get a bigger number
+
+        """
+        nums.sort()
+        resSet = set()
+        for i in range(len(nums)-1):
+            l = i + 1
+            r = len(nums)-1
+            while (l < r):
+                res = nums[i] + nums[l] + nums[r]
+                if res > 0:
+                    r -= 1
+                elif res < 0:
+                    l += 1
+                else:
+                    resSet.add((nums[i], nums[l], nums[r]))
+                    r -= 1
+                    l += 1
+        return list(resSet)
+            
 
 def threeSumBruteForce(self, nums: List[int]) -> List[List[int]]:
 	## O(NLogN) + O(N^3), a brute force solution (this solution times out on leetcode)
