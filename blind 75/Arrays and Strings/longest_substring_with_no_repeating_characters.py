@@ -25,6 +25,31 @@ Output: 0
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         """
+        Revisited 2/28/2025
+        sliding window
+        keep a hashmap since there's no repeating characters,
+        the count of each character must be 1
+        as soon as we see a character is in the hashmap more than once,
+        we shrink the window until the value is back to 1
+
+        O(N) Time
+        O(N) Space
+        """
+        from collections import defaultdict
+        l = 0
+        counter = defaultdict(int)
+        res = 0
+        for r in range(len(s)):
+            counter[s[r]] += 1
+            while (counter[s[r]] > 1):
+                counter[s[l]] -= 1
+                l += 1
+            res = max(r-l+1, res)
+        return res
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        """
         Revisited on 9/25/2024
         https://neetcode.io/problems/longest-substring-without-duplicates
         'abacde'
