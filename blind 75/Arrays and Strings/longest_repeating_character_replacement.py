@@ -8,6 +8,39 @@ https://www.youtube.com/watch?v=gqXU1UyA8pk&ab_channel=NeetCode
 '''
 
 class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        """
+
+        Revisited 2/28/2025
+        sliding window + hashmap
+        keep track of the counts of each character in the hashmap
+        in a given window, you want the length of the window - character with the max
+        count value, as this value will determine the amount of characters
+        that would need to be replaced.
+        If this value > k, that means we need to shrink our window until
+        this value < k again, this means we still can still replace characters,
+        using an inner while loop to do so.
+
+        Time: O(26*N), where the O(26) comes from finding the max(counter.values()) within each
+        iteration, it's constant because it's bounded by the amount of uppercase english letters.
+
+        Space: O(26)
+        """
+        from collections import defaultdict
+        counter = defaultdict(int)
+        l = 0
+        maxLen = 0
+        for r in range(len(s)):
+            counter[s[r]] += 1
+            numReplacements = r - l + 1 - max(counter.values())
+            while (numReplacements > k):
+                counter[s[l]] -= 1
+                l += 1
+                numReplacements = r - l + 1 - max(counter.values())
+            maxLen = max(r - l + 1, maxLen)
+        return maxLen
+
+class Solution:
     """
     https://neetcode.io/problems/longest-repeating-substring-with-replacement
     """
