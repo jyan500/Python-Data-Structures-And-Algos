@@ -7,6 +7,7 @@ class Solution:
         so we calculate max(current max, current price - buying price)
 		O(N) Time O(1) Space
 		Revisited 9/25/2024
+        Revisited 2/28/2025
         https://neetcode.io/problems/buy-and-sell-crypto
         """
         buy = prices[0]
