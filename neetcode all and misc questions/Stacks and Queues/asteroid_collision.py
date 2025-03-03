@@ -1,4 +1,30 @@
 """
+Revisited on 3/3/2025, 
+this is a much cleaner solution by
+appending the current asteroid first. And then, performing the while loop, 
+checking if there's at least two asteroids in the stack first, and then checking
+if the top 2 asteroids in the stack are colliding (i.e 2nd to top is positive, and top is negative,
+meaning it's a right - left collision)
+
+O(N) Time
+O(N) Space
+"""
+class Solution:
+    def asteroidCollision(self, asteroids: List[int]) -> List[int]:
+        stack = []
+        for i in range(len(asteroids)):
+            stack.append(asteroids[i])
+            while (len(stack) >= 2 and stack[-1] < 0 and stack[-2] > 0):
+                first = stack.pop()
+                second = stack.pop()
+                if abs(first) > abs(second):
+                    stack.append(first)
+                elif abs(second) > abs(first):
+                    stack.append(second)
+                # if they're the same, the asteroids explode
+                # and there's no need to re-add to the stack
+        return stack
+"""
 Revisited on 1/13/2025
 """
 class Solution:

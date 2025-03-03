@@ -4,6 +4,41 @@ https://leetcode.com/problems/permutation-in-string/
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
         """
+        Revisited 3/3/2025
+        keep a hashmap of the count of characters in s1
+        perform sliding window on s2, 
+        keep a hashmap of count of characters in our window for s2
+        At our current character, if we update the dict, and then compare the the dict to counter of s1,
+            return true (this means the counts of each characters in the window are the same as s1)
+        while our current window >= the length of s1, increment left pointer and also decrement
+        the counter. If the count reaches 0, pop that key from the dict
+
+    
+        Time: O(26*N)
+        Space: O(26)
+        Comparing two counters in this case is O(26) since
+        it's two dictionaries that are bounded by the amount of upper case characters
+
+        """
+        from collections import Counter, defaultdict
+        counter = Counter(s1)
+        counter2 = defaultdict(int)
+        N = len(s1)
+        l = 0
+        for r in range(len(s2)):
+            counter2[s2[r]] += 1
+            if counter2 == counter:
+                return True
+            while (r - l + 1 >= N):
+                counter2[s2[l]] -= 1
+                if counter2[s2[l]] == 0:
+                    del counter2[s2[l]]
+                l += 1
+        return False
+
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        """
         https://neetcode.io/problems/permutation-string
         s1=abc
         s2=lecadbac
