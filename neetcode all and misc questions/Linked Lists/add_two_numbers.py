@@ -25,17 +25,63 @@ Output: [8,9,9,9,0,0,0,1]
 #         self.val = val
 #         self.next = next
 
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        """
+        Revisited 3/6/2025 with a similar solution
+        because the numbers in the LL are stored in reverse order, they're in the same order
+        that we normally use when performing addition (starting from the end first)
 
+        if the two digits sum >= 10, save a carryover of 1, and save sum - 10 to the new LL
+
+        it's also easier to pad the shorter LL with 0's on the back
+        for example
+        342 + 4 would be the equivalent of
+        342 + 004
+        which is the equivalent of these two LL's
+        4 -> 0 -> 0
+        2 -> 4 -> 3,
+        so the padding occurs on the backside
+        """
+        copy1 = l1
+        copy2 = l2
+        len1 = 0
+        len2 = 0
+        while (copy1.next != None):
+            len1 += 1
+            copy1 = copy1.next
+        while (copy2.next != None):
+            len2 += 1
+            copy2 = copy2.next
+        # pad the shorter list with 0's based on the difference in lengths
+        if len1 > len2:
+            for i in range(0, len1 - len2):
+                copy2.next = ListNode(0)
+                copy2 = copy2.next
+        elif len2 > len1:
+            for i in range(0, len2 - len1):
+                copy1.next = ListNode(0)
+                copy1 = copy1.next
+        dummy = ListNode()
+        newHead = dummy
+        carryover = 0
+        while (l1 != None and l2 != None):
+            cur = carryover + l1.val + l2.val
+            if cur >= 10:
+                carryover = 1
+                digit = cur - 10
+                newHead.next = ListNode(digit)
+            else:
+                carryover = 0
+                newHead.next = ListNode(cur)
+            newHead = newHead.next
+            l1 = l1.next
+            l2 = l2.next
+        # if there's a carryover, of 1 at the end, add to the end
+        if carryover == 1:
+            newHead.next = ListNode(carryover)
+        return dummy.next
+            
 class Solution:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         """
