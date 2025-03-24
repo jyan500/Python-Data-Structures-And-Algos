@@ -14,6 +14,80 @@
 ## Space Complexity:
 ## O(N) for num of nodes stored in our hash map and queue
 
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+"""
+Note the solution was run on lintcode
+https://www.lintcode.com/problem/651/
+It was NOT a requirement for the nodes that were sharing the same row and column
+to be in sorted order, so they are just added onto the result list
+
+"""
+class Solution:
+    """
+    @param root: the root of tree
+    @return: the vertical order traversal
+    """
+    def vertical_order(self, root: TreeNode) -> List[List[int]]:
+        """ 
+        use BFS (level order) to store the tree in a dictionary that 
+        simulates a 2-D array, where the keys are a tuple (i, j)
+        to represent the row i and col j
+
+        when visiting a node to the left, it's i+1, j-1 (to simulate a graph where going to the left is negative)
+        and a node to the right would be i+1, j+1
+
+        Note that it's doing i+1 instead of i-1 like you would expect on a graph, but
+        you can think of it like the graph is upside down where the positive direction is going downwards
+
+        """
+        if (not root):
+            return []
+        q = deque()
+        q.append((root, (0,0)))
+        levelsMap = {
+            (0,0): []
+        }
+        while (q):
+            n = len(q)
+            for i in range(n):
+                node, indices = q.popleft()
+                i,j = indices
+                if node.left:
+                    q.append((node.left, (i+1, j-1)))
+                if (node.right):
+                    q.append((node.right, (i+1, j+1)))
+                if (i,j) in levelsMap:
+                    levelsMap[(i,j)].append(node.val)
+                else:
+                    levelsMap[(i,j)] = [node.val]
+        # iterate on the level map column by column, 
+        # need to figure out the boundaries first by getting the min and max column
+        minCol = float("inf")
+        maxCol = float("-inf")
+        for key in levelsMap:
+            _, j = key
+            minCol = min(j, minCol)
+            maxCol = max(j, maxCol)
+        res = []
+        while (minCol <= maxCol):
+            valuesInCol = []
+            for key in levelsMap:
+                _, j = key 
+                # note that in this version, sorted order is not necessary for nodes that share the 
+                # same column
+                if j == minCol:
+                    valuesInCol.extend(levelsMap[key])
+            res.append(valuesInCol)
+            minCol += 1
+        return res
+
 class Solution:
     def verticalTraversal(self, root: TreeNode) -> List[List[int]]:
         ## level order traversal to get the nodes into a hashmap, storing the indices as a tuple and 

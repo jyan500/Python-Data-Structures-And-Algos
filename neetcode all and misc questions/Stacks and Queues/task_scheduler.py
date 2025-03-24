@@ -190,6 +190,78 @@ Both empty, iteration ends
 """
 class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
+        """
+        Revisited on 2/20/2025 using 2 heaps, max heap to store the tasks based
+        on the frequency and min heap to store the next time a task is available to process.
+        
+        X -> Y -> idle -> X -> Y
+
+        num cycles = 0
+        available tasks = [x, y]
+        heap = []
+
+        each iteration, take from available tasks
+        place a tuple onto the heap, that contains the task,
+        as well as the "next" time this task is available
+
+        once the task is available again, we pop off the heap
+        and put it back into available tasks
+
+        we want to use a min heap to prioritize the tasks
+        that are ready to be used again
+
+        if the task amount has reached 0, do no push back onto the max heap
+
+        maxHeap = [(-2, X), (-2, Y)]
+        minHeap = []
+        numCycles = 0
+
+        pop out the max heap,
+        maxHeap = [(-2, Y)]
+        minHeap = [(2, (-1, X))]
+        numCycles = 1
+
+        pop out the max heap
+        maxHeap = []
+        minHeap = [(2, (-1, X)), (3, (-1, Y))]
+        numCycles = 2
+
+        nothing in the max heap
+        min heap
+        """
+        from collections import Counter
+        import heapq
+        c = Counter(tasks)
+        maxHeap = []
+        minHeap = []
+        for task in c:
+            heapq.heappush(maxHeap, (-c[task], task))
+        numCycles = 0
+        while (maxHeap or minHeap):
+            if len(maxHeap) > 0:
+                amtRemaining, task = maxHeap[0]
+                if (-1 * amtRemaining) > 0:
+                    amtRemaining, task = heapq.heappop(maxHeap)
+                    amtLeft = -1 * ((-1 * amtRemaining) - 1)
+                    # push the next time this task is available, as well
+                    # as the remaining count and the task
+                    if (-1 * amtLeft) > 0:
+                        heapq.heappush(minHeap, (numCycles + n, (amtLeft, task)))
+            # if there's a task ready to be taken off the min heap,
+            # put back onto the max heap
+            if len(minHeap) > 0:
+                time, taskTuple = minHeap[0]
+                # if the task is available to be processed again,
+                # pop it out of the min heap and push back to the max heap
+                if time <= numCycles:
+                    time, taskTuple = heapq.heappop(minHeap)
+                    heapq.heappush(maxHeap, taskTuple)
+            numCycles += 1
+        return numCycles
+
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
         """      
         10/2/2024
         https://neetcode.io/problems/task-scheduling
