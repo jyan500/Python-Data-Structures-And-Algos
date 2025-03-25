@@ -7,6 +7,52 @@ https://leetcode.com/problems/minimum-window-substring/
 https://www.youtube.com/watch?v=jSto0O4AJbM&t=615s&ab_channel=NeetCode
 '''
 
+"""
+Revisited on 3/25/2025
+Brute Force Solution, doesn't pass on leetcode, but passes on Neetcode
+The logic is about the same the previous solution from 9/2024 but it's cleaner than before though.
+Placed the "window calculation" logic inside the while loop to prevent the strange "overshoot by one"
+edge case as mentioned. 
+Time: O(N*(N+M))
+"""
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        from collections import Counter
+        from collections import defaultdict
+
+        # compare the counter of char t, 
+        # check if every character exists from t in s
+        # check that the counts in t are at least the same as the counts in s
+        def containsAllChars(d1, d2):
+            for key in d2:
+                if key not in d1:
+                    return False
+                if key in d1 and d2[key] > d1[key]:
+                    return False
+            return True
+
+        c = Counter(t)
+        counter = defaultdict(int)
+        l = 0
+        minLength = float("inf")
+        window = []
+        minLengthWindow = ""
+        for r in range(len(s)):
+            counter[s[r]] += 1
+            window.append(s[r])
+            while (containsAllChars(counter, c)):
+                # if we've found a candidate that contains all the characters,
+                # calculate the window
+                if (r - l + 1 < minLength):
+                    minLength = r - l + 1
+                    minLengthWindow = s[l:r+1]
+                counter[s[l]] -= 1
+                if counter[s[l]] == 0:
+                    del counter[s[l]]
+                l += 1
+
+        return minLengthWindow
+
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
         """
