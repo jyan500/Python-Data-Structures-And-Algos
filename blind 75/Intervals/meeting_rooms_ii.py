@@ -9,6 +9,7 @@ import heapq
 class Solution:
     def minMeetingRooms(self, intervals: List[Interval]) -> int:
         """
+        Revisited 3/26/2025 with the same solution
         Min Heap Solution:
         https://neetcode.io/problems/meeting-schedule-ii
         O(NLogN) time, O(N) space
