@@ -12,6 +12,7 @@ within DFS,
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         """
+        Revisited 4/7/2025
         Revisited 10/2/2024
         https://neetcode.io/problems/course-schedule
         (Note that I found out about this via the youtube comments on the course-schedule-ii solution video)
