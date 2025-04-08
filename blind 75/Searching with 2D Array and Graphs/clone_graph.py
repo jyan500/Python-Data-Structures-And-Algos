@@ -14,6 +14,7 @@ class Node:
 class Solution:
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         """
+        Revisited 4/8/2025
         Revisited on 10/2/2024, tried for a DFS approach this time from Neetcode
         As we traverse the graph, we can create the graph copy at the same time
         start by creating a graph node with empty neighbors. 
@@ -38,6 +39,8 @@ class Solution:
             if node in self.oldToNew:
                 return self.oldToNew[node]
             root = Node(node.val)
+            # note that when we update the neighbors, it should also update the reference
+            # inside the self.oldToNew dict 
             self.oldToNew[node] = root
             neighbors = []
             for neighbor in node.neighbors:
