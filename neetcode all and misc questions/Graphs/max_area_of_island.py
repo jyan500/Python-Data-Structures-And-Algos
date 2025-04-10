@@ -10,6 +10,33 @@ O((N+number of ones) * M)
 Space Complexity:
 O(N*M) space
 """
+"""
+Revisited on 4/10/2025 with similar solution as above
+"""
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        visited = set()
+        maxArea = float("-inf")
+        def inBounds(i, j):
+            return 0 <= i < len(grid) and 0 <= j < len(grid[0])
+        def dfs(i,j):
+            directions = [(0,1), (0,-1), (1,0), (-1,0)]
+            area = 1
+            for x, y in directions:
+                newX = x + i
+                newY = y + j
+                if inBounds(newX, newY) and (newX, newY) not in visited and grid[newX][newY] == 1:
+                    visited.add((newX, newY))
+                    area += dfs(newX, newY)
+            return area
+        
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if (i,j) not in visited and grid[i][j] == 1:
+                    visited.add((i,j))
+                    maxArea = max(dfs(i,j), maxArea)
+        return maxArea if maxArea != float("-inf") else 0
+
 
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:

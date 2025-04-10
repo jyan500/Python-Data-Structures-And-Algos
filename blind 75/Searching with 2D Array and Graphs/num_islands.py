@@ -5,6 +5,40 @@ An island is surrounded by water and is formed by connecting adjacent lands hori
 
 https://leetcode.com/problems/number-of-islands/
 '''
+"""
+Revisited 4/10/2025
+Same time complexity as below but cleaner code
+"""
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        """
+        keep a visited set that contains all cells that have value of "1" that we've 
+        seen so far
+        perform DFS to visit all connected cells that have value of "1", all of the visited
+        cells would be considered one island
+        """
+        visited = set()
+        res = 0
+        def inBounds(i, j):
+            return 0 <= i < len(grid) and 0 <= j < len(grid[0])
+        def dfs(i, j):
+            directions = [(0,1),(0,-1),(1,0),(-1,0)]
+            for x,y in directions:
+                newX = x+i
+                newY = y+j
+                if inBounds(newX, newY) and grid[newX][newY] == "1" and (newX, newY) not in visited:
+                    visited.add((newX, newY))
+                    dfs(newX, newY)
+            
+        
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == "1" and (i,j) not in visited:
+                    visited.add((i,j))
+                    dfs(i,j)
+                    res += 1
+        return res
+
 class Solution2:
     """
     Revisited on 7/8/2023
