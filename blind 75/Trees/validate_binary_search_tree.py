@@ -69,7 +69,34 @@ We can do this by keeping track of a min and max as we traverse the tree
 #         self.left = left
 #         self.right = right
 # Definition for a binary tree node.
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
+class Solution:
+    """
+    apply preorder search, tracking current min and current max
+    for this subtree
+    1) when searching left, we only update the cur max since every
+    node is smaller than the current max on the left side
+    2) when search right, we only update the cur min since every node
+    is larger than the current min on the right side
+    if node falls outside of these boundaries, it should return False
+    """
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def search(root, curMin, curMax):
+            if root:
+                return root.val > curMin \
+                and root.val < curMax and \
+                search(root.left, curMin, root.val) and \
+                search(root.right, root.val, curMax)
+            return True
+
+        return search(root, float("-inf"), float("inf"))
+        
 class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
         def search(root, currMin, currMax):
