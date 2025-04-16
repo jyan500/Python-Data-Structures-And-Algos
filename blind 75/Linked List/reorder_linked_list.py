@@ -10,7 +10,109 @@ https://www.youtube.com/watch?v=xRYPjDMSUFw&t=611s&ab_channel=NickWhite
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 
+# Revisited 4/15/2025 with the same solution
+class Solution:
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        1) split the list in half using fast and slow pointers
+        2) reverse the 2nd half
+        3) merge the two halves together by iterating and alternating between the
+        two halves
+        """
+        # split list in half
+        # we want the fast pointer to stop at the end of the list before it becomes None
+        # so the slow pointer ends up at the halfway point of the list
+        fast = head.next
+        slow = head
+        while (fast != None and fast.next != None):
+            fast = fast.next.next
+            slow = slow.next
+        # the next half is slow.next, save in temp variable
+        secondHalf = slow.next
+        # "split" the lists by setting slow.next to None,
+        # so head will now be up to the halfway point
+        slow.next = None
+        
+        # reverse the 2nd half
+        prev = None
+        curr = secondHalf
+        while (curr != None):
+            # save the pointer to curr
+            temp = curr
+            # advance curr by one
+            curr = curr.next
+            # instead of setting temp to be next, set it to
+            # the prev value
+            temp.next = prev
+            # advance prev
+            prev = temp
+        # prev should now contain the reversed linked list,
+        # alternate between the two by setting the remainder of 
+        # one list to the "next" pointer of the other
+        """
+        1 -> 2 -> 3 -> 4 -> None becomes
+        temp1 = 1 -> 2 -> None
+        temp2 = 4 -> 3 -> None
+        due to the prior steps
+
+        1st iteration:
+        t1Next = temp1.next, 2 -> None
+        t2Next = temp2.next, 3 -> None
+
+        temp1.next = temp2
+        instead of 1 -> 2 -> None, it's now
+        4 -> 3 -> None
+        original head value is now 1 -> 4 -> 3 -> None
+
+        temp2.next = t1Next
+        instead of 4 -> 3 -> None, it's now
+        2 -> None
+        original head value is now 1 -> 4 -> 2 -> None
+
+        advance temp1 = t1Next (2 -> None)
+        advance temp2 = t2Next (3 -> None)
+
+        2nd iteration:
+        t1Next = temp1.next (None)
+        t2Next = temp2.next (None)
+
+        temp1.next = temp2 (instead of None, it's now 3 -> None)
+        original head value is now 1 -> 4 -> 2 -> 3 -> None
+        temp2.next = t1Next (instead of None, it's now None)
+
+        temp1 = t1Next (None)
+        temp2 = t2Next (None)
+
+        head is modified to 1 -> 4 -> 2 -> 3 -> None
+        """
+        temp1 = head
+        temp2 = prev
+        # i = 0
+        while (temp1 != None and temp2 != None):
+            # print(f"iteration: {i+1}")
+            # print("-------------------")
+            t1Next = temp1.next
+            t2Next = temp2.next
+            # print("t1Next: ", t1Next)
+            # print("t2Next: ", t2Next)
+            temp1.next = temp2
+            # print("temp1.next = temp2: ", temp1.next)
+            temp2.next = t1Next
+            # print("temp2.next = t1Next: ", temp2.next)
+            temp1 = t1Next
+            # print("temp1 = t1Next: ", temp1)
+            temp2 = t2Next
+            # print("temp2 = t2Next: ", temp2)
+            # print("head: ", head)
+            # i += 1
+            
 class Solution:
     def reorderList(self, head: Optional[ListNode]) -> None:
         """

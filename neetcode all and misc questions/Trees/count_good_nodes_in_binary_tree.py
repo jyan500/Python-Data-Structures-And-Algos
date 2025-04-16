@@ -43,6 +43,24 @@ Final result is 4
 #         self.left = left
 #         self.right = right
 
+# Revisited 4/16/2025
+class Solution:
+    def goodNodes(self, root: TreeNode) -> int:
+        """
+        which tree traversal to use?
+            -try preorder
+        keep track of current max?
+        """
+        self.res = 0
+        def search(node, curMax):
+            if node:
+                if node.val >= curMax:
+                    self.res += 1
+                search(node.left, max(curMax, node.val))
+                search(node.right, max(curMax, node.val))
+        search(root, float("-inf"))
+        return self.res
+
 class Solution:
     def goodNodes(self, root: TreeNode) -> int:
         """
