@@ -14,6 +14,8 @@ Time complexity: O(N), because we traverse all the elements potentially if we ha
 #         self.right = right
 
 """
+Revisited on 4/17/2025 with the same solution
+
 Revisited on 7/22/2023
 This is similar to the solution below except it uses global variables instead of 
 passing in an array as a param that gets updated through the recursive calls

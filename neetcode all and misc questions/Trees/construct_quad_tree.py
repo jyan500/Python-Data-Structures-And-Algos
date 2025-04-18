@@ -13,6 +13,20 @@ class Node:
 class Solution:
     def construct(self, grid: List[List[int]]) -> 'Node':
         """
+        Revisited 4/18/2025
+        1) Remember to use the concept N = N // 2 to split into quadrants, and then
+        pass in to start from the top left corner of each of these quadrants
+
+        loop i ... N
+           loop j ... N
+              use grid[i+row][j+col] to compare elements directly in that quadrant
+
+        top left: row, col
+        top right: row, col + N
+        bottom left: row + N ,col
+        bottom right: row+N, col+N
+        
+
         Neetcode: https://www.youtube.com/watch?v=UQ-1sBMV0v4&ab_channel=NeetCodeIO
         Time Complexity: O(N^2LogN), there are LogN levels in the tree, and at each level,
         you're performing N^2 work (nested loop) to figure out whether all the values 
