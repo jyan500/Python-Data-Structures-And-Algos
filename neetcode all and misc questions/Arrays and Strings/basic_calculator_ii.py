@@ -28,6 +28,71 @@ one last case is at the end of our iteration, we need to make sure to evaluate t
 since normally, we don't make an evaluation until we see another operator (but we're at the end of the string so we won't see another one)
 finally, at the end, sum up all values in the stack
 '''
+
+"""
+Revisited on 4/22/2025
+this solution is not as clean as the one on 2/4/2025 but
+I managed to come up with it from memory.
+
+Thought it made sense to do all the number parsing first to remove any
+white spaces 
+
+i.e from "  10 + 5 / 2 - 1" to [10, +, 5, /, 2, -, 1]
+And then handling the multiplication/division using stack, and also treating any subtraction symbols
+like negative numbers
+so:
+[10, 2, -1]
+
+And then sum of the result above to get 11
+"""
+class Solution:
+    def calculate(self, s: str) -> int:
+        parsed = []
+        stack = []
+        curNum = 0
+        # handle the number parsing first
+        for i in range(len(s)):
+            if s[i].isdigit():
+                curNum = (10 * curNum) + int(s[i])
+            elif s[i] == "+" or s[i] == "-" or s[i] == "*" or s[i] == "/":
+                parsed.append(curNum)
+                curNum = 0
+                parsed.append(s[i])
+        # the reason for the extra curNum is that you have to include the
+        # last number in the expression as it doesn't get added in the code above due
+        # to the loop ending
+        # note that it's okay if it's zero, since that doesn't affect the calculations below
+        parsed.append(curNum)
+
+        # handle only multiplication and division first
+        onlyMultAndDiv = []
+        stack.append(parsed[0])
+        for i in range(1, len(parsed)):
+            if len(stack) > 0:
+                if stack[-1] == "*" or stack[-1] == "/":
+                    operator = stack.pop()
+                    num = stack.pop()
+                    if operator == "*":
+                        stack.append(num * parsed[i])
+                    elif operator == "/":
+                        stack.append(int(num/parsed[i]))
+                    continue
+                # if there's subtraction, we can treat the current
+                # number as a negative number in order to make the next
+                # step easier
+                if stack[-1] == "-":
+                    operator = stack.pop()
+                    stack.append(parsed[i] * -1)
+                    continue
+            # if it's a subtraction symbol or number
+            if parsed[i] == "-" or parsed[i] != "+":
+                stack.append(parsed[i])
+        # after creating the stack with all the multiplication and division evaluated,
+        # and subtraction treated as negative numbers, we can just add everything in the stack
+        # for the final result
+        return sum(stack)
+            
+
 # revisited 2/4/2025, was asked this on interview today
 # https://www.youtube.com/watch?v=2EErQ25kKE8&ab_channel=SaiAnishMalla 
 # same solution as below
