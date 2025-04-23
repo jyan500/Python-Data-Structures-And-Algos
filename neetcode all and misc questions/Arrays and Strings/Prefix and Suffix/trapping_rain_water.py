@@ -4,6 +4,72 @@ https://leetcode.com/problems/trapping-rain-water/
 class Solution:
     def trap(self, height: List[int]) -> int:
         """
+        Revisited 4/23/2025
+        prefix and suffix sums
+        1) When looking at the bars, the amount of water is bounded by the minimum between the max height on the left
+        and max height on the right, subtracted by the height at that cell:
+
+        min(max(left), max(right)) - height(current cell)
+
+        (Note that you can't trap water between the first element and the boundary,
+        and the last element and the boundary)
+
+        height = [0,2,0,3,1,0,1,3,2,1]
+                
+        so between i = 1 and i = 3, the max height is 2 on the left, and 3 on the right,
+        and the minimum between these two values is 2, so the amount of water that can be trapped
+        is 2
+
+        between i = 3 and i = 4, the min between the max height on left and max height on right is 3
+        subtracted from the current cell height (of 1) is 2
+
+        The brute force solution would be continuously calculate these values for each cell
+        
+        """
+        # Brute Force
+        # O(N^2)
+        # note that we start 1, len(heights)-1, since there's no right most max element on the right bounds,
+        # and no left most max element
+        """
+        areas = [0] * len(height)
+        for i in range(1, len(height)-1):
+            # find the max of each element on the left
+            maxLeft = max(height[:i])
+            # find the max of each element on the right
+            maxRight = max(height[i:])
+            # find the min between these two which is the bounds for how much water
+            # can be contained, subtracted by the current cell height. But only if 
+            # the cell height is less than the boundaries, otherwise that cell
+            # can't contain water
+            if height[i] <= min(maxLeft, maxRight):
+                areas[i] = min(maxLeft, maxRight) - height[i]
+        return sum(areas)
+        """
+
+        # optimal solution
+        # O(N) Time O(N) Space
+        areas = [0] * len(height)
+        
+        # this time, we pre-calculate the max values on the left as prefix
+        # max values on the right as suffix, so we can instantly know what the max height
+        # on the left and right is by referencing prefix[i] and suffix[i] respectively
+        prefix = [h for h in height]
+        suffix = [h for h in height]
+
+        for i in range(1, len(height)):
+            prefix[i] = max(prefix[i-1], height[i])
+        for i in range(len(height)-2, -1,-1):
+            suffix[i] = max(suffix[i+1], height[i])
+        for i in range(1, len(height)-1):
+            maxLeft = prefix[i]
+            maxRight = suffix[i]
+            if height[i] <= min(maxLeft, maxRight):
+                areas[i] = min(maxLeft, maxRight) - height[i]
+        return sum(areas)
+
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        """
         9/25/2024
         https://neetcode.io/problems/trapping-rain-water
         Brute Force: O(N^2) Time O(1) Space
