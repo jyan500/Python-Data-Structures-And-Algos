@@ -49,6 +49,38 @@ Output: "a(b(c)d)"
 
 '''
 
+# revisited on 4/25/2025
+class Solution:
+    def minRemoveToMakeValid(self, s: str) -> str:
+        """
+        in order for a sequence to be valid:
+        each opening brace has to match with a closing brace
+        return the valid sequence after removing the minimum amount of braces needed
+
+        1) perform the valid parenthesis algo to build a valid parenthesis sequence,
+        whenever we match a valid pair of parenthesis, save those indices
+        2) save the indices to see which indices to remove from the string
+        """
+        valid = set()
+        # contains tuples of (character, index)
+        stack = []
+        for i in range(len(s)):
+            if len(stack) > 0:
+                if stack[-1][0] == "(" and s[i] == ")":
+                    valid.add(stack[-1][1])
+                    valid.add(i)
+                    stack.pop()
+                    continue     
+            if s[i] == "(":
+                stack.append((s[i], i))
+        res = []
+        for i in range(len(s)):
+            # if the index of the parenthesis string is in the valid set (which proves that it
+            # was part of a valid sequence) or it's not a parenthesis, add it to res
+            if ((s[i] == ")" or s[i] == "(") and (i in valid)) or (s[i] != ")" and s[i] != "("):
+                res.append(s[i])
+        return "".join(res)
+
 # Revisited on 1/17/2024
 class Solution:
     def minRemoveToMakeValid(self, s: str) -> str:
