@@ -18,6 +18,7 @@ https://www.youtube.com/watch?v=CscLi1gVGUk&ab_channel=TimothyHChang
 class Solution:
     def isBipartite(self, graph: List[List[int]]) -> bool:
         """
+        Revisited 5/1/2024
         Revisited 11/15/2024
         Time: O(E+V)
         Space: O(V)

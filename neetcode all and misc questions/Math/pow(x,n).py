@@ -112,3 +112,23 @@ class Solution:
     
 
     '''
+
+# un-optimized version that passes on Neetcode, but not on LC (5/2/2025)
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        """
+        x * x * x ... n times
+        2^-4
+        
+        recursion
+        2*-1 = 1/2
+        2*-2 = (1/2) * (1/2) = 1/4
+        """
+        def recur(x, n):
+            if n == 0:
+                return 1
+            if n > 0:
+                return x * recur(x, n-1)
+            else:
+                return 1/x * recur(x, n+1)
+        return recur(x, n)
