@@ -41,6 +41,59 @@ from target_index to the end of the list to get the last position of the element
 	since we've "overshot" and need to search the other way
 
 '''
+
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        """
+        Revisited on 5/7/2025
+        Perform 2 binary searches
+        The key is that if we've found our target in the binary search, we need to keep
+        going in a certain direction to find the last occurrence of that element
+        in the direction
+        """
+        if len(nums) == 0:
+            return [-1, -1]
+        def findFirst(l, r):
+            # if nums[mid] == target and the previous number is less than target,
+            # we know this is the left bound
+            mid = l + (r-l)//2
+            if nums[mid] == target and nums[mid-1] < target:
+                return mid
+            # this is a weird case, we need to perform the check above before concluding the element doesn't exist
+            if l >= r:
+                return -1
+            # continue searching left
+            if nums[mid] >= target:
+                return findFirst(l, mid)
+            else:
+                return findFirst(mid+1, r)
+        
+        def findLast(l, r):
+            mid = l + (r-l)//2
+            # if nums[mid] == target and the previous number is less than target,
+            # we know this is the right bound
+            if nums[mid] == target and nums[mid+1] > target:
+                return mid
+            if l >= r:
+                return -1
+            # otherwise, we continue searching right
+            if nums[mid] <= target:
+                return findLast(mid+1, r)
+            else:
+                return findLast(l, mid)
+        
+        first = -1
+        last = -1
+        if nums[-1] == target:
+            last = len(nums)-1
+        else:
+            last = findLast(0, len(nums)-1)
+        if nums[0] == target:
+            first = 0
+        else:
+            first = findFirst(0, len(nums)-1)
+        return [first, last]
+
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
         """
