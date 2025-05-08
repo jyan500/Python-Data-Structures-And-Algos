@@ -24,6 +24,62 @@ as this would represent the lowest common ancestor before the paths diverged
 #         self.val = x
 #         self.left = None
 #         self.right = None
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        """
+        Revisited on 5/8/2025, this solution isn't as clean compared to 2/3/2025's solution
+        Approach:
+        1) find the path to nodes p and q using preorder traversal which visits the node before the left and right, store the values in array.
+        2) iterate through both paths simultaneously until the nodes
+        are no longer the same, and then return the node right before. We can do this
+        because all nodes in the tree are assumed to be unique, so we won't run into case
+        where we have to handle values that are the same as p or q.
+        """
+        self.pathToP = []
+        self.pathToQ = []
+        def getPath(node, target, forQ =False):
+            # perform a preorder traversal
+            if node:
+                if node.val == target.val:
+                    if forQ:
+                        self.pathToQ = [node] + self.pathToQ
+                    else:
+                        self.pathToP = [node] + self.pathToP
+                    return True
+                pathA = getPath(node.left, target, forQ)
+                pathB = getPath(node.right, target, forQ)
+                if pathA or pathB:
+                    if forQ:
+                        self.pathToQ = [node] + self.pathToQ
+                    else:
+                        self.pathToP = [node] + self.pathToP
+                return pathA or pathB
+
+            return False
+
+        getPath(root, p)
+        getPath(root, q, True)
+
+        i = 0
+        j = 0
+        # get the previous value. Note that if one of the paths have already
+        # ended, the last node in the shorter path is the LCA
+        while (i < len(self.pathToP)-1 and j < len(self.pathToQ)-1):
+            # if the next value in the path is not the same, break. As i will now
+            # be the LCA 
+            if self.pathToP[i+1].val != self.pathToQ[j+1].val:
+                break
+            i += 1
+            j += 1
+        return self.pathToP[i]
+
 
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
