@@ -28,6 +28,56 @@ one last case is at the end of our iteration, we need to make sure to evaluate t
 since normally, we don't make an evaluation until we see another operator (but we're at the end of the string so we won't see another one)
 finally, at the end, sum up all values in the stack
 '''
+class Solution:
+    def calculate(self, s: str) -> int:
+        """
+        Revisited on 5/22/2025
+        Similar to the solution on 4/22, slightly cleaner
+        1) I would use a stack since I need to evaluate previous entries
+        2) in order to follow order of operations, I could evaluate all the 
+        multiplying and dividing first, and then make a second pass to evaluate
+        addition and subtraction
+        3) I could also make subtraction easier to evaluate by converting the number
+        that's being subtracted to a negative number, and then I'd only need to perform a 
+        sum( ... ) on the evaluated array
+
+        4) String parsing, numbers can be more than one digit. It could be easier to just evaluate
+        all the numbers first, doing all the string parsing. And then start evaluating operators
+        """
+        currentNumber = 0
+        evaluatedNumbers = []
+        stack = []
+        operators = set(["-", "+", "/", "*"])
+        for i in range(len(s)):
+            if s[i].isdigit():
+                # in order to add a digit, we have to multiply the existing number by 10 and then add the digit
+                currentNumber = (currentNumber * 10) + int(s[i])
+            # if we see an operator, we can reset the current number to 0 and add the current number
+            # and operator to the stack
+            if s[i] in operators:
+                evaluatedNumbers.append(currentNumber)
+                evaluatedNumbers.append(s[i])
+                currentNumber = 0
+        # it's assumed that we'll always have a valid expression, so we need to add the last number
+        # after we finish building and iterating the string s
+        evaluatedNumbers.append(currentNumber)
+        for i in range(len(evaluatedNumbers)):
+            if len(stack) > 0:
+                if stack[-1] in operators:
+                    operator = stack.pop()
+                    if operator == "-":
+                        stack.append(-1 * evaluatedNumbers[i])
+                    elif operator == "*":
+                        number = stack.pop()
+                        stack.append(number * evaluatedNumbers[i])
+                    elif operator == "/":
+                        number = stack.pop()
+                        stack.append(int(number/evaluatedNumbers[i]))
+                    else:
+                        stack.append(evaluatedNumbers[i])
+                    continue
+            stack.append(evaluatedNumbers[i])
+        return sum(stack)
 
 """
 Revisited on 4/22/2025
