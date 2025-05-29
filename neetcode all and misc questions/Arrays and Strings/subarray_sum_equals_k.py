@@ -104,6 +104,29 @@ counter = {0: 2, 1:2, 2:1, 3:1, 4:1}
 Done, return res = 4
 """
 class Solution:
+    """
+    Revisited 5/28/2025
+    This is a solution that's the same ideas as below, but doesn't have the counter initialized to {0:1}.
+    The reasoning is that the first time curSum == k, there's no other subarray curSum - k that equals 0, so we just
+    increment the total of subarrays that sum to k from 0 to 1.
+    """
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        counter = {}
+        curSum = 0
+        total = 0
+        for i in range(len(nums)):
+            curSum += nums[i]
+            if curSum - k in counter:
+                total += counter[curSum - k]
+            if curSum == k:
+                total += 1
+            if curSum in counter:
+                counter[curSum] += 1
+            else:
+                counter[curSum] = 1
+        return total
+
+class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
         # brute force O(N^2)
         # cur = 0

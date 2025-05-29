@@ -4,6 +4,7 @@ https://leetcode.com/problems/find-peak-element/
 class Solution:
     def findPeakElement(self, nums: List[int]) -> int:
         """
+        Revisited 5/29/2025
         Binary Search:
         https://neetcode.io/solutions/find-peak-element
         
