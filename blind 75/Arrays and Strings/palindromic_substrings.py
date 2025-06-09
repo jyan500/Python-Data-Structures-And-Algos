@@ -14,6 +14,53 @@ O(N^2) time, O(1) space "Expand around the center" solution:
 https://www.youtube.com/watch?v=4RACzI5-du8&ab_channel=NeetCodeNeetCode
 '''
 
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        """
+        Revisited 6/9/2025
+        Brute Force solution:
+        1) writing a separate isPalindrome function that applies the two pointer strategy
+        starting from the beginning and end
+        2) applying nested loops, find every substring in S, and then apply the isPalindrome function
+        to all of those substrings
+
+        More optimized:
+        loop through each letter
+            at each letter, apply start two pointers at the current index
+            of the letter, and then going outwards, check if they are the same
+            letter. If so, this is a palindromic substring, increment our result by one
+
+        apply the algorithm twice, once where the two pointers start at the same index,
+        and one where the pointers start at (index, index+1), to account for
+        even length palindromes
+        i.e 
+        "acaa"
+           ^
+           aa would be an even length palindrome here
+        """
+        res = 0
+        # get all odd-numbered length palindromes
+        for i in range(len(s)):
+            l = i
+            r = i
+            while (l >= 0 and r <= len(s) - 1):
+                if s[l] != s[r]:
+                    break
+                res += 1
+                l -= 1
+                r += 1
+        # get all even numbered length palindromes
+        for i in range(len(s) - 1):
+            l = i
+            r = i + 1
+            while (l >= 0 and r <= len(s) - 1):
+                if s[l] != s[r]:
+                    break
+                res += 1
+                l -= 1
+                r += 1
+        return res
+
 # Revisited on 7-14-2023
 class Solution2:
     # def isPalindrome(self, s: str) -> int:
