@@ -21,6 +21,7 @@ O(N*K) for the adjacency list
 """
 
 # Revisited on 1/3/2025
+# Revisited on 6/11/2025 with the same solution
 class Solution:
     def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
         """

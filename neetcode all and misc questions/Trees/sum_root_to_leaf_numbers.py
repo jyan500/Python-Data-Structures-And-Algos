@@ -7,6 +7,7 @@
 class Solution:
     def sumNumbers(self, root: Optional[TreeNode]) -> int:
         """
+        Revisited 6/12/2025
         Time: O(N)
         Space: O(N)
         1) Preorder traversal, but only traverse down to the leaf node by checking whether the root.left exists or root.right exists.
