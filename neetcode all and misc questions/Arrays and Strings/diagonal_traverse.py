@@ -1,4 +1,74 @@
 class Solution:
+    class Solution:
+    def findDiagonalOrder(self, mat: List[List[int]]) -> List[int]:
+        """
+        Revisited on 6/17/2025
+        0,0 0,1 0,2
+        1,0 1,1 1,2
+        2,0 2,1 2,2
+
+        0,0 0,1 0,2 0,3
+        1,0 1,1 1,2 1,3
+        2,0 2,1 2,2 2,3
+        3,0 3,1 3,2 3,3
+
+        Approach:
+        we can start by iterating starting from the top row
+        0,0 -> 0, 1 -> 0,2 -> 0,3
+        and then going down this row
+        1,3 -> 2,3 -> 3,3
+
+        the reasoning is that in this direction, we're always reaching the 
+        top of each diagonal, so it ensures we cover every diagonal
+
+        for example 0,0 is the only element in the first diagonal
+        0,1, we do (x+1, y-1) to get the next element in the diagonal, which is 1,0
+        0,2 we do (x+1, y-1) to get the next element in the diagonal, which is 1,1,
+        and then 2,0
+        and so on...
+
+        we'll also store each element in a separate list.
+        Once we have each diagonal in nested lists, we reverse every other nested list 
+        to represent the proper direction that's mentioned in the problem,
+        and then merge all the lists together.
+
+        Time: O(N*M)
+        Space: O(N*M)
+        """
+        def inBounds(x, y, rows, cols):
+            return x >= 0 and x < rows and y >= 0 and y < cols
+        rows = len(mat)
+        cols = len(mat[0])
+        elements = []
+        for i in range(0, cols):
+            x = 0
+            y = i
+            diagonal = []
+            while inBounds(x, y, rows, cols):
+                diagonal.append(mat[x][y])
+                x += 1
+                y -= 1
+            elements.append(diagonal)
+        # we already have the diagonal starting from (0, cols-1), so we can
+        # start at (1, cols-1) instead
+        for j in range(1, rows):
+            x = j
+            # last column
+            y = cols - 1
+            diagonal = []
+            while inBounds(x, y, rows, cols):
+                diagonal.append(mat[x][y])
+                x += 1
+                y -= 1
+            elements.append(diagonal)
+        # reverse every other list and merge
+        result = []
+        for i in range(len(elements)):
+            if i % 2 == 0:
+                elements[i].reverse()
+            result.extend(elements[i])
+        return result
+
     def findDiagonalOrder(self, mat: List[List[int]]) -> List[int]:
         """
         1st diag starts from bottom left to top right
