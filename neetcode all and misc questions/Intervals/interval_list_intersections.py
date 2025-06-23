@@ -7,6 +7,8 @@ The trick is that whenever the end time A < end time B, you shift the pointer fo
 as you want to check the next greater end time. 
 
 Then, there's four cases to handle when the intervals intersect, which can be seen in the code comments.
+
+Revisited on 6/23/2025 with the same solution
 """
 class Solution:
     def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:

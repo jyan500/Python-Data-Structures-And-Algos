@@ -7,7 +7,7 @@
 class Solution:
     def isCompleteTree(self, root: Optional[TreeNode]) -> bool:
         """
-        Solved 6/20/2025, was able to solve without a guide, level order traversal seemed quite natural here.
+        Solved 6/20/2025, was able to solve without a guide in ~30 mins, level order traversal seemed quite natural here.
         https://leetcode.com/problems/check-completeness-of-a-binary-tree/
 
         every level (except the last) is filled
