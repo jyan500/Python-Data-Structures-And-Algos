@@ -4,6 +4,7 @@ https://www.youtube.com/watch?v=4wlBBRo4tYY&ab_channel=SaiAnishMalla
 '''
 
 """
+Revisited on 6/24/2025 with the same solution
 Revisited on 8/17/2023
 Re-wrote a solution based on my understanding of Sai Anish Malla's video
 
@@ -17,6 +18,32 @@ to get the next permutation as the result.
 There's an edge case where the numbers are in descending order,
 which breaks steps 1), and 2)
 (i.e [3, 2, 1]), we just need to reverse the list in place in that case
+
+example 1:
+original = 1 2 3 4
+the param is = 2 1 3 4
+
+the first descending number is 3, index = 2
+the first element that is greater than the descending element is 4, index = 3
+swaps index 2 and 3
+2 1 4 3
+
+reverse everything past index 3, in this case, there's nothing to reverse since
+we're already at the end
+so the answer is 2 1 4 3
+
+example 2:
+now if we were to get the next lexicographical element after 2 1 4 3
+
+the first descending element is 1, at index = 1
+the first element that is greater than the descending element is 3, at index = 3
+
+swap these two
+2 3 4 1
+    ^ ^
+    reverse everything from index = 2 onwards
+
+2 3 1 4 is the final answer
 
 Time Complexity: O(3N), 3 separate one pass operations
 Space Complexity: O(1)
