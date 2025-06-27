@@ -49,6 +49,38 @@ Output: "a(b(c)d)"
 
 '''
 
+# Revisited on 6/27/2025
+class Solution:
+    def minRemoveToMakeValid(self, s: str) -> str:
+        """
+        performing the valid parenthesis algorithm using stack, except we also add closing parenthesis,
+        and keep track of the index of the parenthesis
+
+        So by the end, if we have items left on our stack, these would be "invalid" parenthesis,
+        and need to be filtered out from the original string, which we can do because
+        we've stored the index
+
+        Time: O(3N)
+        Space: O(N)
+        """
+        stack = []
+        for i in range(len(s)):
+            if len(stack) > 0:
+                index, item = stack[-1]
+                # if the top forms a valid parenthesis with the cur item, pop out
+                if item == "(" and s[i] == ")":
+                    stack.pop()
+                    continue
+                
+            if s[i] == "(" or s[i] == ")":
+                stack.append((i, s[i]))
+        res = list(s)
+        # replace any items with ""
+        for index, item in stack:
+            res[index] = ""
+        # filter out any empty spaces
+        return "".join([item for item in res if item != ""])
+
 # revisited on 4/25/2025
 class Solution:
     def minRemoveToMakeValid(self, s: str) -> str:
