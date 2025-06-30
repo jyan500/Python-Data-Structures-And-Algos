@@ -1,6 +1,8 @@
 class Solution:
     def getLargestOutlier(self, nums: List[int]) -> int:
         """
+
+        Revisited 6/30/2025 
         Brute Force:
         Out of an array of size N, pick N - 2 elements.
         Sum up these elements and see if it equals to one of the two remaining elements left.
@@ -76,6 +78,10 @@ class Solution:
             potentialSumNum = remaining / 2
             # if the potential sum number exists and the index of that element is not
             # the one we just chose, since the potential sum number has to be a different element.
+            # also, there's another condition (len(indexMap[potentialSum] > 1))
+            # for the edge case [1,1,1,1,1,5,5]
+            # since it is possible the outlier value CAN be equal to potentialSum as long as the indices are not the same,
+            # so as long as the total amount of the indices where this value exists is greater than 1, this is true
             if potentialSumNum in indexMap and (i not in indexMap[potentialSumNum] or len(indexMap[potentialSumNum]) > 1):
                 # here, nums[i] is the outlier since we removed it from the total sum,
                 # and we were able to find the number
