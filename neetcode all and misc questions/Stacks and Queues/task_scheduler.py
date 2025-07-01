@@ -191,6 +191,70 @@ Both empty, iteration ends
 class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
         """
+        Revisited 7/1/2025, I think I flipped the ordering of the min heap popping first and then the max heap after
+        which led to a slightly different solution, where I needed to add 1 to the cooldown time
+        
+        We can use a max heap here since we keep track of the tasks that have the highest frequency,
+        and prioritize scheduling those tasks
+        We can also use a min heap to keep track of the cooldown for tasks, in order to keep track
+        of the next time a task can be scheduled
+
+        {A: 3, B: 3}
+        n = 3
+
+        curTime = 1
+        maxHeap = [(3, A), (3, B)]
+        minHeap = []
+        pops out
+        counter = {A:2, B:3}
+        maxHeap((3, B))
+        minHEap = [(5, A)]
+
+        curTime = 2
+        maxHeap = (3,B)
+        minHeap = [(5, A)]
+
+        pops out
+        counter = {A:2, B:2}
+        maxHeap = []
+        minHeap = [(5, A), (6,B)]
+
+        curTime = 3
+        top of minHeap not ready to be popped out, nothing in the max heap to pop,
+        so this is idle time
+
+        """
+        from collections import Counter
+        import heapq
+        c = Counter(tasks)
+        maxHeap = []
+        minHeap = []
+        for key in c:
+            heapq.heappush(maxHeap, (-c[key], key))
+        currentTime = 0
+        while (maxHeap or minHeap):
+            # before popping from the max heap,
+            # check to see if any tasks can be put back into the max heap
+            if len(minHeap) > 0:
+                if minHeap[0][0] == currentTime:
+                    time, task = heapq.heappop(minHeap)
+                    heapq.heappush(maxHeap, (-c[task], task))
+            if len(maxHeap) > 0:
+                time, task = heapq.heappop(maxHeap)
+                # convert back to positive
+                time = time * -1
+                # decrement task count
+                c[task] -= 1
+                # add onto the min heap the next time the task is available if there are still
+                # more quantity for that task
+                if c[task] > 0:
+                    heapq.heappush(minHeap, (currentTime + n + 1, task))
+            currentTime += 1
+        return currentTime
+            
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        """
         Revisited on 2/20/2025 using 2 heaps, max heap to store the tasks based
         on the frequency and min heap to store the next time a task is available to process.
         
