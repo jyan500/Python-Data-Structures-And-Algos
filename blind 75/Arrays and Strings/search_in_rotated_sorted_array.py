@@ -22,6 +22,49 @@ Note: Solution MUST BE IN O(LogN)
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
         """
+        Revisited on 7/3/2025
+        1) use binary search to find the peak index, where the
+        elements on the right side are less instead of greater
+        2) From there, we perform binary search on the sorted portions
+        0 ... peak Index, and then peak Index + 1 ... len(nums)-1 
+
+        """
+        def findPeakIndex(l, r):
+            mid = l + (r-l)//2
+            if l >= r:
+                return l
+            # if the right most element < nums[mid],
+            # that means the peak index is on the right side
+            if nums[r] < nums[mid]:
+                return findPeakIndex(mid+1, r)
+            else:
+                return findPeakIndex(l, mid)
+        
+        def binarySearch(l, r):
+            mid = l + (r-l)//2
+            # if we've exhausted the search space and
+            # haven't found the target, return False
+            if nums[mid] == target:
+                return mid
+            if l >= r:
+                return -1
+            if target > nums[mid]:
+                return binarySearch(mid+1, r)
+            else:
+                return binarySearch(l, mid)
+
+        N = len(nums)
+        peakIndex = findPeakIndex(0, N-1)
+        # if the target is in bounds of the left side search the left side,
+        # otherwise search the right side
+        if nums[peakIndex] <= target <= nums[N-1]:
+            return binarySearch(peakIndex, N-1)
+        else:
+            return binarySearch(0, peakIndex-1)
+
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        """
         Revisited on 9/29/2024
         find the rotation point of the rotated sorted array:
         by comparing the number at the left and the number at the right to the number at mid,
