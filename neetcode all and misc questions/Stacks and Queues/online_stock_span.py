@@ -1,4 +1,75 @@
 class StockSpanner:
+    """
+    Solution that I came up with on 7/17/2025
+
+    A brute force solution would be to iterate backwards on each price to find the number
+    of consecutive days where price <= number
+
+    Optimized:
+    monotonic stack problem (similar to daily temperatures)
+
+    keep array of all values, and then keep stack of values that are strictly decreasing
+    if our current value is greater than the top of the stack, pop out of the stack, but also
+    keep track of how many values were less than the current value in a tuple. If we're popping out, 
+    we can add the amount of values before it to the initial starting number of 1 (which says there's
+    1 consecutive day which is the current day)
+
+    7 (no value before it, 1)
+    2 (this is strictly decreasing, 1)
+    1 (this is also strictly decreasing, 1)
+    2 (this is not strictly decreasing, initialize as 1, pops out, adds value of 1 to 2)
+
+    becomes
+
+    7
+    2
+    2 (not strictly decreasing, adds value to 3)
+
+    7
+    2 (has value of 3 to show 3 values less than that came before it)
+
+    7 (1)
+    2 (3)
+    adds value 8 (initialize to 1, no longer strictly decreasing)
+    pops out 2, but this time add the value 3 to the initial value 1, which shows
+    that its been at least 4 consecutive days with price on stack <= current
+
+    7 (1)
+    8 (4),
+    still not strictly decreasing, pops out 7 and adds 1 to the value, for total of 5
+
+    Time: Each next() call should be at worst O(N)
+    Space: O(N)
+
+    """
+    def __init__(self):
+        # stores a tuple where the (price, number of consecutive days where the current price <= top of the stack)
+        self.stack = []
+
+    def next(self, price: int) -> int:
+        numDays = 1
+        while (len(self.stack) > 0):
+            # store the amount of consecutive days where the current value >= top of the stack
+            topPrice, numConsecutiveDays = self.stack[-1]
+            # if we have a price that's greater than the top of the stack, we include the amount
+            # of consecutive days that we saved into our running total (numDays)
+            # so we don't need to re-calculate those values again.
+            if price >= topPrice:
+                self.stack.pop()
+                numDays += numConsecutiveDays
+            # because we're keeping a monotonic decreasing stack, if we see a value that's greater,
+            # we can't pop out anymore, so we break.
+            else:
+                break
+        # finally, save the price along with the number of consecutive days where price >= top of stack
+        self.stack.append((price, numDays))
+        return numDays
+
+
+# Your StockSpanner object will be instantiated and called as such:
+# obj = StockSpanner()
+# param_1 = obj.next(price)
+class StockSpanner:
 
     def __init__(self):
         self.stack = []
