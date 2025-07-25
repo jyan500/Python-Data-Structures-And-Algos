@@ -13,6 +13,7 @@ class Node:
 class Solution:
     def construct(self, grid: List[List[int]]) -> 'Node':
         """
+        Revisited 7/25/2025
         Revisited 4/18/2025
         1) Remember to use the concept N = N // 2 to split into quadrants, and then
         pass in to start from the top left corner of each of these quadrants
