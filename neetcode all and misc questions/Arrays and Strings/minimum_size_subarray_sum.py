@@ -31,8 +31,22 @@ removes 2, cur sum is now 7 (min window size of 2)
 
 returns the min window size of 2
 
-
 """
+class Solution:
+    # Revisited 8/1/2025
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        currentSum = 0
+        minCurrentLength = float("inf")
+        length = 0
+        l = 0
+        for r in range(len(nums)):
+            currentSum += nums[r]
+            while (currentSum >= target):
+                minCurrentLength = min(minCurrentLength, r - l + 1)
+                currentSum -= nums[l]
+                l += 1
+        return minCurrentLength if minCurrentLength != float("inf") else 0
+
 class Solution:
     def minSubArrayLen(self, target: int, nums: List[int]) -> int:
         # O(N^2) solution
