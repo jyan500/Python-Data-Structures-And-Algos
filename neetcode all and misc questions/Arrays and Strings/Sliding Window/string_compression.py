@@ -115,5 +115,40 @@ class Solution:
         for i in range(0, N):
             chars.pop(0)
         return len(chars)
+
+# An O(N) space solution when revisiting on 8/4/2025
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+        from collections import defaultdict
+        counter = defaultdict(int)
+        # store the index of the value as the key and the count of the char[index] as value,
+        # this way we account for cases like "aabbaaa", where a is repeated, so
+        # this is a different window
+        cur = chars[0]
+        counter[0] += 1
+        l = 0
+        for r in range(1, len(chars)):
+            if chars[r] == cur:
+                counter[l] += 1
+            else:
+                l = r
+                cur = chars[r]
+                counter[l] += 1
+        i = 0
+        # once we have the lengths of each character window,
+        # retrieve the actual character that represents the window using 
+        # chars[key], set it to i, and then also set the next placements based
+        # on the count (counter[key])
+        # i.e set a, and then increment to the next spot, and then set "2" for example
+        for key in counter:
+            chars[i] = chars[key]
+            i += 1
+            if (i < len(chars) and counter[key] > 1):
+                for k in range(len(str(counter[key]))):
+                    chars[i] = str(counter[key])[k]
+                    i += 1
+        return i
+
+
         
             
