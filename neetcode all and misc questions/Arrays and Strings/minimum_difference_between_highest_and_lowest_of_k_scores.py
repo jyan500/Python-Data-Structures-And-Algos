@@ -2,6 +2,8 @@
 https://leetcode.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores/
 https://www.youtube.com/watch?v=JU5XdBZZtlk&ab_channel=NeetCode
 
+Revisited 8/7/2025
+
 Key Concept:
 To get the minimum difference between scores, it'd make sense to sort them first.
 And then apply sliding window of size K, where you continually
