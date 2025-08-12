@@ -8,6 +8,44 @@ Given the head of a singly linked list, return true if it is a palindrome.
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
+
+class Solution:
+    """
+    Revisited 8/12/2025
+    O(N) Time
+    O(1) Space
+    solution using two pointers to find the middle of the LL
+    and then reversing the second half,
+    and then comparing the two halves to see if they're equal values
+    """
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        slow = head
+        fast = head.next
+        while (fast and fast.next):
+            slow = slow.next
+            fast = fast.next.next
+
+        # separate the second half of the linked list 
+        secondHalf = slow.next
+        slow.next = None
+
+        # reverse the second half
+        cur = secondHalf
+        prev = None
+        while (cur):
+            temp = cur
+            cur = cur.next
+            temp.next = prev
+            prev = temp
+        
+        # iterate through both simultaneously to see if the nodes are equal
+        while (head and prev):
+            if head.val != prev.val:
+                return False
+            head = head.next
+            prev = prev.next
+        return True
+
 class Solution:
 	## O(N) time but O(N) space, is it possible to do this in O(1) space?
 	def isPalindrome(self, head: ListNode)->bool:
