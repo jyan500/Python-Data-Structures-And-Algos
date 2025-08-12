@@ -31,6 +31,58 @@ as this would represent the lowest common ancestor before the paths diverged
 #         self.left = None
 #         self.right = None
 
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        """
+        Revisited on 8/12/2025
+        This is a similar solution to below, with the exception with the loop statement to find the diverging paths,
+        figured that you can just continually set the result as long as the path values are the same. Once they diverge,
+        or if one of the paths ends,
+
+        Also the recursion is cleaner here, since there's a separate variable to store the path during the recursion. And after
+        the target is found, just set whatever the current path is to the global variable.
+        
+        you break out of the while loop. And the LCA would've already been set
+
+        Get the paths to p and q within the tree
+        And then iterate through the path and see where the path
+        diverges. This is where the lowest common ancestor would be.
+        """
+        self.pathP = []
+        self.pathQ = []
+
+        def getPath(node, target, path):
+            if node:
+                if node.val == target.val:
+                    path.append(node)
+                    if target == p:
+                        self.pathP = path
+                    elif target == q:
+                        self.pathQ = path
+                    return True
+                return getPath(node.left, target, path + [node]) or getPath(node.right, target, path + [node])
+            return False
+        getPath(root, p, [])
+        getPath(root, q, [])
+        i = 0
+        j = 0
+        res = None
+        while (i < len(self.pathQ) and j < len(self.pathP)):
+            if self.pathQ[i].val == self.pathP[i].val:
+                res = self.pathQ[i]
+            else:
+                break
+            i += 1
+            j += 1
+        return res
+        
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         """
