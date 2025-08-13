@@ -2,8 +2,36 @@
 https://leetcode.com/problems/find-all-anagrams-in-a-string/
 """
 class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        """
+        Revisited on 8/12/2025
+        using a sliding window, check if the count of characters in the window matches
+        the count of characters in p. If so, this is an anagram
 
-            
+        Time:
+        O(N*26), where the 26 is a comparison of the two counters, representing all lower case alphabetical characters
+        O(M) space, M is the size of the shorter string p
+        """
+        from collections import Counter, defaultdict
+        counter = Counter(p)
+        res = []
+        l = 0
+        N = len(p)
+        current = Counter()
+        for r in range(len(s)):
+            if s[r] in current:
+                current[s[r]] += 1
+            else:
+                current[s[r]] = 1
+            if r - l + 1 == N:
+                if current == counter:
+                    res.append(l)
+                current[s[l]] -= 1
+                # remove any values that have count of 0 if they've fallen completely out of the window
+                if current[s[l]] == 0:
+                    del current[s[l]]
+                l += 1
+        return res
 
 class Solution:
     def findAnagrams(self, s: str, p: str) -> List[int]:
