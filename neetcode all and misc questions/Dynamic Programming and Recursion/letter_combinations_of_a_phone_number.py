@@ -100,7 +100,7 @@ combinations = dfs("b", [["d", "e", "f"], ["g", "h", "i"]]) and the process repe
 
 
 """
-
+# Revisited 8/12/2025
 # Revisited on 1/30/2025, Time: O(N^4), where 4 represents the max amount of characters
 # per digit
 class Solution3:
