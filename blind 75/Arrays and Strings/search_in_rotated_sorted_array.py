@@ -22,6 +22,7 @@ Note: Solution MUST BE IN O(LogN)
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
         """
+        Revisited on 8/12/2025
         Revisited on 7/3/2025
         1) use binary search to find the peak index, where the
         elements on the right side are less instead of greater
