@@ -36,6 +36,41 @@ to reach any employee (since for any time_so_far < max_time, this employee would
 last employee was informed). Also, this is not necessarily the employee in the lowest level of the tree, as depending on the 
 informTime values, the employee in the lowest level isn't necesarily the employee that takes the longest to inform.
 '''
+
+class Solution:
+    def numOfMinutes(self, n: int, headID: int, manager: List[int], informTime: List[int]) -> int:
+        """
+        Revisited 8/20/2025
+        BFS problem with queue
+        (The tricky part is figuring out how to construct the adjacency list)
+
+        create an adjacency list, mapping each index of the manager array to its employee
+        append (current employee, inform time so far) on the queue
+        perform BFS with the inner for loop
+
+        (similar concept to rotting oranges BFS problem)
+        """
+        from collections import deque
+        adj = {}
+        for i in range(len(manager)):
+            adj[i] = []
+        for i in range(len(manager)):
+            if manager[i] != -1:
+                # map the manager to the employee
+                if i in adj:
+                    adj[manager[i]].append(i)
+        maxTime = 0
+        q = deque()
+        q.append((headID, 0))
+        while (q):
+            N = len(q)
+            for i in range(N):
+                employee, timeSoFar = q.popleft()
+                maxTime = max(timeSoFar, maxTime)
+                for subordinate in adj[employee]:
+                    q.append((subordinate, timeSoFar + informTime[employee]))
+        return maxTime
+
 class Solution:
     from collections import deque
     def numOfMinutes(self, n: int, headID: int, manager: List[int], informTime: List[int]) -> int:
