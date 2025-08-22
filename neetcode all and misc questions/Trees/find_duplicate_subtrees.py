@@ -4,7 +4,42 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+# Definition for a binary tree node.
+
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
+    """
+    Revisited on 8/22/2025 with a similar solution below:
+    The key is recognizing that you can "serialize" the subtree by returning a string representation of the root.val
+    at each level and delimiting. Then use a hashmap to keep track of all the different serializations.
+
+    If a serialization exists more than once in the hashmap, that means they are the same subtree, so just return the root
+    for one of those cases.
+    """
+    def findDuplicateSubtrees(self, root: Optional[TreeNode]) -> List[Optional[TreeNode]]:
+        self.record = defaultdict(list)
+        self.res = []
+        def search(root):
+            if root:
+                # while doing preorder traversal, get the serialization of the subtree at each level 
+                serialization = ",".join([str(root.val), search(root.left), search(root.right)])
+                self.record[serialization].append(root)
+                return serialization
+            return "null"
+        search(root)
+        res = []
+        # if the same serialization exists more than once, just return one of those roots in the list
+        for nestedList in self.record.values():
+            if len(nestedList) > 1:
+                res.append(nestedList[0])
+        return res
+
+class Solution:
+
     def findDuplicateSubtrees(self, root: Optional[TreeNode]) -> List[Optional[TreeNode]]:
         """
         Neetcode Solution:
