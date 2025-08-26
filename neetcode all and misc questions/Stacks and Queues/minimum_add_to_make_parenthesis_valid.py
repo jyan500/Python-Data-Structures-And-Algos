@@ -1,6 +1,8 @@
 class Solution:
     def minAddToMakeValid(self, s: str) -> int:
         """
+        Revisited on 8/26/2025 with the same solution
+
         in order for a parenthesis string to be valid, there must be the same amount
         of opening and closing braces
         
