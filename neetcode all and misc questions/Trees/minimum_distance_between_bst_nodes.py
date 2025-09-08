@@ -9,8 +9,11 @@ https://www.youtube.com/watch?v=joxx4hTYwcw&ab_channel=NeetCodeIO
 #         self.left = left
 #         self.right = right
 class Solution:
+
     def minDiffInBST(self, root: Optional[TreeNode]) -> int:
         """
+        Revisited on 9/8/2025, I re-figured out this solution but not the optimal.
+
         O(N) Time and Space Complexity
         build inorder list which will be sorted because it's a BST, and then find the difference between each adjacent value,
         since in a sorted array, if we compare list[i] with list[i+1], there's no need to compare list[i] with list[i+2] for example,
