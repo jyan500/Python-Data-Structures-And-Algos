@@ -25,6 +25,24 @@ O(N) time
 #         self.val = val
 #         self.left = left
 #         self.right = right
+"""
+Revisited on 9/9/2025, I was trying to write a solution based on inorder traversal + checking
+for a palindrome but it wasn't working out. So I had to revisit the optimal solution
+
+Traverse down both halves both of the tree at once, but compare the left child of one half with the right child of the other half,
+and then the right child of one half with the left child of the other half.
+"""
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        def isSameTree(p, q):
+            if not p and not q:
+                return True
+            if (not p and q) or (not q and p):
+                return False
+            else:
+                return p.val == q.val and isSameTree(p.left, q.right) and isSameTree(p.right, q.left)
+        return isSameTree(root.left, root.right)
+
 class Optimal:
 	def isSymmetric(self, root: Optional[TreeNode]) -> bool:
 		def sameTree(p, q):
