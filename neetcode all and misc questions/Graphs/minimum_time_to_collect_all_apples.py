@@ -19,6 +19,50 @@ since this node is also part of the path required to get to the apple nodes.
 """
 class Solution:
     def minTime(self, n: int, edges: List[List[int]], hasApple: List[bool]) -> int:
+        """
+        Time: O(N)
+        Space: O(N)
+        Revisited 8/11/2025
+        https://neetcode.io/solutions/minimum-time-to-collect-all-apples-in-a-tree
+        this is a graph problem, 
+        create an adjacency list of the undirected graph,
+        tracks the node and a list
+        of edges and edge to node.
+        then start a DFS at root 0
+
+        the key here is recognizing when we're in a subtree with an apple in it.
+        Since when we traverse the graph, we'll eventually get to a point in the DFS where we find an apple.
+        Then when we return back up the tree, how do we know that we actually found an apple?
+
+        The answer to this is that when we traverse the neighbors, if the neighbor has an apple, we know we'd
+        need to add 2 to the amount of steps, and then pass that along
+        Along with this, if in a previous call, if it returns an amount of steps that's greater than 0,
+        we need to add the total amount of steps so far, plus an additional 2 to show that we went down and back up
+        this node.
+
+        
+        """
+        adjacency = {}
+        for i in range(n):
+            adjacency[i] = []
+        for node, edge in edges:
+            adjacency[node].append(edge)
+            adjacency[edge].append(node)
+
+        def dfs(node, prev):
+            steps = 0
+            for neighbor in adjacency[node]:
+                if neighbor == prev:
+                    continue
+                amt = dfs(neighbor, node)
+                if amt or hasApple[neighbor]:
+                    steps += (amt + 2)
+            return steps
+        return dfs(0, -1)
+
+
+class Solution:
+    def minTime(self, n: int, edges: List[List[int]], hasApple: List[bool]) -> int:
         def dfs(node, adjacencyList, visited):
             steps = 0
             if node in adjacencyList:
