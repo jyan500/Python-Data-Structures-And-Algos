@@ -1,6 +1,9 @@
 class Solution:
     def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
         """
+        Revisited on 9/12/2025 with the same solution. I had some intuition that it might be
+        related to the subarray of sum equals K problem, but I got thrown off that it was in the sliding window section.
+        
         Brute Force
         use nested loops to get all subarrays and check the sum of each
         Time: O(N^2), where N is the length of the array
