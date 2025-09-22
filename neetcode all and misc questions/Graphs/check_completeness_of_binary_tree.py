@@ -7,6 +7,8 @@
 class Solution:
     def isCompleteTree(self, root: Optional[TreeNode]) -> bool:
         """
+        Revisited 9/22/2025 with a fix, the test cases got updated so the solution below has been edited.
+
         Solved 6/20/2025, was able to solve without a guide in ~30 mins, level order traversal seemed quite natural here.
         https://leetcode.com/problems/check-completeness-of-a-binary-tree/
 
@@ -30,63 +32,62 @@ class Solution:
         last level: [4,5,6, null] , this would be valid since there are no "null" values until after the last value
         last level: [4, 5, null, 7] would not be valid, since there's a "null" gap between values 5 and 7
 
+
+        EDIT 9/22/2025 due to updated test cases:
+        We also have to check on every level above the current level, if the amount of nodes == 2^i,
+        where i is the current level (0 indexed), this shows that this level is fully complete.
+
         Time: O(N)
         Space: O(N)
 
         """
-        # figure out how many levels there are first by taking the height of the tree
-        if not root:
-            return True
         def getHeight(node):
             if node:
-                left = getHeight(node.left)
-                right = getHeight(node.right)
-                return 1 + max(left, right)
+                return 1 + max(getHeight(node.left), getHeight(node.right))
             return 0
-        from collections import deque
-        q = deque()
-        q.append(root)
-        numLevels = getHeight(root)
-        curLevel = 1
-        allLevels = [[root.val]]
-        # if there's only one level, return True by default,
-        # since there are no levels below to be filled, so the current level is the last level
-        if numLevels == curLevel:
-            return True
-        while (q):
-            N = len(q)
-            levelList = []
-            for i in range(N):
-                node = q.popleft()
-                if node:
-                    # second to last level, allow null values
-                    if curLevel == numLevels - 1:
-                        if node.left:
-                            levelList.append(node.left.val)
-                        else:
-                            levelList.append(None)
-                        
-                        if node.right:
-                            levelList.append(node.right.val)
-                        else:
-                            levelList.append(None)
-                        # don't add the last row to the queue, since we don't want all null values
+        
+        def getLevels(root, height):
+            q = deque()
+            q.append(root)
+            curHeight = 1
+            levels = []
+            while (q):
+                N = len(q)
+                level = []
+                for i in range(N):
+                    node = q.popleft()
+                    if curHeight + 1 == height:
+                        q.append(node.left)
+                        q.append(node.right)
                     else:
-                        if node.left and node.right:
-                            levelList.append(node.left.val)
-                            levelList.append(node.right.val)
-                            q.append(node.left)
-                            q.append(node.right)
-                        # before the second to last level, if there a
-                        else:
-                            return False
-            allLevels.append(levelList)
-            curLevel += 1
-        lastLevel = allLevels[-1]
-        for i in range(len(lastLevel)):
-            # if we reach a "None" value, if the values to the right is not None,
-            # this means there's a gap, so this level doesn't have all the nodes shifted to the left
+                        if node:
+                            if node.left:
+                                q.append(node.left)
+                            if node.right:
+                                q.append(node.right)
+                    if node:
+                        level.append(node.val)
+                    else:
+                        level.append(None)
+                levels.append(level)
+                curHeight += 1
+            return levels
+
+        height = getHeight(root)
+        levels = getLevels(root, height)
+        lastLevel = levels[-1]
+        for i in range(len(levels)):
+            curLevel = levels[i]
+            # if we're on the last level, check for gaps.
+            # if the previous value is None, but the current is not None, that means there's a gap,
             # return False
-            if lastLevel[i] == None and i < len(lastLevel)-1 and lastLevel[i+1] != None:
-                return False
+            if height - 1 == i:
+                for i in range(1, len(curLevel)):
+                    if curLevel[i-1] == None and curLevel[i] != None:
+                        return False
+            # for every level that's not the last level, the amount of values must be equal to
+            # 2^h, where h is the current level
+            else:
+                if 2**(i) != len(curLevel):
+                    return False
         return True
