@@ -2,7 +2,7 @@ class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         """
         Revisited 5/9/2025 with a different solution than my first attempt, which tracks two
-        indices.
+        indices. This is less efficient however due to string slicing.
 
         recursion + memoization
 
