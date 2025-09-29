@@ -28,6 +28,23 @@ class Solution:
         O(N) Time
         O(N) Space
         """
+
+        """
+        Cleaner version by neetcode:
+        The difference here is that if the characters are not the same, it will continue
+        iterating down S, while the pointer at T remains the same. This saves memory
+        
+        i, j = 0, 0
+
+        while i < len(s) and j < len(t):
+            if s[i] == t[j]:
+                i += 1
+                j += 1
+            else:
+                i += 1
+        return len(t) - j
+        """
+
         tCounter = set(t)
         c = []
         k = 0
@@ -40,4 +57,5 @@ class Solution:
         if list(t) == c:
             return 0
         return len(t) - len(c)
+
         
