@@ -24,6 +24,26 @@ Space Complexity: O(N)
 
 """
 class Solution:
+    """
+    Revisited 9/30/2025
+    Same concept as above, except you only need one hashmap for the magazine, and then
+    you decrement the count of characters inside magazine as you find those characters while iterating through
+    ransomNote. If the count of characters is decreased to 0, remove that character from the magazine hashmap
+    to denote that all of the characters were used up for that letter.
+    """
+    def canConstruct(self, ransomNote: str, magazine: str) -> bool:
+        from collections import Counter
+        c = Counter(magazine)
+        for char in ransomNote:
+            if char in c:
+                c[char] -= 1
+                if c[char] == 0:
+                    del c[char]
+            else:
+                return False
+        return True
+
+class Solution:
     def canConstruct(self, ransomNote: str, magazine: str) -> bool:
         ransomNoteMap = dict()
         for i in range(len(ransomNote)):
