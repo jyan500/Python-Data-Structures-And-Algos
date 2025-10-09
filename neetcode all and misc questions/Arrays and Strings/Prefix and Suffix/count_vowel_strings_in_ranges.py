@@ -1,6 +1,8 @@
 class Solution:
     def vowelStrings(self, words: List[str], queries: List[List[int]]) -> List[int]:
         """
+        Revisited 10/7/2025 with the same solution
+        
         5/20/2025
         https://leetcode.com/problems/count-vowel-strings-in-ranges/
         https://neetcode.io/solutions/count-vowel-strings-in-ranges

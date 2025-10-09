@@ -1,6 +1,7 @@
 class Solution:
     def maximumCandies(self, candies: List[int], k: int) -> int:
         """
+        Revisited 10/8/2025
         Binary Search over a range
         candies = [5 8 6] k = 3 children
 
