@@ -1,6 +1,57 @@
 class Solution:
     def repairCars(self, ranks: List[int], cars: int) -> int:
         """
+        Revisited on 10/10/2025, writing the solution in a while loop instead
+        what is the lower bound and upper bound?
+        the lower bound is 1 minute
+        the upper bound is the time it takes if the lowest ranked mechanic fixed all the cars,
+        which would be (i.e [4,3,2,1], ranked 4 would be the slowest, taking 4 * (10**2) = 400 minutes)
+
+        since the mechanics can all repair cars simultaneously, we're looping through each mechanic,
+        and checking how many cars they can repair in the given minutes. If the number of cars they can all
+        repair >= cars, this means this is a valid number. But we could do better if we decreased the amount of minutes
+        and re-checked again.
+
+        We can take advantage of binary search here by cutting the search space in half every time, instead of looping
+        from the lower to upper bound and checking how many cars each mechanic can fix in the given amount of minutes.
+
+        Time complexity: O(M * Log(upper bound)), where M is the amount of mechanics, and upper bound is the 
+        max amount of time it could take to fix all the cars
+        Space: O(1)
+
+        """
+        import math
+        l = 1
+        r = max(ranks) * (cars ** 2)
+
+        # check the amount of cars that each mechanic can fix during the given time frame
+        # (since they can all work together at the same time)
+        # if the amount of cars >= cars, its possible for them to fix all the cars in the given time frame.
+        # since the equation is given as numMinutes = r * (n**2), we have to solve for N,
+        # num cars = floor(sqrt(numMinutes/r)), floor is to round down, since you can't have a fraction of a car 
+        def isValid(minutes):
+            numCars = 0
+            for i in range(len(ranks)):
+                numCarsFixed = math.floor(math.sqrt(minutes/ranks[i]))
+                numCars += numCarsFixed
+            return numCars >= cars
+        
+        res = 0
+        while (l <= r):
+            mid = l + (r-l)//2
+            # if all mechanics can fix all cars in the given time frame, search the left side
+            # to potentially find a better answer
+            if isValid(mid):
+                # save the answer, but allow it to be overwritten in case we find a better answer
+                res = mid
+                r = mid - 1
+            else:
+                l = mid + 1
+        return res
+
+class Solution:
+    def repairCars(self, ranks: List[int], cars: int) -> int:
+        """
         Binary Search on Range:
 
         if you have rank 4 mechanic fix all the cars, how long would that take?
