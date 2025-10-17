@@ -1,9 +1,11 @@
 class Solution:
     def zeroFilledSubarray(self, nums: List[int]) -> int:
         """
+        https://leetcode.com/problems/number-of-zero-filled-subarrays/
+        
         Time: O(N)
         Space: O(N)
-        
+
         0 0 0 - 1 count of 3 0's
         2 count of 2 0's
         3 count of 1 0's
