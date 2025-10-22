@@ -1,5 +1,6 @@
 """
 8/27/2025
+Revisited 10/22/2025, reviewing the optimized solution
 """
 class Solution:
     def restoreIpAddressesOptimized(self, s: str) -> List[str]:
