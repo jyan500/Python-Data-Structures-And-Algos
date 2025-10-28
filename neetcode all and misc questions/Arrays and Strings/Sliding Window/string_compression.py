@@ -116,7 +116,7 @@ class Solution:
             chars.pop(0)
         return len(chars)
 
-# An O(N) space solution when revisiting on 8/4/2025
+# An O(N) space solution when revisiting on 8/4/2025, also revisited 10/28/2025 with the same solution
 class Solution:
     def compress(self, chars: List[str]) -> int:
         from collections import defaultdict
