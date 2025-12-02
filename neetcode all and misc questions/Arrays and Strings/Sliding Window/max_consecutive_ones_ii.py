@@ -6,7 +6,44 @@ from typing import (
 https://www.lintcode.com/problem/883/
 Leetcode Premium
 """
+class Solution:
+    def findMaxConsecutiveOnes(self, nums: List[int]) -> int:
+        """
+        https://neetcode.io/problems/max-consecutive-ones-ii/question
+        sliding window
+        1 0 1 1 0 1 1 1 1
+        
+        if a second "0" is found, 
+        move the left pointer until its one index after the 0 that we flipped
 
+        Edge cases:
+        if no zeroes are found, or only one zero is found, just take the length of the array as the max length
+        """
+        l = 0
+        firstZeroIndex = None
+        flag = False
+        maxLength = 0
+        for r in range(len(nums)):
+
+            if nums[r] == 0:
+                # set flag if we've found a first zero
+                if not flag:
+                    flag = True
+                # if we find a second zero, calculate the max length and
+                # set the left pointer to be one after the first zero we found.
+                else:
+                    flag = False
+                    maxLength = max(maxLength, r - l)
+                    l = firstZeroIndex + 1
+                firstZeroIndex = r
+        # if our flag is still true (meaning only one zero was found),
+        # or no zeroes were found,
+        # the max length will just be the num
+        if flag or (not firstZeroIndex):
+            maxLength = max(maxLength, len(nums))
+
+        return maxLength
+            
 class Solution:
     """
     @param nums: a list of integer
