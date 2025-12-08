@@ -5,6 +5,14 @@ https://leetcode.com/problems/longest-palindrome/
 class Solution:
     def longestPalindrome(self, s: str) -> int:
         """
+        Revisited 12/8/2025
+        
+        1) Start by looping through the counter and getting the highest even number
+        that exists within each number, add that to the result, 
+        and then subtract that from the total count of that key
+
+        2) Loop through the counter a second time to find a key with value of 1, and then use that
+        as the "middle" value of the palindrome, adding to the result
         Revisited on 9/30/2025 with a simpler solution
 
         palindromes follow a pattern where there's at least 2 of each character,
