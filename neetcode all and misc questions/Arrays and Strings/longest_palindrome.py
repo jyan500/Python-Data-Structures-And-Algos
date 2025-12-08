@@ -6,14 +6,40 @@ class Solution:
     def longestPalindrome(self, s: str) -> int:
         """
         Revisited 12/8/2025
-        
+
+        palindromes follow a pattern where there's at least 2 of each character,
+        with the exception of the middle element.
+        So the goal is to count the amount of elements that can be used to contribute
+        to the palindrome (even count) plus an additional element with only a value of 1 that 
+        can be used as the middle element (if present) 
+
         1) Start by looping through the counter and getting the highest even number
         that exists within each number, add that to the result, 
         and then subtract that from the total count of that key
-
         2) Loop through the counter a second time to find a key with value of 1, and then use that
         as the "middle" value of the palindrome, adding to the result
-        Revisited on 9/30/2025 with a simpler solution
+        """
+        from collections import Counter
+        c = Counter(s)
+        res = 0 
+        for key, value in c.items():
+            if value >= 2:
+                # get the highest even number from the count
+                amt = value - (value % 2)
+                # decrement the amount of characters that were used
+                c[key] -= amt
+                res += amt
+        # check if there's any remaining values of length 1, and count one of these values
+        for key, value in c.items():
+            if value == 1:
+                res += 1
+                break
+        return res
+
+class Solution:
+    def longestPalindrome(self, s: str) -> int:
+        """
+  
 
         palindromes follow a pattern where there's at least 2 of each character,
         with the exception of the middle element.
