@@ -1,6 +1,7 @@
 class Solution:
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
         """
+        Revisited on 12/12/2025
         https://neetcode.io/problems/subsets-ii
         Time Complexity: O(NLogN + (N * 2^N))
         in order to prevent us from choosing a duplicate,
