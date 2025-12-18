@@ -14,6 +14,7 @@ class Node:
 class Solution:
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         """
+        Revisited 12/18/2025
         Revisited 4/8/2025
         Revisited on 10/2/2024, tried for a DFS approach this time from Neetcode
         As we traverse the graph, we can create the graph copy at the same time
@@ -42,12 +43,9 @@ class Solution:
             # note that when we update the neighbors, it should also update the reference
             # inside the self.oldToNew dict 
             self.oldToNew[node] = root
-            neighbors = []
             for neighbor in node.neighbors:
                 # each DFS will return the cloned node for each neighbor with all of its corresponding neighbors intact
-                n = dfs(neighbor)
-                neighbors.append(n)
-            root.neighbors = neighbors
+                root.neighbors.append(dfs(neighbor))
             return root
         
         return dfs(node)
