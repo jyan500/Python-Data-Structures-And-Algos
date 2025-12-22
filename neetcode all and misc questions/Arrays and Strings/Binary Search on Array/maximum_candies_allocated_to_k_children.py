@@ -1,7 +1,46 @@
 class Solution:
+    """
+        Revisited 10/8/2025
+        Except it uses a while loop for the binary search instead of recursion, its much easier
+        to understand the way the answer is saved in this solution compared to the recursive version
+    """
+    def maximumCandies(self, candies: List[int], k: int) -> int:
+        totalCandies = sum(candies)
+        if totalCandies < k:
+            return 0
+        l = 1
+        r = totalCandies//k
+
+        def isValid(amount):
+            numPiles = 0
+            # take the proposed amount, and see how many piles you can make
+            # by doing integer division on the amount at candies[i] by the proposed amount
+            # for example, if the proposed amount of candies is 4, and candies = [5, 8, 6], with k = 3
+            # 4 goes into 5 one time evenly, so one pile is made
+            # 4 goes into 8 2 times evenly, so two piles are made
+            # 4 goes into 6 1 time evenly, so one piles is made
+            # the total piles here is 4, which is >= 3, so this would be a valid answer, but
+            # we could move our indices in binary search to check the right side for a potentially
+            # bigger answer.
+            for i in range(len(candies)):
+                numPiles += (candies[i]//amount)
+            return numPiles >= k
+        res = 0
+        while l <= r:
+            mid = l + (r-l)//2
+            if isValid(mid):
+                # we want to save the previous answer that we found, so that in case
+                # we go to the next amount and its no longer valid, this will be our answer
+                res = mid
+                # set the left index to mid + 1 to search the right side
+                l = mid + 1
+            else:
+                r = mid - 1
+        return res
+
+class Solution:
     def maximumCandies(self, candies: List[int], k: int) -> int:
         """
-        Revisited 10/8/2025
         Binary Search over a range
         candies = [5 8 6] k = 3 children
 

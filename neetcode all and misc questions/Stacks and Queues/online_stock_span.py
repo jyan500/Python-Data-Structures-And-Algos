@@ -1,5 +1,6 @@
 class StockSpanner:
     """
+    Revisited 12/22/2025
     Solution that I came up with on 7/17/2025
 
     A brute force solution would be to iterate backwards on each price to find the number
