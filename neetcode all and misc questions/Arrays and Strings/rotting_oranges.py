@@ -28,6 +28,56 @@ Space:
 O(number of fresh oranges) for the visited set
 """
 class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        """
+        BFS
+        Revisited 12/23/2025
+        find all the rotten oranges first and place them into
+        the queue
+        for each queue item, track both the cell and also the 
+        current time, so when the BFS ends, you'll automatically
+        have the smallest number of minutes
+        """
+        from collections import deque
+        q = deque()
+        M = len(grid)
+        N = len(grid[0])
+        directions = [(0, 1), (1, 0), (-1, 0), (0, -1)]
+        def inBounds(i, j):
+            return 0 <= i < M and 0 <= j < N
+
+        visited = set()
+        for i in range(M):
+            for j in range(N):
+                if grid[i][j] == 2:
+                    q.append((i,j,0))
+                    visited.add((i,j))
+        res = 0
+        while (q):
+            # continue to run BFS on each of the rotten oranges, and as we see fresh oranges,
+            # turn these into rotten oranges, and increment the time
+            # by the time the BFS finishes, we should have the minimum time
+            for _ in range(len(q)):
+                i, j, time = q.popleft()
+                res = time
+                for x, y in directions:
+                    newX = x + i
+                    newY = y + j
+                    if inBounds(newX, newY) and grid[newX][newY] == 1 and (newX, newY) not in visited:
+                        grid[newX][newY] = 2
+                        visited.add((newX,newY))
+                        q.append((newX, newY, time + 1))
+        
+        # check to see if no fresh oranges left first
+        for i in range(M):
+            for j in range(N):
+                if grid[i][j] == 1:
+                    return -1
+        
+        # if no more fresh oranges, return the result 
+        return res
+
+class Solution:
     def inBounds(self, i, j, grid):
         return 0 <= i < len(grid) and 0 <= j < len(grid[0])
     def orangesRotting(self, grid: List[List[int]]) -> int:
