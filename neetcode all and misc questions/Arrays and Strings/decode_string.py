@@ -31,6 +31,41 @@ https://leetcode.com/problems/decode-string/
 class Solution:
     def decodeString(self, s: str) -> str:
         """
+        everything after a number is always an opening brace
+        numbers can be more than one digit, but are always positive
+        use a stack and then join the resulting elements inside to get the decoded string
+        include the braces, and begin popping off if you see a closing brace
+
+        Revisited on 12/24/2025
+
+        """
+        stack = []
+        for i in range(len(s)):
+            # if we find closing brace
+            if s[i] == "]":
+                # concatenate every element between the last opening brace
+                element = ""
+                while (len(stack) > 0 and stack[-1] != "["):
+                    element = stack.pop() + element
+                # pop off the opening brace
+                stack.pop()
+                # the previous elements after the opening brace should always be digits, evaluate
+                # the number
+                number = ""
+                while (len(stack) > 0 and stack[-1].isdigit()):
+                    number = stack.pop() + number
+                # evaluate the current element with the number by multiplying, and
+                # putting back onto the stack in case this is a nested element inside
+                # another set of parenthesis
+                if element != "":
+                    stack.append(int(number) * element)
+            else:
+                stack.append(s[i])
+        return "".join(stack)
+
+class Solution:
+    def decodeString(self, s: str) -> str:
+        """
         Revisited 2/5/2025
         Time: O(N)
         Space: O(N)
