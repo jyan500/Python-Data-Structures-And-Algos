@@ -191,6 +191,60 @@ Both empty, iteration ends
 class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
         """
+        Revisited 12/30/2025 with max heap and min heap solution. This time, I just
+        stored on the frequency as an additional element on the tuple on the min heap
+
+        Time Complexity: O(KLogK * N)
+        where N is the length of the tasks array, K is the number of unique tasks (26 total since its uppercase letters A - Z)
+
+        tasks max heap to store both the task and its frequency. This is a greedy approach
+        where we always use up the most frequently occurring element if possible.
+        use min heap to store tasks and the next time they can be used
+        current time
+        while (tasks)
+            examine the tasks that are on the min heap
+                see if top of the min heap, the current time > next time the task can be used
+                    remove from min heap
+                    put back onto the queue
+
+            examine the tasks on the max heap
+                pop off a task and place onto the min heap if the frequency - 1 > 0,
+                storing the next time this can be used by taking
+                current time + n
+                decrement frequency
+
+            increment current time
+        return current time
+
+        """
+        from collections import Counter
+        import heapq
+        c = Counter(tasks)
+        maxHeap = []
+        minHeap = []
+        currentTime = 0
+        for key, value in c.items():
+            heapq.heappush(maxHeap, (-value, key))
+        while (maxHeap or minHeap):
+            # if the cooldown time of the task on the top of the minheap
+            # has passed, put it back onto the max heap for processing
+            while (minHeap and minHeap[0][0] < currentTime):
+                timeValue = heapq.heappop(minHeap)
+                value = timeValue[1]
+                freq = timeValue[2]
+                heapq.heappush(maxHeap, (-freq, value))
+            if maxHeap:
+                freqValue = heapq.heappop(maxHeap)
+                freq = -1 * freqValue[0]
+                value = freqValue[1]  
+                if (freq - 1 > 0):
+                    heapq.heappush(minHeap, (currentTime + n, value, freq-1))
+            currentTime += 1
+        return currentTime
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        """
         Revisited 7/1/2025, I think I flipped the ordering of the min heap popping first and then the max heap after
         which led to a slightly different solution, where I needed to add 1 to the cooldown time
         

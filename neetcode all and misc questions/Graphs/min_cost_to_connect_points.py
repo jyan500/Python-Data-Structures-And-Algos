@@ -3,6 +3,37 @@ class Solution:
         """
         Neetcode:
         https://www.youtube.com/watch?v=f7JOBJIC-NA
+        
+        Prim's Algorithm solves for the minimum spanning tree here
+
+        Creating the adjacency list is different from most other graph problems
+        we treat a given set of points as an index within N (for example, if there are 4 sets of coordinates,
+        we label them 0, 1, 2, 3), and then in the adjacency list, save the edge (i.e 0 -> 1), and also keep track
+        of the distance between the two edges
+
+        so the adjacency would look something like this:
+        points = [[0,0],[2,2],[3,10],[5,2],[7,0]]
+        0 -> (0,0)
+        1 -> (2,2)
+        2 -> (3,10)
+        3 -> (7,0)
+
+        {0: [
+                [1, distance between (0,0) and (2,2)],
+                [2, distance between (0,0) and (3,10)],
+                [3, distance between (0,0) and (7,0)],
+        ],
+        1: [
+            [0, distance between (2,2) and (0,0)],
+            [2, distance between (2,2) and (3,10)],
+            [3, distance between (2,2) and (7,0)]
+        ],
+        ...
+        }
+
+        From there, you would apply BFS, but use a min heap instead of a normal queue, so we're always
+        getting the next edge with the smallest distance.
+
        	Time Complexity: 
         O(N^2LogN), where N is the amount of edges
         the NLogN comes from Prim's algorithm, since it uses heappop()
