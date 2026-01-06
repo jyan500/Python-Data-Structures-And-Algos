@@ -1,6 +1,44 @@
 class Solution:
     def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
         """
+        similar concept to meeting rooms II
+
+        should sort the trips list based on the start location
+        put the end time of the trip on a min heap
+        while the top of the min heap's end time is less than the current trip's start time,
+            this means we are not overlapping, therefore:
+                pop off the min heap, and also decrement the capacity,
+                since that means we would've "dropped off" the passengers at the top of the min heap
+                since we've already passed that end point.
+
+        otherwise, this means we are overlapping an interval, which means
+        check if the capacities can be added together, and append the trip onto the min heap
+        
+        Time: O(NLogN)
+        Space: O(N)
+        """
+        import heapq
+        trips.sort(key=lambda x: x[1])
+        minHeap = []
+        numPassengers, start, end = trips[0]
+        heapq.heappush(minHeap, (end, start, numPassengers))
+        curCapacity = numPassengers
+        if curCapacity > capacity:
+            return False
+        for i in range(1, len(trips)):
+            curPassengers, start, end = trips[i]
+            while (len(minHeap) > 0 and start >= minHeap[0][0]):
+                prevEnd, prevStart, prevPassengers = heapq.heappop(minHeap)
+                curCapacity -= prevPassengers
+            curCapacity += curPassengers
+            if curCapacity > capacity:
+                return False
+            heapq.heappush(minHeap, (end, start, curPassengers))
+        return True
+
+class Solution:
+    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+        """
         Neetcode's Heap Solution:
         1) Sort the trips array by the starting location
         2) Keep a min heap that tracks the dropoff location

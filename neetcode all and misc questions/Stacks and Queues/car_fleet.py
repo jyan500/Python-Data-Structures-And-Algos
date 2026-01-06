@@ -5,6 +5,7 @@ https://www.youtube.com/watch?v=Pr6T-3yB9RM&ab_channel=NeetCode
 class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         """
+        Revisited on 1/1/2026
         Revisited on 2/7/2025
         Brainstorming:
         position = [10,8,0,5,3]
@@ -25,6 +26,11 @@ class Solution:
         so they will intersect at some point, and become a fleet. At this point,
         you'd set the stack element to be the slower of the two cars, and 
         assume that the position would be the position of the car that was further ahead.
+
+        Edit 1/1/2026: in reality, in the step where we merge, we're actually not really merging, 
+        rather we're just omitting the current car from the stack, since we know that it would get intersect
+        at some point with the previous car and become a fleet, so the stack will just track the total fleets
+        that reach the target eventually. 
 
         Approach:
         1) Create an array of tuples like so (position ,speed), and then sort by
@@ -57,7 +63,10 @@ class Solution:
             # so we need to merge them, taking the prevPosition (since we sorted
             # and that position is further ahead) 
             if curTimeToTarget <= prevTimeToTarget:
-                stack[-1] = (prevPosition, min(curSpeed, prevSpeed))
+                # EDIT 1/1/2026, actually the min is not needed here, and we can just use
+                # the prevSpeed, as its implied that if the previous car overtakes the current,
+                # the previous car is the slower car of the two
+                stack[-1] = (prevPosition, prevSpeed)
             else:
                 stack.append(cars[i])
         return len(stack)
