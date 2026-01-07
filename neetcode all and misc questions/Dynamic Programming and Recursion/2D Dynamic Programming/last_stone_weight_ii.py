@@ -68,9 +68,10 @@ class Solution:
         # return self.res
 
         stoneSum = sum(stones)
-        # we want to take the ceiling here since if total sum is an odd number,
-        # this is so we get as close to the target as possible, even if we go over.
+        # arbitrary, but neetcode's solution does ceiling here since if total sum is an odd number,
         # i.e ceil(23/2) = 12, so we're looking for a pile value that's >= 12
+        # you can do integer division as well though, and you'd just end up with the smaller of the two piles
+        # which is still fine, since we're performing an abs() on the difference between the two piles anyway.
         target = ceil(stoneSum/2)
         memo = {}
         def dfs(i, total):
