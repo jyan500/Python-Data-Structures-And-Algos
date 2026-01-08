@@ -42,6 +42,101 @@ https://www.youtube.com/watch?v=pNichitDD2E&ab_channel=NeetCode
 }
 
 """
+import heapq
+
+class Twitter:
+    def __init__(self):
+        """
+        Revisited 1/8/2026 with the same solution
+        
+        user id : {
+            followers: [],
+            following: [],
+            tweets: [],
+        }
+        """
+        self.timestamp = 0
+        self.db = {
+            
+        }
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        if (userId not in self.db):
+            self.db[userId] = {"tweets": [], "followers": set(), "following": set()}
+        self.db[userId]["tweets"].append((self.timestamp, tweetId))
+        self.timestamp += 1
+
+    def getNewsFeed(self, userId: int) -> List[int]:
+        """
+        brute force:
+        get the feeds of the followers and also the user's own tweets
+        sort them and take the top 10
+
+        slightly more space optimized using a min heap
+        start appending tweets into the min heap
+        once you reach 10 tweets, if you add another tweet, then
+        pop off the top since that's the oldest tweet
+
+        once you get the final list, just reverse by the timestamp,
+        and return it so that's in
+        ordered from most recent to least recent
+        """
+        if userId not in self.db:
+            self.db[userId] = {"tweets": [], "followers": set(), "following": set()}
+        minHeap = []
+        for followerId in self.db[userId]["following"]:
+            if followerId in self.db:
+                # we start iterating from the back to get the oldest tweets
+                for i in range(len(self.db[followerId]["tweets"])-1,-1,-1):
+                    tweet = self.db[followerId]["tweets"][i]
+                    heapq.heappush(minHeap, tweet)
+                # if exceeds 10, pop off the top since that's the oldest tweet
+                # since we're in a min heap, so the smaller timestamp value = oldest
+                if len(minHeap) > 10:
+                    heapq.heappop(minHeap)
+        # start iterating from the back to get the oldest tweets
+        for i in range(len(self.db[userId]["tweets"])-1,-1,-1):
+            tweet = self.db[userId]["tweets"][i]
+            heapq.heappush(minHeap, tweet)
+            if len(minHeap) > 10:
+                heapq.heappop(minHeap)
+        res = []
+        while minHeap:
+            timestamp, tweetId = heapq.heappop(minHeap)
+            res = [tweetId] + res
+        return res
+        # brute force: combined + sorting
+        # followerTweets = []
+        # for followerId in self.db[userId]["following"]:
+        #     if followerId in self.db:
+        #         followerTweets.extend(self.db[followerId]["tweets"])
+        # userTweets = self.db[userId]["tweets"]
+        # allTweets = followerTweets + userTweets
+        # allTweets.sort(key=lambda x: -x[0])
+        # return [tweetId for timestamp, tweetId in allTweets[:10]]
+
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        if followerId not in self.db:
+            self.db[followerId] = {"tweets": [], "followers": set(), "following": set()}
+        if followeeId not in self.db:
+            self.db[followeeId] = {"tweets": [], "followers": set(), "following": set()}
+        self.db[followeeId]["followers"].add(followerId)
+        self.db[followerId]["following"].add(followeeId)
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        if followerId in self.db and followeeId in self.db:
+            if followeeId in self.db[followerId]["following"]:
+                self.db[followerId]["following"].remove(followeeId)
+
+
+# Your Twitter object will be instantiated and called as such:
+# obj = Twitter()
+# obj.postTweet(userId,tweetId)
+# param_2 = obj.getNewsFeed(userId)
+# obj.follow(followerId,followeeId)
+# obj.unfollow(followerId,followeeId)
+
 class Twitter:
     """
     Revisited on 10/2/2024
