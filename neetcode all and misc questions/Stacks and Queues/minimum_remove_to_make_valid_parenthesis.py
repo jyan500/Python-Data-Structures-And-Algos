@@ -56,8 +56,6 @@ class Solution:
         of the parenthesis so if there any parenthesis remaining on the stack, we know
         those are invalid, and they should be removed from the string to
         create the final result.
-
-        Revisited 1/13/2026
         """
         stack = []
         for i in range(len(s)):
@@ -65,12 +63,11 @@ class Solution:
                 index, top = stack[-1]
                 if top == "(" and s[i] == ")":
                     stack.pop()
-                # if this doesn't meet requirements for valid parenthesis,
-                # and it's non-alphabetical character (which should be parenthesis), add the parenthesis and its index
-                # so we know to remove this from the final string
-                elif not s[i].isalpha():
-                    stack.append((i, s[i]))
-            elif not s[i].isalpha():
+                    continue
+            # if this doesn't meet requirements for valid parenthesis,
+            # and it's non-alphabetical character (which should be parenthesis), add the parenthesis and its index
+            # so we know to remove this from the final string
+            if s[i] == "(" or s[i] == ")":
                 stack.append((i, s[i]))
         res = []
         # get only the indices on the stack and ignore whether it's an opening/closing parenthesis for faster lookup
@@ -80,6 +77,7 @@ class Solution:
             if i not in lookup:
                 res.append(s[i])
         return "".join(res)
+
 
 # Revisited on 6/27/2025
 class Solution:
