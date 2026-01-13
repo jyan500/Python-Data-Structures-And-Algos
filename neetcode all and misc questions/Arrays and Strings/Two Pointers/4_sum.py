@@ -1,4 +1,5 @@
 """
+Revisited 1/12/2026
 https://leetcode.com/problems/4sum/
 Basically the same as 3 sum:
 1) 
@@ -23,6 +24,7 @@ Time Complexity:
 O(N^3 + NLogN)
 
 Space: O(number of quadruplets)
+
 """
 class Solution:
     def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
@@ -32,6 +34,10 @@ class Solution:
             for j in range(i+1, len(nums)):
                 l = j + 1
                 r = len(nums) - 1
+                """         
+                note that the conditional must be l < r and not l <= r so that you don't pick the same value
+                twice, as part of the problem states that the values chosen must be distinct per index
+                """
                 while (l < r):
                     totalSum = nums[i] + nums[j] + nums[l] + nums[r]
                     # if the sum is too big, we need to shrink the right side
