@@ -1,6 +1,40 @@
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         """
+        Claude's Non-knapsack approach (more optimal o(N^2), no need to check current string)
+        at each index, check every substring from index to N
+        leetcode
+        check every substring l, le, lee, leet, etc
+        if substring in worddict, we now recur down this path, and make sure that
+        the recursion down this path also returns True. This way,
+        don't really need to know what the actual "string" is, just whether it was 
+        able to split at this particular index
+        """
+        memo = {}
+        wordDict = set(wordDict)
+        N = len(s)
+        def dfs(i):
+            # if we were able to reach the end, that means we successfully split
+            # the word into parts, so return True
+            if i == N:
+                return True
+            if i in memo:
+                return memo[i]
+            # check everything past the current index
+            for j in range(i+1, N+1):
+                substring = s[i:j]
+                # we need to ensure that this substring can be segmented AND
+                # the remainder of the string can be segmented before we return True
+                if substring in wordDict and dfs(j):
+                    memo[i] = True
+                    return memo[i]
+            memo[i] = False
+            return False
+        return dfs(0)
+            
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        """
         Revisited 5/9/2025 with a different solution than my first attempt, which tracks two
         indices. This is less efficient however due to string slicing.
 

@@ -1,6 +1,42 @@
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
         """
+        Revisited on 1/16/2026
+        1) build adjacency list, this is a directed graph, on each target node in the adjacency list,
+        store a tuple of the target AND its weight
+        2) Apply Djikstra's algorithm (BFS + minHeap), storing the current time and node into minHeap
+            Store visited set and mark node as visited after popping
+
+        For future reference:
+        if the graph edges have weights, make sure to include those weights in the adjacency list as tuples,
+        and use Djikstra's or Bellman Ford
+        """
+        import heapq
+        adjacency = {}
+        for i in range(1, n+1):
+            adjacency[i] = []
+        for source, target, weight in times:
+            adjacency[source].append((target, weight))
+        minHeap = []
+        heapq.heappush(minHeap, (0, k))
+        visited = set()
+        while (minHeap):
+            time, node = heapq.heappop(minHeap)
+            if node in visited:
+                continue
+            visited.add(node)
+            # as we pop off, mark this node as visited.
+            # and if we've visited all nodes, then return the time, as 
+            # djikstra's would pick the most optimal way to visit all the nodes already.
+            if len(visited) == n:
+                return time
+            for neighbor, weight in adjacency[node]:
+                heapq.heappush(minHeap, (time+weight, neighbor))
+        return -1 
+        
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        """
         Revisited on 10/2/2024 with this solution
         Neetcode:
         https://www.youtube.com/watch?v=EaphyqKU4PQ&ab_channel=NeetCode
