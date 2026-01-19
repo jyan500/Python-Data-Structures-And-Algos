@@ -15,6 +15,7 @@ Output: ""
 Explanation: There is no common prefix among the input strings.
 
 '''
+"""Revisited 1/19/2026 with the solution below, not the most pythonic """
 """
 Revisited 7/28/2023
 "pythonic" solution
@@ -75,6 +76,39 @@ class Solution:
             
         return longest_common_prefix
                 
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        """
+        find the shortest word in the list to get the length
+        loop through all words, until the length of the shortest word,
+        and comparing the prefixes
+        """
+        shortestLength = float("inf")
+        shortestWord = ""
+        for i in range(len(strs)):
+            if len(strs[i]) < shortestLength:
+                shortestWord = strs[i]
+                shortestLength = len(strs[i])
+        
+        i = 0
+        prefix = ""
+        while (i < len(shortestWord)):
+            flag = True
+            curLetter = strs[0][i]
+            for j in range(1, len(strs)):
+                if strs[j][i] != strs[j-1][i]:
+                    flag = False
+                    break
+                else:
+                    curLetter = strs[j][i]
+            if flag:
+                prefix += curLetter
+            # if the prefixes don't match in one instance, break out of the whole process
+            else:
+                break
+            i += 1
+        return prefix
+            
             
                 
         
