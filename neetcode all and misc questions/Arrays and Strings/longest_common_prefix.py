@@ -84,28 +84,21 @@ class Solution:
         and comparing the prefixes
         """
         shortestLength = float("inf")
-        shortestWord = ""
         for i in range(len(strs)):
-            if len(strs[i]) < shortestLength:
-                shortestWord = strs[i]
-                shortestLength = len(strs[i])
+            shortestLength = min(len(strs[i]), shortestLength)
+
         
         i = 0
         prefix = ""
         while (i < len(shortestWord)):
-            flag = True
             curLetter = strs[0][i]
             for j in range(1, len(strs)):
+                # as soon as we find a letter where it's not shared
+                # across all words in the list, break and return the prefix
                 if strs[j][i] != strs[j-1][i]:
-                    flag = False
-                    break
-                else:
-                    curLetter = strs[j][i]
-            if flag:
-                prefix += curLetter
-            # if the prefixes don't match in one instance, break out of the whole process
-            else:
-                break
+                    return prefix
+            # otherwise, add the prefix to the current letter
+            prefix += curLetter
             i += 1
         return prefix
             
