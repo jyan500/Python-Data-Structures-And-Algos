@@ -13,6 +13,9 @@ class Solution:
         so we would treat both of these cases like normal fibonacci,
         0 1 1, so the 1st and 2nd fibonacci values are 1,
         and the 0th fibonacci is 0.
+
+        Time: O(N)
+        Space: O(N)
         
         """
         memo = {}
