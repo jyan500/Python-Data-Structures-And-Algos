@@ -5,6 +5,68 @@ class Solution:
     def solve(self, board: List[List[str]]) -> None:
         """
         Do not return anything, modify board in-place instead.
+
+        X O X X
+        X O O X
+        X X O X
+        X O X X
+
+        this example, the 4 cell region cannot be surrounded because the top most region cell 
+        is on the edge, and therefore, cannot be 4-directionally surrounded by X cells
+
+        Brute Force solution:
+        Find all islands and store the indices of their cells, also map a boolean to check
+        if any of the islands' cells is on the edge of the board
+
+        go through all islands that don't have an edge on the board and convert them to X's
+
+        This uses up O(N*M) Time and O(N*M) memory, so it's not as efficient as the solution below
+        """
+
+        N = len(board)
+
+        def inBounds(i,j):
+            return 0 <= i < len(board) and 0 <= j < len(board[0])
+        
+        def isOnEdge(i,j):
+            return i == 0 or i == len(board)-1 or j == 0 or j == len(board[0])-1
+
+        islands = []
+        directions = [(0,1), (0,-1), (1,0),(-1,0)]
+        self.surrounded = True
+        self.globalVisited = set()
+        def dfs(i,j, visited):
+            if isOnEdge(i,j):
+                self.surrounded = False
+            if (i,j) in visited:
+                return
+            visited.add((i,j))
+            self.globalVisited.add((i,j))
+            for x, y in directions:
+                newX = x + i
+                newY = y + j
+                if inBounds(newX, newY) and board[newX][newY] == "O":
+                    dfs(newX, newY, visited)
+        k = 0
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == "O" and (i,j) not in self.globalVisited:
+                    visited = set()
+                    dfs(i,j, visited)
+                    islands.append({"cells": visited, "isSurrounded": self.surrounded})
+                    # reset the value
+                    self.surrounded = True
+                    k += 1
+        for value in islands:
+            if value["isSurrounded"]:
+                # convert the surrounded islands to "X" values
+                for x,y in value["cells"]:
+                    board[x][y] = "X"
+
+class Solution:
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
         """
         """
         https://www.youtube.com/watch?v=9z2BunfoZ5Y&ab_channel=NeetCode
