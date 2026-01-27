@@ -28,6 +28,7 @@ Output: [8,9,9,9,0,0,0,1]
 class Solution:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         """
+        Revisited 1/27/2026 with the same solution
         Revisited 3/6/2025 with a similar solution
         because the numbers in the LL are stored in reverse order, they're in the same order
         that we normally use when performing addition (starting from the end first)
