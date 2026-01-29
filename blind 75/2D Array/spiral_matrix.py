@@ -7,6 +7,50 @@
 	matrix without hitting a coordinates that we've already visited
 '''
 """
+Revisited 1/28/2026 with similar solution as below
+"""
+class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        """
+        keep a current pointer (i,j)
+        go as left as possible until boundaries are reached
+        and we haven't reached a cell that was visited
+        go as down as far as possible
+        go as far left as possible
+        go as far up as possible
+
+        continue this process until our visited set == total number of cells
+        """
+        M = len(matrix)
+        N = len(matrix[0])
+        totalCells = M*N
+        res = [matrix[0][0]]
+        visited = set()
+        visited.add((0,0))
+        i = 0
+        j = 0
+        def inBounds(i,j):
+            return 0 <= i < M and 0 <= j < N
+        # M * N gives you the total amount of cells,
+        # so as long as we haven't visited all the cells
+        while (len(visited) < totalCells):
+            # right, down, left, up in that order
+            directions = [(0, 1), (-1, 0), (0, -1), (1,0)]
+            for x, y in directions:
+                # keep going in that direction until it's no longer possible,
+                # then move to the next direction
+                while (True):
+                    newX = x + i
+                    newY = y + j
+                    if not inBounds(newX, newY) or (newX, newY) in visited:
+                        break
+                    res.append(matrix[newX][newY])
+                    visited.add((newX,newY))
+                    i = newX
+                    j = newY
+        return res
+
+"""
 Revisited on 8/9/2023 with a similar concept but cleaner solution
 O(N^M) time, where M is the number of rows and N is the number of columns
 O(N^M) space, where M is the number of rows and N is the number of columns
