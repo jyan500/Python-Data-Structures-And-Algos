@@ -29,6 +29,76 @@ dest = 4
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
         """
+        1) create adjacency list
+
+        DFS?
+        that way, we can pop out of the visited set if we need to find another path,
+        looks like that worked but it's not as efficient as possible.
+
+        2) Djikstra's Algorithm?
+            - negative prices not possible
+            - optimizes for the smallest total price
+            - but we also need to take into account the number of stops taken
+        
+        our visited set has to take into account when a node is visited, what the best possible price
+        was when visiting that node. Initially, when we visit a node for the first time, and we record
+        the number of stops, and initialize the best price to float("inf"), then, we usually 
+        set the price to be the current price right after (since current price < float("inf"))
+
+        """
+        import heapq
+        from collections import defaultdict
+        adjacency={}
+        for i in range(n):
+            adjacency[i] = []
+        for source, dest, price in flights:
+            adjacency[source].append((price, dest))
+        # create a nested default dict of integers
+        # {city: {stop: price}}
+        visited = defaultdict(lambda: defaultdict(int))
+        minHeap = []
+        heapq.heappush(minHeap, (0, src,0))
+        while (minHeap):
+            totalPrice, city, stops = heapq.heappop(minHeap)
+            if city == dst:
+                return totalPrice
+            # if we've exceeded the number of stops,
+            # OR if the current price exceeds the best recorded price at this city so far
+            # continue
+            if stops-1 == k or totalPrice > visited[city][stops]:
+                continue
+            for price, neighbor in adjacency[city]:
+                updatedPrice = totalPrice + price
+                updatedStops = stops + 1
+                if neighbor not in visited:
+                    visited[neighbor] = defaultdict()
+                # start the price out at each neighbor + stop combination at float("inf")
+                if updatedStops not in visited[neighbor]:
+                    visited[neighbor][updatedStops] = float("inf")
+                # if we've found a better price for the same number of stops, update the price
+                # in the visited set and put this into the minHeap
+                if visited[neighbor][updatedStops] > updatedPrice:
+                    visited[neighbor][updatedStops] = updatedPrice
+                    heapq.heappush(minHeap, (updatedPrice, neighbor, updatedStops))
+        return -1
+        # self.res = float("inf")
+        # def dfs(cur, stops, totalPrice):
+        #     if cur == dst and stops - 1 <= k:
+        #         self.res = min(self.res, totalPrice)
+        #     if cur in visited:
+        #         return
+        #     visited.add(cur)
+        #     for neighborPrice, neighborDest in adjacency[cur]:
+        #         dfs(neighborDest, stops + 1, totalPrice+neighborPrice)
+        #     visited.remove(cur)
+        
+        # dfs(src,0,0)
+        # return self.res if self.res != float("inf") else -1
+
+
+class Solution:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        """
         Bellman Ford's Algorithm
         https://www.youtube.com/watch?v=5eIK3zUdYmE
         O(E*K), k is the max amount of stops
