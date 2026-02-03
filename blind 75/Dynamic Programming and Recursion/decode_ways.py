@@ -2,7 +2,107 @@
 https://leetcode.com/problems/decode-ways/
 https://www.youtube.com/watch?v=W4rYz-kd-cY&list=PLQdWvigIOnscYtuD1UesE2IazI1erKh-W&index=48&ab_channel=Knapsak
 '''
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        """
+        Revisited on 1/30/2026 with a different solution than my attempt in 2023
+        backtracking,
+    
+        1012
 
+        to check whether a given number is in the boundaries
+        between A to Z,
+        it would be i + ord("A")-1, and then checking
+        whether that value is between ord("A") and ord("Z"),
+        ord("A") is 65 and ord("Z") is 90
+        for example 1 + ord("A") - 1 should be 65, which
+        is in bounds 65 <= 65 <= 90
+
+        J -> 10
+        A -> 1
+        B -> 2
+
+        if we find an invalid cur, for example
+        1 -> A
+        0 -> this is invalid, since 0 does not map to any character so we backtrack
+        10 -> this will go to the case above
+
+        this is different from knapsack, since
+        we're interested in just whether at the given
+        index, is the current value valid? (rather than
+        the current combination of values). It's a partition problem
+        rather than a knapsack
+
+        Because we cannot take more than 3 characters 
+        (since that would result in a ord(value) of greater than Z),
+        we decide at each point whether we want to take 1 or 2 characters,
+        and then check their validity
+
+        Can use memoization to optimize from exponential,
+        to O(N^2)
+
+        in the memoization state, we would need to check
+        whether at a given state index i,
+        how many ways can we partition the rest of the characters?
+        so essentially, we set memo[i] = res, where res is the 
+        amount of ways we can partition starting at index i
+
+        for example:
+        "1111"
+        if we were to partition this without memoization,
+        we would start by calculating
+        1
+        11
+        and then get to either index 1 or index 2
+        so at index 2
+        if we take 11, we're now at index 3, so we now have a value of 1
+        partition 11 , 11, so at memo[3] = 1
+        back at index 2
+        we can take 1, and be back at index 3,
+        but we already know that at memo[3] the best we can do is 1 combination,
+        so we just return 1 right away
+
+        going back to index 2
+        1 + 1 = 2, so now there are 2 ways
+        memo[2] = 2
+
+        back at index 1, once we hit index 2,
+        we can then rely on memo[2], 
+        and we don't need to recalculate the partitions again
+
+
+        """
+        N = len(s)
+        boundary1 = ord("A")
+        boundary2 = ord("Z")
+        memo = {}
+        def search(i):
+            # if we made it to the very end, that means that 
+            # we were able to successfully break down each character without running
+            # into invalid choices
+            if i == N:
+                return 1
+            if i in memo:
+                return memo[i]
+            takeOne = s[i]
+            res = 0
+            if i < N - 1:
+                takeTwo = s[i] + s[i+1]
+                # cannot accept leading zeroes
+                if takeTwo[0] == "0":
+                    return 0
+                valueTakeTwo = int(takeTwo) + boundary1 - 1
+                if boundary1 <= valueTakeTwo <= boundary2:
+                    res += search(i+2)
+            valueTakeOne = int(takeOne) + boundary1 - 1
+            if boundary1 <= valueTakeOne <= boundary2:
+                res += search(i+1)
+            memo[i] = res
+            return res
+
+        return search(0)
+        
+        
 class Solution2:
     def numDecodings(self, s: str) -> int:
         """
