@@ -4,6 +4,7 @@
  */
 var maxSubArray = function(nums) {
     /* 
+    Revisited 2/5/2026 (JS solution)
     Kadane's Algorithm 
     (similar to best time to buy or sell stock question)
     1) track the current sum, and the max sum as two variables
