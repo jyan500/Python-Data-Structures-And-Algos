@@ -10,6 +10,9 @@
  * @param {TreeNode} root
  * @return {number}
  */
+/* 
+Revisited JS version 2/6/2026
+*/
 var diameterOfBinaryTree = function(root) {
 	// you can use let as a declaration for a global variable in the recursion
 	// this is valid because when using diameter inside the helper, 
