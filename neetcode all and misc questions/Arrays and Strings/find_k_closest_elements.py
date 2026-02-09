@@ -1,7 +1,63 @@
 '''
 https://leetcode.com/problems/find-k-closest-elements/
 '''
+class Solution:
+    def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
+        """
+        2/9/2026
+        2 pointers, moving outwards
+        insert x into the list first and find its index
 
+        2 5 8 9, k = 2
+           ^ insert 6
+
+        2 5 6 8 9
+          ^   ^
+          L   R
+        compare 5 to 6, and 8 to 6
+        since 5 is closer to 6 than 8 is, move the left pointer
+
+        2 5 6 8 9
+        ^     ^
+        L     R
+        Compare 2 to 6 and 8 to 6, since 8 is closer to 6 than 2 is,
+        move the right pointer
+
+        since we already have two elements (which equals k), we return the elements
+        5, 8 
+
+        Note that because the answer needs to be in sorted order, it's necessary to
+        sort the final result as well
+
+        Time: O(N + KlogK), where K is the size of the output array
+        Space: O(K)
+        """
+        def closest(numA, numB, x):
+            return abs(numA - x) < abs(numB - x) or (abs(numA - x) == abs(numB - x) and numA < numB)
+        index = 0
+        for i in range(1, len(arr)):
+            if arr[i-1] <= x <= arr[i]:
+                index = i
+        arr = arr[:index] + [x] + arr[index:]
+        l = index - 1
+        r = index + 1
+
+        res = []
+        while (l >= 0 or r < len(arr)):
+            numA = arr[l]
+            numB = arr[r]
+            # this means numA is closer to X than numB is
+            if closest(numA, numB, x):
+                res.append(numA)
+                l -= 1
+            else:
+                res.append(numB)
+                r += 1
+            if len(res) == k:
+                break
+        return sorted(res)
+            
+        
 """
 https://leetcode.com/problems/find-k-closest-elements/discuss/1310981/Simple-Solutions-w-Explanation-or-All-Possible-Approaches-Explained!
 
