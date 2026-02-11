@@ -4,6 +4,7 @@
  */
 var countSubstrings = function(s) {
     /* 
+    Revisited on 2/10/2026 with the same solution
     Similar to the other palindromic substring problems, 
     you perform an inner while loop that checks the indices going outwards from the starting point
     for odd length palindromes, l and r start at i
