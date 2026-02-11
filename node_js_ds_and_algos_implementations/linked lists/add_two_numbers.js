@@ -11,6 +11,8 @@
  * @return {ListNode}
  */
 /*
+Revisited on 2/11/2026 with the same solution as below
+
 Approach without using extra memory:
 similar to add two strings where you pad the shorter number with zeroes
 to avoid edge cases
