@@ -7,6 +7,8 @@ class Solution {
 	/*
 	https://neetcode.io/problems/valid-tree
 
+    Revisited 2/16/2026 with the same solution
+
 	Approach:
 	1) A graph is a valid tree if:
 		- from the root (0), all other nodes are reachable
