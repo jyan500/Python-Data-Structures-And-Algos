@@ -1,3 +1,40 @@
+class Solution {
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    lengthOfLongestSubstring(s) {
+        /*
+        Revisited 2/18/2026
+        O(N) Time
+        O(N) Space
+        sliding window
+        we expand the window, keeping track of counts of each character in a hashmap until we find a duplicate
+        character
+        we decrement the left side of the window until there are no duplicate characters left, and then continue
+        expanding the right side 
+        */
+        let counter = {}
+        let l = 0
+        let res = 0
+        for (let r = 0; r < s.length; ++r){
+            if (!(s[r] in counter)){
+                counter[s[r]] = 1
+            }
+            else {
+                counter[s[r]] += 1
+            }
+            while (counter[s[r]] > 1){
+                counter[s[l]] -= 1
+                l += 1
+            }
+            res = Math.max(res, r - l + 1)
+        }
+        return res
+    }
+}
+
+
 /**
  * @param {string} s
  * @return {number}
