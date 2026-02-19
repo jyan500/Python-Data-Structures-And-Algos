@@ -32,7 +32,7 @@ class Solution {
         have between these two numbers, and check whether the values on both sides
         will match
 
-        O(N) Time
+        O(N) Time (note that finding the GCD itself is only OLog(min(A,B)))
         O(K) Space since we're creating windows of size K where K is the gcd
         */
         let longer = str1.length >= str2.length ? str1 : str2
