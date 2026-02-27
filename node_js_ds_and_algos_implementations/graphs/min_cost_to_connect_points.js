@@ -1,3 +1,108 @@
+class Solution {
+    /**
+     * @param {number[][]} points
+     * @return {number}
+     */
+    minCostConnectPoints(points) {
+        /*
+        Revisited 2/27/2026
+
+        This solution is not as efficient space-wise as the one below it,
+        since this uses actual coords as keys in the adjacency list, basically creating an O(N^2) structure
+        that stores each point and its weight to every other point in the list.
+
+        points = [[0,0], [2,2], [3,3], [2,4], [4,2]]
+        connect all the points such that
+        1) there's only one path between each pair of points
+        2) you get the minimum cost 
+
+        is this a graph problem?
+        Minimum spanning tree, connect all the points
+        with the minimum cost, same definition as above
+
+        I don't remember this off the top of my head, but Prim's or Kruskal's algorithm 
+        solves for the minimum spanning tree
+
+        in this case, the weight of an edge is the manhattan distance between the two points
+
+        we need to create an adjacency list where one point is connected with all other points
+        with the manhattan distance as a weight
+
+        Why do we check visited set twice in Prim's Algorithm (critical difference between djikstra's):
+
+        In Prim’s algorithm, the Min-Priority Queue can contain multiple entries for the same node. 
+        
+        let [coord, cost] = heap.dequeue()
+        if (visited.has(coord)){
+            continue
+        }
+        For example, if node B is connected to node A with weight 10 and node C with weight 5, 
+        both [10, B] and [5, B] might end up in the heap.
+        The heap pops [5, B] first. You mark B as visited.
+        Later, the heap pops [10, B].
+        Without this check, you would add the cost of the "worse" edge (10) to your total, 
+        even though node B is already part of your Minimum Spanning Tree (MST). 
+        This would create a cycle and give you the wrong answer.
+
+        If node nei is already in the visit set, 
+        it means it’s already part of your MST. 
+        There is no reason to add an edge leading to it back into the heap, because you know for a fact you'll just end up skipping it anyway when it pops (due to the first check we discussed).
+        By checking here, you keep the heap smaller, which saves memory and makes the pop() operations faster 
+        (since heap operations are O(Log(Heap Size))
+
+        The total time complexity is N^2 LogN
+        */
+
+        function manhattanDistance(x1, y1, x2, y2){
+            return Math.abs(x1-x2) + Math.abs(y1-y2)
+        }
+        let adjacency = {}
+        /* key: 'x1,y1' value: [['x2,y2', manhattan distance]]*/
+        for (let i = 0; i < points.length; ++i){
+            let [x1,y1] = points[i]
+            let coord1 = `${x1},${y1}`
+            adjacency[coord1] = []
+            for (let j = 0; j < points.length; ++j){
+                if (i === j){
+                    continue
+                }
+                let [x2,y2] = points[j]
+                let coord2 = `${x2},${y2}`
+                let dist = manhattanDistance(x1,y1,x2,y2)
+                adjacency[coord1].push([
+                    coord2,
+                    dist
+                ])
+            }
+        }
+        /* priority should be based on the manhattan distance */
+        let heap = new MinPriorityQueue((entry)=>entry[1])
+        let visited = new Set()
+        // arbitrary point, just select the first one
+        heap.enqueue([`${points[0][0]},${points[0][1]}`,0])
+        let N = points.length
+        let res = 0
+        /* very similar to djikstra's, but once
+        we've visited all points, we stop
+         */
+        while (visited.size < N){
+            let [coord, cost] = heap.dequeue()
+            if (visited.has(coord)){
+                continue
+            }
+            // whenever we pop off min heap, this will automatically be the min cost
+            res += cost
+            visited.add(coord)
+            for (let [neighCoord, neighCost] of adjacency[coord]){
+                if (!visited.has(neighCoord)){
+                    heap.enqueue([neighCoord, neighCost])
+                }
+            }
+        }
+        return res
+    }
+}
+
 /**
  * @param {number[][]} points
  * @return {number}
