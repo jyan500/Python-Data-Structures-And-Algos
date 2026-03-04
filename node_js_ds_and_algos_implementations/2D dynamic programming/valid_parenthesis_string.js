@@ -2,6 +2,85 @@
  * @param {string} s
  * @return {boolean}
  */
+class Solution {
+    /**
+     * @param {string} s
+     * @return {boolean}
+     */
+    checkValidString(s) {
+        /*
+        3/3/2026
+        (From Below)
+        Time: O(N^2), if the entire string was * values,
+        for each character, we'd need to consider two possibilities for each "*" character 
+        so for example, ****, each character has two possibilities, so the total is 2 * 2 * 2 * 2 = 16,
+        which is the same as 4^2. This indicates the amount of subproblems that we'd need to solve.
+        
+        Space: O(N^2), since along with each index, we're storing the current string configuration of our stack,
+        similar to a 2-D DP problem.
+
+        First instinct here is backtracking
+        when you get to an asterisk character, it branches into three different possibilities
+
+        recur(i+1, cur + [")"])
+        recur(i+1, cur + ["("])
+        # treat current character as an empty string and continue
+        recur(i+1, cur)
+
+        once you reach the last character, run the is valid parenthesis algorithm
+        on this set of characters to see if its valid
+
+        Rather than waiting until we reach the end to figure out whether we have
+        a valid combination,
+        keep track of the opening braces we have so far. Whenever we match an opening with a closing,
+        we decrement the opening braces amount.
+        However, if the opening braces amount becomes negative, that means there are too many
+        closing braces, so this is not valid.
+        
+        If the num open === 0, this is valid, we'd check this in our base case once we've recurred
+        through the whole string.
+
+        To optimize, we need to cache at at a given i, and the number of opening braces left,
+        can we create a valid parenthesis string? true/false
+        */
+        let N = s.length
+        let memo = {}
+        function search(i, numOpen){
+            /* 
+            if there are too many closing braces, we have to terminate early.
+            For example, what if you had a string of only closing braces? 
+
+            ")))"
+
+            The number of opening braces is technically zero 
+            since we never found any opening braces, but we wouldn't want to return
+            the numOpen === 0, as we know there weren't any opening braces to begin with.
+            this statement prevents this false positive!
+            */
+            let key = `${i},${numOpen}`
+            if (numOpen < 0){
+                return false
+            }
+            if (i >= N){
+                return numOpen === 0
+            }
+            if (key in memo){
+                return memo[key]
+            }
+            let flag = false
+            if (s[i] === "(" || s[i] === ")"){
+                memo[key] = search(i+1, s[i] === ")" ? numOpen - 1 : numOpen + 1)
+                return memo[key]
+            }
+            const addClosing = search(i+1, numOpen-1)
+            const addOpening = search(i+1, numOpen+1)
+            const ignore = search(i+1, numOpen)
+            memo[key] = addClosing || addOpening || ignore
+            return memo[key]
+        }
+        return search(0, 0)
+    }
+}
 
 /* 
     Note this is listed as a "greedy" problem, but personally find this much easier 
