@@ -4,6 +4,7 @@
  */
 var orangesRotting = function(grid) {
     /* 
+    Revisited 3/5/2026
     BFS, since we want to see the results of the rotting in intervals (rather than using DFS, which would only show the rotting down
     one specific "path")
 
