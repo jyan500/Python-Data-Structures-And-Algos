@@ -13,6 +13,112 @@ class Solution {
      * @param {Interval[]} intervals
      * @returns {number}
      */
+    minMeetingRooms(intervals) {
+        /*
+
+        O(NLogN) time
+        O(N) space 
+
+        [(0,40), (5,10), (15,20)]
+        sort the intervals by start time, and then by end time
+        use a min heap that holds the end time of a meeting
+        iterate through the intervals
+            [40]
+            if the end time on the heap is greater than the current start,
+                place the current meeting end time onto the heap
+                10 < 40, so places 10 on the min heap
+            [10,40]
+            20 > 10, so this means that we should pop out the end time
+            of 10 from the heap
+            however, 20 is still less than 40, so we put 20 on the min heap
+
+        at the end, there are 2 elements left on the min heap,
+        so that means 2 rooms were needed in total to schedule all meetings without conflicts
+
+        note that's its important it's:
+        if (minHeap.size() > 0 && minHeap.front() <= start){
+            minHeap.dequeue()
+        }
+
+        and not
+
+        while (minHeap.size() && minHeap.front() <= start){
+            minHeap.dequeue()
+        }
+
+        Example:
+        intervals:  [
+            Interval { start: 1, end: 5 },
+            Interval { start: 1, end: 20 },
+            Interval { start: 2, end: 6 },
+            Interval { start: 5, end: 10 },
+            Interval { start: 10, end: 15 },
+            Interval { start: 15, end: 20 }
+        ]
+
+        []
+        [ 5 ]
+        [ 5, 20 ]
+        [ 5, 6, 20 ]
+        [ 6, 10, 20 ]
+        
+        Note at this point in time, we're analyzing {start: 10, end: 15}
+        if we were to do the while loop condition, both 6, 10 and would get popped out.
+        But in reality, because 6 is already ended, and technically 10 is just ending,
+        we still need one room for {start: 10, end: 15}, and the other for {start: 5, end: 10}. 
+        The while loop condition states:
+        "two rooms freed up, so I'll reuse both"
+        but you can only sit in one chair at a time. 
+        The new meeting only needs one of those freed rooms. 
+        The other freed room still represents a room that was needed historically, 
+        and another future meeting could need it.
+
+        [ 10, 15, 20 ]
+        */
+        intervals.sort((a,b) => {
+            if (a.start < b.start){
+                return -1
+            }
+            else if (a.start > b.start){
+                return 1
+            }
+            else {
+                if (a.end < b.end){
+                    return -1
+                }
+                else if (a.end > b.end){
+                    return 1
+                }
+                return 0
+            }
+        })
+        let minHeap = new MinPriorityQueue()
+        for (let i = 0; i < intervals.length; ++i){
+            let { start, end } = intervals[i]
+            if (minHeap.size() > 0 && minHeap.front() <= start){
+                minHeap.dequeue()
+            }
+            minHeap.enqueue(end)
+        }
+        return minHeap.size()
+    }
+}
+
+/**
+ * Definition of Interval:
+ * class Interval {
+ *   constructor(start, end) {
+ *     this.start = start;
+ *     this.end = end;
+ *   }
+ * }
+ */
+
+class Solution {
+    /**
+     * @param {Interval[]} intervals
+     * @returns {number}
+     */
     /*
     Approach:
     1) In the intervals list, separate it into two separate lists, one for start times only

@@ -5,6 +5,7 @@
  */
 var combinationSum2 = function(candidates, target) {
     /*
+    revisited 3/9/2026
     because we want unique combinations, we should sort first
     candidates = [2,5,2,1,2]
     after sorting
