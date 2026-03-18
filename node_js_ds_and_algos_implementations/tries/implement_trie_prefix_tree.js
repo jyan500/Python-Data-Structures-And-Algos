@@ -1,4 +1,5 @@
 /* 
+
 Note these are function prototypes which act as classes
 When creating "methods", you can do <Name>.prototype.<Name of Method> = () => {
 	
@@ -38,6 +39,66 @@ of the word is O(1), done N times
 Space Complexity: O(N), holding N levels on the Trie depending on the amount of the characters
 
 */ 
+
+class TrieNode {
+    constructor(){
+        this.children = {}
+        this.endOfWord = false
+    }
+}
+
+class PrefixTree {
+    constructor() {
+        this.root = new TrieNode()
+    }
+
+    /**
+     * @param {string} word
+     * @return {void}
+     */
+    insert(word) {
+        let head = this.root
+        for (let char of word){
+            if (!(char in head.children)){
+                head.children[char] = new TrieNode()
+            }
+            head = head.children[char]
+        }
+        head.endOfWord = true
+    }
+
+    /**
+     * @param {string} word
+     * @return {boolean}
+     */
+    search(word) {
+        let head = this.root
+        for (let char of word){
+            if (!(char in head.children)){
+                return false
+            }
+            head = head.children[char]
+        }
+        return head.endOfWord
+    }
+
+    /**
+     * @param {string} prefix
+     * @return {boolean}
+     */
+    startsWith(prefix) {
+        let head = this.root
+        for (let char of prefix){
+            if (!(char in head.children)){
+                return false
+            }
+            head = head.children[char]
+        }
+        return true
+    }
+}
+
+/********************************************************/
 var TrieNode = function() {
     this.children = {}
     this.endOfWord = false
