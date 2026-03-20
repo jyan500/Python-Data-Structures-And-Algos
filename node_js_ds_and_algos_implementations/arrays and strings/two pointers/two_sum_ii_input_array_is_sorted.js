@@ -6,6 +6,8 @@ class Solution {
      */
     twoSum(numbers, target) {
         /*
+        Revisited 3/20/2026 with the same solution as below
+        
         Using two pointers, because the array is already sorted in ascending order,
         and we know that the first index is always less than the second,
         we can start one pointer at the left, and one pointer at the right.
