@@ -1,3 +1,59 @@
+class Solution {
+    /**
+     * @param {string} s1
+     * @param {string} s2
+     * @param {string} s3
+     * @return {boolean}
+     */
+    isInterleave(s1, s2, s3) {
+        /*
+        if the sum of characters of s1 and s2 do not equal s3,
+        we can short circuit and return false since there's no way
+        we can interleave if there's not enough characters
+        */
+        if (s1.length + s2.length < s3.length){
+            return false
+        }
+        let memo = {}
+        function search(i, j, k){
+            /*
+            determine whether s3[k] == s1[i] or s2[j]
+            if s3[k] == s1[i]
+            continue incrementing i but keep j the same
+            if s3[k] == s2[j]
+            continue incrementing j but keep i the same
+
+            (Note this also meets the case where both s3[k] == s1[i] && s3[k] == s2[j])
+            return false otherwise
+
+            base case:
+            if we reach the end of s3
+                we check whether we've also reached the end of both s1 and s2
+            
+            at each i,j,k we can memoize the result to optimize
+            */
+            let key = `${i},${j},${k}`
+            if (k >= s3.length){
+                return i >= s1.length && j >= s2.length
+            }
+            if (key in memo){
+                return memo[key]
+            }
+            let flag = false
+            if (s1[i] === s3[k]){
+                flag = flag || search(i+1, j, k+1)
+            }
+            if (s2[j] === s3[k]){
+                flag = flag || search(i, j+1, k+1)
+            }
+            memo[key] = flag
+            return flag
+        }
+
+        return search(0,0,0)
+    }
+}
+
 /**
  * @param {string} s1
  * @param {string} s2
