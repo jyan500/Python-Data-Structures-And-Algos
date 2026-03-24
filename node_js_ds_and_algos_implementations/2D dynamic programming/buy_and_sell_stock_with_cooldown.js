@@ -4,6 +4,8 @@
  */
 var maxProfit = function(prices) {
     /*
+    Revisited 3/24/2026 with the same solution as below:
+    
     keep track of two params, current day i, and boolean
     on whether you can buy stocks or not
     each time you sell, add to profit
