@@ -1,3 +1,44 @@
+class KthLargest {
+    /**
+     * @param {number} k
+     * @param {number[]} nums
+     */
+    constructor(k, nums) {
+        /* 
+        Same solution as below, revisited 4/3/2026
+        Time complexity: O(NLogN) to create the heap, but O(LogN) to add
+        use a min heap, keep adding items until length exceeds K. Then, pop out the top of the min heap
+        K will be the kth largest element at that point
+        [1 2 3 3]
+        as you initially heapify this, you can see
+        1 2 3 3, once you get to the last 3, the 1 gets dropped out
+        2 3 3
+        then you add another 3
+        2 3 3 3, the 2 gets dropped out
+         */
+        this.minHeap = new MinPriorityQueue()
+        this.k = k
+        for (let i = 0; i < nums.length; ++i){
+            this.minHeap.enqueue(nums[i])
+            if (this.minHeap.size() > k){
+                this.minHeap.dequeue()
+            }
+        }
+    }
+
+    /**
+     * @param {number} val
+     * @return {number}
+     */
+    add(val) {
+        this.minHeap.enqueue(val)
+        if (this.minHeap.size() > this.k){
+            this.minHeap.dequeue()
+        }
+        return this.minHeap.front()
+    }
+}
+
 /**
  * @param {number} k
  * @param {number[]} nums
