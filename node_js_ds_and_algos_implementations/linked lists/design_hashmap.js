@@ -1,3 +1,91 @@
+/* Revisited 4/6/2026 */
+class Node {
+    constructor(key, value, next=null){
+        this.key = key
+        this.value = value
+        this.next = next
+    }
+}
+
+class MyHashMap {
+    constructor() {
+        this.arr = []
+        this.size = 1000
+        for (let i = 0; i < this.size; ++i){
+            this.arr.push(new Node(-1, -1))
+        }
+    }
+
+    /**
+     * @param {number} key
+     * @param {number} value
+     * @return {void}
+     */
+    put(key, value) {
+        // with the fixed size of 1000, in order to fit any number
+        // of elements, have to perform the modulus to get a hash value
+        // the index bucket is always < 1000, and a given bucket stores multiple keys
+        // that all map to the same index
+        let hash = key % this.size
+        let head = this.arr[hash]
+        let prev = null
+        while (head){
+            if (head.key == key){
+                head.value = value
+                return
+            }
+            prev = head
+            head = head.next
+        }
+        // if not found, add the key, value pair
+        prev.next = new Node(key, value)
+    }
+
+    /**
+     * @param {number} key
+     * @return {number}
+     */
+    get(key) {
+        let hash = key % this.size
+        let head = this.arr[hash]
+        let found = -1
+        while (head){
+            if (head.key === key){
+                found = head.value
+                break
+            }
+            head = head.next
+        }
+        return found
+    }
+
+    /**
+     * @param {number} key
+     * @return {void}
+     */
+    remove(key) {
+        let hash = key % this.size
+        let head = this.arr[hash]
+        let prev = null
+        while (head){
+            if (head.key === key){
+                prev.next = head.next
+                return
+            }
+            prev = head
+            head = head.next
+        }
+    }
+}
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * var obj = new MyHashMap()
+ * obj.put(key,value)
+ * var param_2 = obj.get(key)
+ * obj.remove(key)
+ */
+
 /*
     Very similar to design hash set problem
 
