@@ -4,6 +4,8 @@
  */
 var merge = function(intervals) {
     /*
+    Revisited 4/7/2026
+    
     1) need to sort the intervals by start time
     2) keep track of the top of the merged intervals list (prev),
     and check whether the prev end time >= current interval start time, if so this is overlapping.
