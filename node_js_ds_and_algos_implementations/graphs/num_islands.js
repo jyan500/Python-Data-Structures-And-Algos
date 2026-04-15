@@ -2,6 +2,7 @@
  * @param {character[][]} grid
  * @return {number}
  */
+/* Revisited 4/14/2026, O(N*M) time O(N*M) space*/
 var numIslands = function(grid) {
     const inBounds = (i, j, m, n) => {
         return 0 <= i && i < m && 0 <= j && j < n
