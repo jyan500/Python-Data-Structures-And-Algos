@@ -5,6 +5,9 @@ class Solution {
      */
     stoneGame(piles) {
         /*
+        4/16/2026
+        Was able to figure this one out after recalling similarities with stone game II
+
         Dynamic Programming + Reverse Thinking
 
         you have 2 choices
