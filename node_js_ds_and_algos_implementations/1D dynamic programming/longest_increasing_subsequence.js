@@ -1,3 +1,55 @@
+class Solution {
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    lengthOfLIS(nums) {
+        /*
+        Revisited 4/20/2026
+        Simpler solution
+        dynamic programming/knapsack relation
+        We first try skipping
+        then we try taking the current element, updating the previous index
+
+        core logic:
+        res = search(i+1, j)
+        if (greater or j is undefined)
+            res = Math.max(res, 1 + search(i+1,i))
+
+        memoization, at index i,j, what is the greatest increasing subsequence i can make based on our previous element at j?
+        also we have to include the index of the last included element. Note that merely
+        putting the value of the last element won't work for recursion, as there can be 
+        duplicates of the same element
+        */
+        let N = nums.length
+        let memo = {}
+        const search = (i, j) => {
+            let key = `${i},${j}`
+            if (i === N){
+                return 0
+            }
+            if (key in memo){
+                return memo[key]
+            }
+            let take = 0 
+            // we either skip the current element, OR we take (thus increasing the count by 1)
+            // and we want to take the MAX between these two so we know whether it's better
+            // to take or skip at this step to produce the greatest increasing subsequence
+            let res = search(i+1, j)
+            // we only perform the Max() if the current number is greater than the previous,
+            // and if we have choice of taking or skipping
+            if (j === -1 || nums[i] > nums[j]){
+                take = 1+search(i+1,i)
+                res = Math.max(take, res)
+            }
+
+            memo[key] = res
+            return memo[key]
+        }
+        return search(0, -1)
+    }
+}
+
 /**
  * @param {number[]} nums
  * @return {number}
