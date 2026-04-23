@@ -1,3 +1,70 @@
+class Solution {
+    /**
+     * @param {number} n
+     * @return {boolean}
+     */
+    isHappy(n) {
+        /*
+        4/22/2026
+        Slightly cleaner solution, still O(KLogN), where K is the amount of iterations before terminating,
+        and floor(logN) represents the number of digits of n
+        222
+
+        2^2 + 2^2 + 2^2 = 4 + 4 + 4 = 12
+
+        12 -> 1^2 + 2^2 = 1 + 4 = 5
+
+        5 -> 5^2 = 25
+
+        25 -> 2^2 + 5^2 = 4 + 25 = 29
+
+        29 -> 2^2 + 9^2  = 4 + 81 = 85 
+
+        8^2 + 5^2 = 64 + 25 = 89 *** note this number here
+
+        8^2 + 9^2 = 64 + 81 = 145
+
+        1^2 + 4^2 + 5^2 = 1 + 16 + 25 = 17 + 25 = 42
+
+        4^2 + 2^2 = 16 + 4 = 20
+
+        2^2 = 4
+
+        4^2 = 16
+
+        1^2 + 6^2 = 1 + 36 = 37
+
+        3^2 + 7^2 = 9 + 49 = 58
+
+        5^2 + 8^2 = 25 + 64 = 89
+
+        Note that 89 has already been seen! so we know that we are going into a cycle
+
+        */
+        function sumSquareOfDigits(num){
+            // iterate through the digits
+            let cur = num
+            let sum = 0
+            while (cur > 0){
+                let lastDigit = cur % 10
+                sum += (lastDigit ** 2)
+                cur = Math.floor(cur/10)
+            }
+            return sum
+        }
+        let visited = new Set()
+        let cur = n
+        while (cur !== 1){
+            cur = sumSquareOfDigits(cur)
+            if (visited.has(cur)){
+                return false
+            }
+            visited.add(cur)
+        }
+        return true
+    }
+}
+
 /**
  * @param {number} n
  * @return {boolean}

@@ -1,3 +1,59 @@
+// class Node {
+//   constructor(val, next = null, random = null) {
+//       this.val = val;
+//       this.next = next;
+//       this.random = random;
+//   }
+// }
+
+class Solution {
+    /**
+     * @param {Node} head
+     * @return {Node}
+     */
+    copyRandomList(head) {
+        let temp = head
+        /* 
+            4/23/2026
+            This is a much cleaner solution than the original that I came up with:
+
+            map the old node reference to its new node reference 
+            after we've created all new nodes to match their old nodes,
+            we iterate through the old nodes once more
+                and then determine what the next and random pointers to the new nodes
+                are based on the references of the old nodes
+            
+            Important NOTE: use new Map() instead of a regular object, since regular objects
+            will coerce the node references into strings instead of keeping them as their 
+            actual references in memory. This would cause the object to constantly overwrite
+            the same key over and over since they all coerce to "[Object object]" instead
+            of the actual reference
+        */
+        let oldToNew = new Map()
+        oldToNew.set(null,null)
+        while (temp){
+            let newNode = new Node(temp.val, null, null)
+            oldToNew.set(temp, newNode)
+            temp = temp.next
+        }
+        temp = head
+        let res = new Node()
+        let dummy = res
+        while (temp){
+            let copy = oldToNew.get(temp)
+            // after retrieving the new node based on the old,
+            // set the next pointer for the new node by matching the old pointers' next 
+            copy.next = oldToNew.get(temp.next)
+            // set the random pointer for the new node by matching the old pointers' random 
+            copy.random = oldToNew.get(temp.random)
+            dummy.next = copy
+            dummy = dummy.next
+            temp = temp.next
+        }
+        return res.next
+    }
+}
+
 /**
  * // Definition for a Node.
  * function Node(val, next, random) {
