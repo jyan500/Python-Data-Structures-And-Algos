@@ -1,3 +1,75 @@
+class Solution {
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    findMin(nums) {
+        /*
+        Revisited 4/24/2026 with while loop solution
+
+        Need to find the inflection point, since in un-rotated arrays,
+        the right side is always greater, and the left side is always less
+        than the current number
+        however, in the rotated array, there's a certain point where
+        in the inflection, the left side suddenly becomes greater, and the
+        right side is also greater
+        for example,
+        [3,4,5,6,1,2], 1 would be the inflection point, since 
+        3 is greater than 1, and 2 is greater than 1 as well
+
+        use binary search to find the inflection point
+
+        l = 0
+        r = 5
+        mid = 5//2 = 2
+        nums[2]
+
+        note that nums[5] < nums[2] (2 < 5), so search the right side
+        l = 2 + 1 = 3
+
+        l = 3
+        r = 5
+
+        mid = 3 + (5-3)//2 = 3 + 1 = 4
+        nums[4] = 1
+        note here that nums[5] is actually greater than nums[4], so we search left
+        2 > 1
+
+        r = 4
+        l = 3
+        mid = 3 + (4-3) = 4//2 = 2
+
+        nums[r] < nums[mid], nums[4] < nums[2] = 1 < 5
+        search right side again
+
+        l = mid + 1 = 4
+        now l is no longer less than r, so the while loop breaks
+
+        so we return nums[l]
+        */
+        const findInflectionPoint = () => {
+            let l = 0
+            let r = nums.length - 1
+            while (l < r){
+                let mid = l + Math.floor((r-l)/2)
+                // search right side, since in normal array, nums[r] should be greater than mid, and not less
+                if (nums[r] < nums[mid]){
+                    l = mid + 1
+                }
+                else {
+                    // unlike most binary search problems, you need to include mid as the right boundary
+                    // when searching the left side. This is because there are cases where mid might 
+                    // be the minimum we're looking for
+                    r = mid
+                }
+            }
+            return nums[l]
+        }
+        let inflectionPoint = findInflectionPoint()
+        return inflectionPoint
+    }
+}
+
 /**
  * @param {number[]} nums
  * @return {number}
