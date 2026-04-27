@@ -1,3 +1,47 @@
+class Solution {
+    /**
+     * @param {number[]} gas
+     * @param {number[]} cost
+     * @return {number}
+     */
+    canCompleteCircuit(gas, cost) {
+        /*
+        brute force solution O(N^2) time solution is to 
+        try starting at each index i and then running the simulation
+        to see if you run out of gas at any point.
+
+        include mod logic since gas.length - 1 is connected to gas station 0,
+        for example
+        [1,2,3,4], once k reaches index 4, mod 4 would be 0, which sets it back to the first station,
+        so we can just continually increase k without worrying about going out of bounds
+     
+        */
+        for (let i = 0; i < gas.length; ++i){
+            // start at gas station i and run the simulation 
+            let k = i
+            let totalGas = 0
+            while (true){
+                // break out of the loop if we ran out of gas
+                if (totalGas < 0){
+                    break
+                }
+                totalGas += gas[k % gas.length]
+                // assuming k > i (which means we travelled at least one station above where we were before)
+                // continually increase k and mod so that at the index
+                // will reset back to 0 every time we're at an index that's divisible by 
+                // the length of the array
+                if (k > i && (k % gas.length) === i){
+                    // this means we've made one full circle
+                    return i
+                }
+                totalGas -= cost[k % gas.length]
+                ++k
+            }
+        }
+        return -1
+    }
+}
+
 /**
  * @param {number[]} gas
  * @param {number[]} cost
