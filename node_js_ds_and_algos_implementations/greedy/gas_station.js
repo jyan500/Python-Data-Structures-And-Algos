@@ -6,6 +6,7 @@ class Solution {
      */
     canCompleteCircuit(gas, cost) {
         /*
+        4/27/2026
         brute force solution O(N^2) time solution is to 
         try starting at each index i and then running the simulation
         to see if you run out of gas at any point.
