@@ -4,6 +4,7 @@
  */
 var sortArray = function(nums) {
     /*
+    Revisited 4/29/2026
     merge sort
     O(NLogN) Time
     O(N) space
