@@ -1,3 +1,66 @@
+class Solution {
+    /**
+     * @param {string} s
+     * @return {string[][]}
+     */
+    partition(s) {
+        /*
+        Revisited 5/5/2026
+        for cases like abbab, I think you'd need dynamic programming because
+        because there's not a consistent looping pattern that would get you:
+        [a] [bb] [a] [b]
+
+        at a given i, we can either
+        take the current element and continue our partition OR
+        start a new partition
+
+        Time: O(N*2^N), exponential since we have two choices (either continue the partition or start a new one),
+        and then we need to check at each step, whether the substring is palindromic, which is O(N)
+
+        Space: O(N)
+
+        */
+        const isValidPalindrome = (p) => {
+            let l = 0
+            let r = p.length - 1
+            while (l <= r){
+                if (p[l] !== p[r]){
+                    return false
+                }
+                ++l
+                --r
+            }
+            return true
+        }
+        let partitions = []
+        const search = (i, j, partition) => {
+            if (j > s.length){
+                // we only add if the partition if we just finished completing a partition,
+                // meaning the start of the substring === end of the substring
+                // this helps prevent duplicates or incomplete partitions if we got here
+                // through the "skip" recursive case
+                if (i === j){
+                    partitions.push(partition)                
+                }
+                return
+            }
+            let curPartition = []
+            let curSlice = s.slice(i, j+1)
+            if (curSlice.length > 0 && isValidPalindrome(curSlice)){
+                curPartition = [...partition, curSlice]
+                // add to the current partition and reset the partition by setting the starting
+                // index to j+1
+                search(j+1, j+1, curPartition)
+            }
+            // OR don't add to the current partition and just
+            // increment j + 1 to continue the substring
+            search(i, j+1, partition)
+        }
+        search(0, 0, [])
+        return partitions
+    }
+}
+
 /*
 Neetcode solution:
 Time Complexity: O(n*(2^n))
