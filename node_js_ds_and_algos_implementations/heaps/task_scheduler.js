@@ -4,6 +4,7 @@
  * @return {number}
  */
 /*
+Revisited 5/6/2026
 
 Data Structures:
 1) Use a hash map to store the counts of each task
