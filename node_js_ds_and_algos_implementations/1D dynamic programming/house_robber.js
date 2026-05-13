@@ -4,6 +4,7 @@
  */
 var rob = function(nums) {
     /*
+    Revisited 5/13/2026
     recurrence relation:
     at any given house i, the robber can rob
     i or skip i and rob i + 1
