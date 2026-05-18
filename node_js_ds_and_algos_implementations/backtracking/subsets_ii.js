@@ -1,3 +1,56 @@
+class Solution {
+    /**
+     * @param {number[]} nums
+     * @return {number[][]}
+     */
+    subsetsWithDup(nums) {
+        /*
+        Revisited 5/18/2026
+        knapsack
+        either take the current element
+        or skip
+
+        to avoid duplicates:
+        sort the input list first
+        pay attention to the index to make sure
+        we don't revisit 
+        [1,2,1] => [1,1,2]
+        to avoid duplicates
+        if we pick 1 1 2
+        at first we do the "pick" case normally
+        when we get to the "skip" case,
+        we need to figure out the index we should skip
+
+        when going back to 
+        1 1, we have the option of skipping 1
+        so then we get 1 2
+
+
+        */
+        let results = []
+        let N = nums.length
+        nums.sort()
+        const search = (i, cur) => {
+            if (i >= N){
+                results.push(cur)
+                return
+            }
+            // take as normal on subset 1
+            search(i+1, [...cur, nums[i]])
+            // skip, but on the skip case
+            // we check until we get a different value
+            // so we get a different subset
+            let k = i
+            while (nums[k] === nums[i]){
+                k++
+            }
+            search(k, cur)
+        }
+        search(0, [])
+        return results
+    }
+}
+
 /**
  * @param {number[]} nums
  * @return {number[][]}
