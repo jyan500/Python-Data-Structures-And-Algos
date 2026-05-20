@@ -1,3 +1,45 @@
+class Solution {
+    /**
+     * @param {string} s
+     * @return {string}
+     */
+    longestPalindrome(s) {
+        // revisited 5/20/2026
+        // for each character, set two pointers starting at given index
+        // and move them outwards
+        // for even length palindromes, start l = i, r = i + 1
+        // for odd numbered, start l = i, r = i
+        let curLength = 0
+        let res = ""
+        for (let i = 0; i < s.length; ++i){
+            // find odd length
+            let l1 = i
+            let r1 = i
+            while (l1 >= 0 && r1 < s.length && s[l1] === s[r1]){
+                --l1
+                ++r1
+            }
+            let l2 = i
+            let r2 = i+1
+            while (l2 >= 0 && r2 < s.length && s[l2] === s[r2]){
+                --l2
+                ++r2
+            }
+            let oddLength = r1-l1-1
+            let evenLength = r2-l2-1
+            if (oddLength > evenLength && oddLength > curLength){
+                res = s.slice(l1+1,r1)
+                curLength = oddLength
+            }
+            else if (oddLength < evenLength && evenLength > curLength) {
+                res = s.slice(l2+1, r2)
+                curLength = evenLength
+            }
+        }
+        return res
+    }
+}
+
 /**
  * @param {string} s
  * @return {string}
