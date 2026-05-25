@@ -54,6 +54,7 @@ var jump = function(nums){
     return res
 }
 /* 
+Revisited on 5/25/2026 with the same solution
 Top Down Solution:
 Time: O(N^2)
 Space: O(N)
