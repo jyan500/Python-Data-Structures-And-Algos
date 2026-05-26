@@ -3,6 +3,7 @@
  * @return {number[]}
  */
 var productExceptSelf = function(nums) {
+    /* Revisited 5/26/2026 */
     let prefix = nums.map(x=>x)
     let suffix = nums.map(x=>x)
     let res = nums.map(x=>x)
