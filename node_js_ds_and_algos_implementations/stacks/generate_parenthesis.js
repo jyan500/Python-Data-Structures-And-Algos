@@ -1,3 +1,53 @@
+class Solution {
+    /**
+     * @param {number} n
+     * @return {string[]}
+     */
+    generateParenthesis(n) {
+        /*
+        given n,
+        you need n opening parenthesis and n closing parenthesis present
+        to be considered a valid string of parenthesis
+
+        if you add an opening
+        (
+         in the next spot, you can add either another opening or closing 
+
+        if there are more opening braces than closing braces (and there are still closing braces available), 
+        you can add a closing brace
+
+        example execution:
+        n = 3
+        ((())) is the first one that's found (since we continually pick opening braces, then closing braces)
+        (( - in this case, we have 2 openings and 0 closings, so the amount of openings > amount of closings, so we can add a closing brace
+        (() - now at this step, we have 2 openings and 1 closing, we have the choice of adding an opening brace, or a closing brace,
+
+      (()( - adds opening, this is valid -> branches into another recursion tree
+      (()) - adds closing, this is also valid -> branches into another recursion tree
+        */
+
+        let res = []
+        const search = (numOpen, numClose, cur) => {
+            if (numOpen === n && numClose === n){
+                res.push(cur.join(""))
+                return
+            }
+            // always try adding an opening brace first
+            if (numOpen < n){
+                search(numOpen+1, numClose, [...cur, "("])
+            }
+            // add closing if the amount of opening braces is greater than the amount of closing
+            // and there are still closing braces
+            if (numOpen > numClose && numClose < n){
+                search(numOpen, numClose+1, [...cur, ")"])
+            }
+        }
+        search(0,0, [])
+        return res
+
+    }
+}
+
 /**
  * @param {number} n
  * @return {string[]}
