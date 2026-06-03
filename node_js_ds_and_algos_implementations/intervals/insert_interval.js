@@ -1,3 +1,65 @@
+class Solution {
+    /**
+     * @param {number[][]} intervals
+     * @param {number[]} newInterval
+     * @return {number[][]}
+     */
+    insert(intervals, newInterval) {
+        /*
+        Revisited 6/3/2026
+        sort the intervals
+        first, find the insertion point where the interval should go based on its starting time
+        then, perform the merge intervals algorithm in the case the interval is overlapping
+        with previous intervals in the list 
+        */
+        if (!intervals.length){
+            return [newInterval]
+        }
+
+        intervals.sort((a,b) => {
+            if (a[0] < b[0]) {
+                return -1
+            }
+            else if (a[0] > b[0]){
+                return 1
+            }
+            return 0
+        })
+        let k = 0
+        let newIntervals = [...intervals]
+        let inserted = false
+        while (k < intervals.length){
+            // if the new interval is less than the current start,
+            // insert the new interval here
+            if (newInterval[0] < newIntervals[k][0]){
+                newIntervals.splice(k, 0, newInterval)
+                inserted = true
+                break
+            }
+            ++k
+        }
+        // if the new interval was not inserted, that means it should've been inserted in the final
+        // spot since it has a start time that's greater than the latest start time in the lsit
+        if (!inserted){
+            newIntervals.push(newInterval)
+        }
+        let merged = [newIntervals[0]]
+        for (let i = 1; i < newIntervals.length; ++i){
+            let [curStart, curEnd] = newIntervals[i]
+            let [prevStart, prevEnd] = merged[merged.length-1]
+            // if the prevEnd > currentStart, this is overlapping
+            if (prevEnd >= curStart){
+                // merge
+                merged[merged.length-1] = [Math.min(prevStart, curStart), Math.max(prevEnd, curEnd)]
+            }
+            else {
+                merged.push(newIntervals[i])
+            }
+        }
+        return merged
+    }
+}
+
 /**
  * @param {number[][]} intervals
  * @param {number[]} newInterval
