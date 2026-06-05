@@ -4,6 +4,7 @@
  */
 var minCostClimbingStairs = function(cost) {
     /*
+    Revisited 6/5/2026 with the same solution
     Time Complexity:
     With memoization, it's O(N),
     with the cost of O(N) space
