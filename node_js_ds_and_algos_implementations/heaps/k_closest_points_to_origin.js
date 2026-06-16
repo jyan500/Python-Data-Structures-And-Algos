@@ -1,28 +1,35 @@
-/**
- * @param {number[][]} points
- * @param {number} k
- * @return {number[][]}
- */
-/*
-Approach:
-1) Use a min heap since you want the smallest distances to be at the front of the heap
-for javascript, you want to specify that you want to take in an object,
-and that the priority should be based on a certain attribute of the object (in this case distance)
-2) Calculate the distance of each point to (0, 0) using Math.sqrt(x1**2 + y1**2)
-3) Enqueue an object into the min priority queue using { distance, point }
-4) Pop k times and save to array to get the k closest points to the origin based on the smallest distance
-*/
-var kClosest = function(points, k) {
-    let minHeap = new MinPriorityQueue({priority: (points) => points.distance})
-    for (let [x1, y1] of points){
-        let distance = Math.sqrt(Math.abs(x1**2 + y1**2))
-        minHeap.enqueue({distance: distance, point: [x1,y1]})
+class Solution {
+    /**
+     * @param {number[][]} points
+     * @param {number} k
+     * @return {number[][]}
+     */
+    kClosest(points, k) {
+        /*
+        min heap problem
+        store the coordinates as well as their euclidean distance in an object
+        push onto the min heap
+        then pop off k times 
+
+        Time: O(NLogN + KLogN) -> kLogN when dequeing k times, NLogN when enqueing each element
+        Space: O(N)
+        */
+        let minHeap = new MinPriorityQueue((x) => x.distance)
+        let distances = []
+        for (let [x,y] of points){
+            // technically, you don't need the sqrt since we're only comparing relative distances, 
+            // and don't care what the actual distance value is
+            // let dist = Math.sqrt(x**2 + y**2)
+            let dist = x**2 + y**2
+            minHeap.enqueue({
+                distance: dist, x, y
+            })
+        }
+        let res = []
+        for (let i = 0; i < k; ++i){
+            let {distance,x,y} = minHeap.dequeue()
+            res.push([x,y])
+        }
+        return res
     }
-    let res = []
-    for (let i = 0; i < k; ++i){
-        let {point} = minHeap.dequeue().element      
-        res.push(point)
-    }
-    return res
-    
-};
+}
