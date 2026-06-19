@@ -3,6 +3,47 @@
  * @param {number} k
  * @return {number[]}
  */
+/* 
+Revisited 6/19/2026 with a min heap solution
+*/
+class Solution {
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number[]}
+     */
+    topKFrequent(nums, k) {
+        /* 
+        because we only need the top k elements,
+        the most efficient way (both time and space wise),
+        is to keep a min heap actually,
+        so that whenever we add a new element to the heap
+        and it reorders itself, the minimum goes to the top
+        if we exceed k, we just pop from the top
+        so the final answer is just whatever is left in the min heap at the end
+        */
+        let minHeap = new MinPriorityQueue((priority) => priority.amount)
+        let counter = {}
+        for (let i = 0; i < nums.length; ++i){
+            counter[nums[i]] = nums[i] in counter ? counter[nums[i]] + 1 : 1
+        }
+        for (let key of Object.keys(counter)){
+                minHeap.enqueue({
+                    amount: counter[key],
+                    key: key
+                })
+            if (minHeap.size() > k){
+                minHeap.dequeue()
+            }
+        }
+        let res = []
+        for (let i = 0; i < k; ++i){
+            let { amount, key } = minHeap.dequeue()
+            res.push(key)
+        }
+        return res
+    }
+}
 
 /* 
 Bucket Sort Concept can solve this in O(N) time without needing to do heapify or sort 
