@@ -11,7 +11,9 @@
  * @return {boolean}
  */
 var isBalanced = function(root) {
-    /* balanced Binary Tree = the difference in height between subtrees 
+    /* 
+    Revisited 6/23/2026
+    balanced Binary Tree = the difference in height between subtrees 
     cannot be greater than 1 
     starting from the bottom of the tree, we calculate the height of each subtree
     we check if the height difference is ever greater than 1, otherwise we set
