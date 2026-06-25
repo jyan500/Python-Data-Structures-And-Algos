@@ -1,3 +1,49 @@
+class Solution {
+    /**
+     * @param {number[]} coins
+     * @param {number} amount
+     * @return {number}
+     */
+    coinChange(coins, amount) {
+        /*
+        Revisited: 6/25/2026
+        backtracking
+        coins = [1,5,10] amount = 12
+        you can pick 12 "1" cent coins
+        you can pick 7 "1" cent coins and 1 "5" cent coin
+
+        Time: O(N)
+        Space: O(N)
+
+        */
+        // goal is to decrease the total amount to 0
+        let memo = {}
+        const search = (total) => {
+            // base case: if the total is 0, it takes 0 coins
+            if (total === 0){
+                return 0
+            }
+            // if we already know the smallest amount of coins needed
+            // to make the remaining amount, just return it
+            if (total in memo){
+                return memo[total]
+            }
+            let cur = Number.POSITIVE_INFINITY
+            for (let i = 0; i < coins.length; ++i){
+                // if you can choose this coin
+                if (total - coins[i] >= 0){
+                    // recursive case, adds one coin to the total amount
+                    cur = Math.min(cur, 1 + search(total-coins[i]))
+                }
+            }
+            memo[total] = cur
+            return memo[total]
+        } 
+        let res = search(amount)
+        return res !== Number.POSITIVE_INFINITY ? res : -1
+    }
+}
+
 /**
  * @param {number[]} coins
  * @param {number} amount
