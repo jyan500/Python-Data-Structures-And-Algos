@@ -4,6 +4,7 @@
  */
 var maxProfit = function(prices) {
     /*
+    Revisited 6/26/2026
     https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
     
     if reaching a buying point that's lower
