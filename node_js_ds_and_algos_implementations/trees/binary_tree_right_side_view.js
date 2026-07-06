@@ -1,5 +1,55 @@
 /**
  * Definition for a binary tree node.
+ * class TreeNode {
+ *     constructor(val = 0, left = null, right = null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+class Solution {
+    /**
+     * @param {TreeNode} root
+     * @return {number[]}
+     */
+    rightSideView(root) {
+        /*
+        level order traversal using BFS
+        but at each level, only take the very last element into the result 
+
+        More optimal solution that uses less memory per level:
+        just save the very last element in a variable, so by default, we overwrite the variable
+        within each level and only the very last iteration gets saved, that becomes the right side
+        */
+        if (!root){
+            return []
+        }
+        let q = []
+        q.push(root)
+        let res = []
+        while (q.length){
+            let N = q.length
+            let rightSide = null
+            for (let i = 0; i < N; ++i){
+                let cur = q.shift()
+                if (cur.left){
+                    q.push(cur.left)
+                }
+                if (cur.right){
+                    q.push(cur.right)
+                }
+                rightSide = cur.val
+            }
+            res.push(rightSide)
+        }
+        return res
+    }
+}
+
+/**
+ * Definition for a binary tree node.
  * function TreeNode(val, left, right) {
  *     this.val = (val===undefined ? 0 : val)
  *     this.left = (left===undefined ? null : left)
