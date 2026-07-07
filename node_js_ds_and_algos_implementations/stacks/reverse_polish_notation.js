@@ -1,3 +1,43 @@
+class Solution {
+    /*
+    Revisited 7/7/2026
+    Cleaner solution using math.trunc to always round the number closer to 0 if its a decimal
+    (regardless of whether its positive or negative)
+    */
+    /**
+     * @param {string[]} tokens
+     * @return {number}
+     */
+    evalRPN(tokens) {
+        let stack = []
+        let operators = ["+", "-", "/", "*"]
+        for (let i = 0; i < tokens.length; ++i){
+            if (operators.includes(tokens[i])){
+                let num1 = stack.pop()
+                let num2 = stack.pop()
+                if (tokens[i] === "+"){
+                    stack.push(num2 + num1)
+                }
+                if (tokens[i] === "-"){
+                    stack.push(num2 - num1)
+                }
+                if (tokens[i] === "/"){
+                    // remove the decimal portion with Math.trunc and moves the number
+                    // closer to 0
+                    stack.push(Math.trunc(num2/num1))    
+                }
+                if (tokens[i] === "*"){
+                   stack.push(num2 * num1) 
+                }
+            }
+            else {
+                stack.push(Number(tokens[i]))
+            }
+        }
+        return stack[0]
+    }
+}
+
 /**
  * @param {string[]} tokens
  * @return {number}
