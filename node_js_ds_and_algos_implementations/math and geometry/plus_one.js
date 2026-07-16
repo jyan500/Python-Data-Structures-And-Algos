@@ -1,3 +1,41 @@
+class Solution {
+    /**
+     * @param {number[]} digits
+     * @return {number[]}
+     */
+    plusOne(digits) {
+        // revisited 7/16/2026
+        let carryover = 0
+        // if the last digit is 9, there will be carryover
+        if (digits[digits.length-1] === 9){
+            let i = digits.length-1
+            // here, we assume that we add "plus one", so since we're starting from 
+            // the last element, we can just assume a carryover of 1 to simulate that
+            let carryover = 1
+            while (i >= 0){
+                let res = digits[i] + carryover
+                if (res >= 10){
+                    carryover = 1
+                    digits[i] = res - 10
+                    --i
+                }
+                else {
+                    digits[i] = res
+                    carryover = 0
+                    break
+                }
+            }
+            if (carryover === 1){
+                digits.unshift(1)
+            }
+        }
+        else {
+            digits[digits.length-1] += 1
+        }
+        return digits
+    }
+}
+
 /**
  * @param {number[]} digits
  * @return {number[]}
