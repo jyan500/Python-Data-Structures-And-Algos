@@ -2,8 +2,9 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
-// O(N!) time complexity, since N! is the number of permutations available
-// O(N) Space
+// Revisited 7/17/2026 with the same solution (updated time and space complexity)
+// O(N*N!) time complexity, since N! is the number of permutations available, and we're doing O(N) work of slicing the arrays per recursive call
+// O(N*N!) Space
 var permute = function(nums) {
     let res = []
     var search = function(selection, cur){
