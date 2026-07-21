@@ -4,6 +4,52 @@ class Solution {
      * @return {number}
      */
     longestConsecutive(nums) {
+        /* 
+        Revisited 7/21/2026
+        In a consecutive sequence,
+        each number must be +1 or -1 from each other
+
+        Using a set,
+        we are looking for the starting element,
+        where if the number - 1 does not exist in the set, it must be a starting element
+        for a sequence
+
+        Slight optimization:
+        you can actually iterate over the lookup set instead of the raw elements in the array,
+        because of cases like so:
+        [1,1,1,1,2,3,4,5],
+
+        if you iterate over the raw array, you'd end up re-running the while loop
+        on each "1" element
+
+        This is still O(N) if you iterate over the set, because
+        the while loop would only run at most once per unique element,
+        which is bounded by N
+        */
+        const lookup = new Set([...nums])
+        let res = 0
+        for (let element of lookup){
+            // if the number - 1 does not exist, this is a starting element
+            if (!lookup.has(element - 1)){
+                let cur = element
+                let curLength = 0
+                while (lookup.has(cur)){
+                    ++curLength
+                    ++cur
+                }
+                res = Math.max(curLength, res)
+            } 
+        }
+        return res
+    }
+}
+
+class Solution {
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    longestConsecutive(nums) {
         /*
         Revisited 9/24/2024
         the trick is realizing that in a consecutive sequence,
