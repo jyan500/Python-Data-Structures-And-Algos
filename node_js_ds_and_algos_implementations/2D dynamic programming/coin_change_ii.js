@@ -1,3 +1,58 @@
+class Solution {
+    /**
+     * @param {number} amount
+     * @param {number[]} coins
+     * @return {number}
+     */
+    change(amount, coins) {
+        /*
+        Revisited 7/27/2026 with a different, but less efficient solution
+        O(amount * coins.length^2), because
+        you are doing O(coins.length) amount of work in each recursive call due to the inner for loop
+
+        DP
+        distinct combinations
+        in order to prevent previous elements from being chosen, we pass along
+        the starting index k in the recursion, and then start the loop at k so we don't
+        start back from index 0 again,
+        (i.e we're picking index 1, but we want to prevent index 0 from being chosen
+        in order to avoid a duplicate, since we would've already found that combination
+        when starting at index 0,
+        for example 1,2,3, amount = 4, we can choose 1,1,2, but when have 2 at the starting point,
+        we want to prevent picking "1", such as 2,1,1)
+
+        To memoize, you would need to account for the total and k (the last index picked),
+        since there can be cases where you have the same total, as well as the last index picked,
+        and would be doing redudant work without memoization. For example,
+        if the amount is 8 and coins = [1,2,3]
+        could you have 1,1,1,1,2
+        and 2,2,2
+        both sum to 6 and have their last index picked as index = 1
+        anything else done after that point to reach the total 8 is the same on both paths,
+        so it makes sense to memoize them.
+        */
+        let memo = {}
+        const search = (total, k) => {
+            if (total === 0){
+                return 1
+            }
+            let key = `${total},${k}`
+            if (key in memo){
+                return memo[key] 
+            }
+            let res = 0
+            for (let i = k; i < coins.length; ++i){
+                if (total - coins[i] >= 0){
+                    res += search(total - coins[i], i)
+                }
+            }
+            memo[key] = res
+            return res
+        }
+        return search(amount, 0)
+    }
+}
+
 /**
  * @param {number} amount
  * @param {number[]} coins

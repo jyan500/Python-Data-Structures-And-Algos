@@ -1,3 +1,71 @@
+class MinStack {
+    constructor() {
+        /* 
+        Revisited 7/26/2026
+        (slightly different logic for pushing onto the min stack but the same outcome)
+        you want to use 2 stacks
+        one of them only stores the absolute min at each moment,
+        so the moment we find a min that's smaller, than we add to that stack
+        If it's not smaller, we don't add it
+        That way, we know the absolute min at any point,
+        as well as the actual ordering of the elements for normal push/pop functions
+
+        The only question is that how do we know we've removed all instances of an element?
+        so that it can be removed from the min stack?
+
+        Actually refining the top rule above, if we push to the min stack if its <= min (rather
+        than strictly smaller), we can also track the potential duplicates, so that way when popping,
+        if top of the regular stack == top of min stack, we pop from both
+
+        Pop/top/getmin will always be called on non-empty stacks, so don't need to add the checks there,
+        otherwise, you'd just check the length before performing any of these functions
+
+        */
+        this.minStack = []
+        this.stack = []
+    }
+
+    /**
+     * @param {number} val
+     * @return {void}
+     */
+    push(val) {
+        if (this.minStack.length > 0){
+            if (val <= this.minStack[this.minStack.length-1]){
+                this.minStack.push(val)
+            }
+            this.stack.push(val)
+        }
+        else {
+            this.minStack.push(val)
+            this.stack.push(val)
+        }
+    }
+
+    /**
+     * @return {void}
+     */
+    pop() {
+        if (this.stack[this.stack.length-1] === this.minStack[this.minStack.length-1]){
+            this.minStack.pop()
+        }
+        this.stack.pop()
+    }
+
+    /**
+     * @return {number}
+     */
+    top() {
+        return this.stack[this.stack.length-1]
+    }
+
+    /**
+     * @return {number}
+     */
+    getMin() {
+        return this.minStack[this.minStack.length-1]
+    }
+}
 
 var MinStack = function() {
     this.stack = []
