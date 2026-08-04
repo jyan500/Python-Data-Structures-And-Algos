@@ -4,6 +4,7 @@
  * @return {number}
  */
 /*
+Revisited 8/4/2026
 Time Complexity:
 using the mathemetical trick of the even numbered powers,
 this is reduced to O(LogN), since the number of recursive calls at each even number
