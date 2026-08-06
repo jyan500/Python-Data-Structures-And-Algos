@@ -1,3 +1,43 @@
+class Solution {
+    /**
+     * @param {number} m
+     * @param {number} n
+     * @return {number}
+     */
+    uniquePaths(m, n) {
+        /* 
+        Revisited 8/6/2026
+        Same solution as below with memoization O(N*M) time and space, but you actually don't need a visited set
+        because we're not going to be stuck in a loop since we can only go right or down, and not left/up
+        */
+        let directions = [[0, 1], [1, 0]]
+        const inBounds = (i, j) => {
+            return 0 <= i && i < m && 0 <= j && j < n
+        }
+        let memo = {}
+        const dfs = (i, j) => {
+            let key = `${i},${j}`
+            if (i === m - 1 && j === n - 1){
+                return 1
+            }
+            if (key in memo){
+                return memo[key]
+            }
+            let paths = 0
+            for (let [x,y] of directions){
+                let newX = x + i
+                let newY = y + j
+                if (inBounds(newX, newY)){
+                    paths += dfs(newX, newY)
+                }
+            }
+            memo[key] = paths
+            return paths
+        }
+        return dfs(0,0)
+    }
+}
+
 /**
  * @param {number} m
  * @param {number} n
