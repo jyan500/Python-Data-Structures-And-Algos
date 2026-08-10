@@ -1,3 +1,24 @@
+class Solution {
+    /**
+     * @param {string[]} strs
+     * @return {string[][]}
+     */
+    groupAnagrams(strs) {
+        /* 
+        Revisited using Map() on 8/10/2026
+        sort the letters in the string to create consistent key
+        */
+        let grouping = new Map()
+        strs.forEach((str) => {
+            let key = [...str].toSorted().join("")
+            let group = grouping.get(key) ?? []
+            group.push(str)
+            grouping.set(key, group)
+        })
+        return [...grouping.values()]
+    }
+}
+
 /**
  * @param {string[]} strs
  * @return {string[][]}
