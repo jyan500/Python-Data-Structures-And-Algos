@@ -34,6 +34,7 @@ returns the min window size of 2
 """
 class Solution:
     # Revisited 8/1/2025
+    # Revisited 8/11/2026
     def minSubArrayLen(self, target: int, nums: List[int]) -> int:
         currentSum = 0
         minCurrentLength = float("inf")

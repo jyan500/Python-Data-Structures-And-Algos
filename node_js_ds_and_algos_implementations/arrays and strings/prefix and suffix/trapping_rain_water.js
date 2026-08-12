@@ -1,3 +1,69 @@
+class Solution {
+    /**
+     * @param {number[]} height
+     * @return {number}
+     */
+    trap(height) {
+        /* 
+        Revisited 6/12/2026
+        note that the edges (either index 0 and length - 1)
+        cannot trap any water, since before index 0 and after length - 1
+        are not "walls" that can trap water 
+
+        prefix and suffix
+        for prefix, at a given index, figure out the
+        max height to the left
+        for suffix, at a given index, figure out the 
+        max height to the right
+
+        Once you have both,
+        you can then take the MIN() between the two, as the minimum
+        is the threshold where the water can be trapped
+        i.e 
+        |   
+        |   |
+        | _ |
+
+        min(3, 2) means water can only be trapped up to height 2
+
+        this represents the max water that can be trapped at i
+
+        repeat this process for each index and then sum the results
+        to get the max water that can be trapped between all the bars
+        */
+        let prefix = [...height]
+        let suffix = [...height]
+        let res = Array(height.length).fill(0)
+
+        for (let i = 1; i < prefix.length; ++i){
+            prefix[i] = Math.max(prefix[i-1], prefix[i])
+        }
+        for (let i = suffix.length-2; i >= 0; --i){
+            suffix[i] = Math.max(suffix[i+1], suffix[i])
+        }
+
+        // note that because there's no wall on the left,
+        // for the prefix, index 0 always start at max height 0
+        prefix[0] = 0
+
+        // for suffix, index of length - 1 always starts at 0 since
+        // there's no wall to the right
+        suffix[suffix.length-1] = 0
+
+        for (let i = 1; i < height.length-1; ++i){
+            // calculate the area
+            let thresholdHeight = Math.min(prefix[i],suffix[i])
+            // subtract the actual height from the max to get the area for this
+            // particular column
+            let area = thresholdHeight - height[i]
+            if (area > 0){
+                res[i] = area
+            }
+        }
+        return res.reduce((acc, obj) => acc + obj, 0)
+    }
+}
+
 // https://leetcode.com/problems/trapping-rain-water/
 /**
  * @param {number[]} height
