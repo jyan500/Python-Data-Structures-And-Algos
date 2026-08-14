@@ -4,7 +4,10 @@
  */
 var maxProfit = function(prices) {
      
-    /*  https://www.youtube.com/watch?v=3SJ3pUkPQMc&ab_channel=NeetCode
+    /*  
+        revisited 8/14/2026 
+        
+        https://www.youtube.com/watch?v=3SJ3pUkPQMc&ab_channel=NeetCode
         Concept:
         1) As seen in the neetcode vid, we only turn a profit when 
         going from a lower to a higher price.
