@@ -28,6 +28,55 @@ class Solution {
      * @param {number[][]} grid
      */
     islandsAndTreasure(grid) {
+        /* 
+        Revisited 8/24/2026
+        My initial solution was to use BFS on each land cell.
+        But the "reverse thinking" strategy which is more optimal is to
+        instead place all the "chest" cells on to the queue, and then apply BFS,
+        increasing the distance each time we reach a land cell, and then directly
+        modifying the grid at that point. It's guaranteed to be the shortest distance
+        */
+        const LAND = 2**31 - 1
+        const CHEST = 0
+        const directions = [[0,1],[0,-1],[1,0],[-1,0]]
+        const inBounds = (i, j) => {
+            return 0 <= i && i < grid.length && 0 <= j && j < grid[0].length
+        }
+
+        let q = []
+        // find all chest cells and add to queue
+        for (let i = 0; i < grid.length; ++i){
+            for (let j = 0; j < grid[0].length; ++j){
+                if (grid[i][j] === CHEST){
+                    q.push([i,j,0])
+                }
+            }
+        }
+        // apply BFS on each chest cell, by initially starting from each chest cell in the queue,
+        // and then pushing land cells,
+        // we guarantee the moment we reach a land cell, that would automatically
+        // be the shortest distance to a chest cell. We can just modify the cell
+        // directly as we search. This also acts as a "visited" set also since
+        // it will not detect a grid cell we've already visited as a land cell since it has a number thats not INF
+        while (q.length){
+            let [i,j,dist] = q.shift()
+            for (let [x,y] of directions){
+                let newX = x+i
+                let newY = y+j
+                if (inBounds(newX,newY) && grid[newX][newY] === LAND){
+                    grid[newX][newY] = dist + 1
+                    q.push([newX,newY,dist+1])
+                }
+            }
+        }
+    }
+}
+
+class Solution {
+    /**
+     * @param {number[][]} grid
+     */
+    islandsAndTreasure(grid) {
         var inBounds = function(i, j){
             return i >= 0 && i < grid.length && j >= 0 && j < grid[0].length
         }
