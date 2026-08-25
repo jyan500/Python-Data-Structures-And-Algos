@@ -5,6 +5,7 @@ class Solution {
      * @returns {number}
      */
 	/* 
+    Revisited 8/25/2026 with the same solution
 	https://neetcode.io/problems/count-connected-components
 	Time Complexity:
 	O(V+E), where V is the amount of vertices (nodes) and E is the amount of edges
