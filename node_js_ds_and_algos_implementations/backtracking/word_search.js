@@ -1,3 +1,59 @@
+class Solution {
+    /**
+     * @param {character[][]} board
+     * @param {string} word
+     * @return {boolean}
+     */
+    exist(board, word) {
+        /* 
+        Revisited 8/28/2026 with the same solution
+        DFS,
+        you have to delete a given coordinate set
+        after exploring DFS on it though so other
+        paths can visit the same cell
+        Time: O(N*M)
+        Space: O(N*M)
+        */
+        let M = board.length
+        let N = board[0].length
+        let directions = [[0,1],[0,-1],[1,0],[-1,0]]
+        const inBounds = (i, j) => {
+            return 0 <= i && i < M && 0 <= j && j < N
+        }
+        const dfs = (i, j, k, visited) => {
+            if (k === word.length - 1){
+                return true
+            }
+            for (let [x,y] of directions){
+                const newX = x + i
+                const newY = y + j
+                if (inBounds(newX, newY) && k + 1 <= word.length - 1 && board[newX][newY] === word[k+1] && !visited.has(`${newX},${newY}`)){
+                    visited.add(`${newX},${newY}`)
+                    if (dfs(newX,newY,k+1,visited)){
+                        return true
+                    }
+                    visited.delete(`${newX},${newY}`)
+                }
+            }
+            return false
+        }
+
+        for (let i = 0; i < M; ++i){
+            for (let j = 0; j < N; ++j){
+                if (board[i][j] === word[0]){
+                    let visit = new Set()
+                    visit.add(`${i},${j}`)
+                    if (dfs(i,j,0, visit)){
+                        return true
+                    }
+                }
+            }
+        }
+
+        return false
+    }
+}
+
 /**
  * @param {character[][]} board
  * @param {string} word
