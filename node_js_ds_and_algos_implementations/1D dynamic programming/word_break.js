@@ -1,3 +1,50 @@
+class Solution {
+    /**
+     * @param {string} s
+     * @param {string[]} wordDict
+     * @return {boolean}
+     */
+    wordBreak(s, wordDict) {
+        /* 
+        determine whether we break at i and start a new string,
+        or continue adding to the same string
+
+        rather than storing the actual subString we've created,
+        we can just store the beginning of it,
+        so we can just calculate slice(beginningIndex, currentIndex) to see
+        if the substring is in the word dict
+
+        For memoization, 
+        note that you only need to memoize the "beginningIndex", since what we're determining is
+        whether at this starting Index, can you split the rest of the words? You don't need to include i
+        since we only make a decision if a word is actually created from beginningIndex to i, and not at every i
+        */
+        let words = new Set(wordDict)
+        let N = s.length
+        let memo = {}
+        const search = (i, beginningIndex) => {
+            const cur = s.slice(beginningIndex, i+1)
+            if (i === N){
+                // if we make it to the end, and our current is also in the word dict,
+                // that means we broke up the words successfully
+                return words.has(cur)
+            }
+            let key = `${beginningIndex}`
+            if (key in memo){
+                return memo[key]
+            }
+            if (words.has(cur)){
+                // we can include this and cur starts over at the current character as the beginingIndex, or continue
+                memo[key] = search(i+1, i+1) || search(i+1, beginningIndex)
+                return memo[key]
+            }
+            memo[key] = search(i+1, beginningIndex)
+            return memo[key]
+        }
+        return search(0, 0)
+    }
+}
+
 /**
  * @param {string} s
  * @param {string[]} wordDict
