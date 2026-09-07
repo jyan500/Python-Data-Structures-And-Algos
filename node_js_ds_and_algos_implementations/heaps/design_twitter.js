@@ -1,3 +1,104 @@
+class Twitter {
+    constructor() {
+        /* 
+        Version that just sorts the newsfeed instead of using a heap
+        get news feed O(NLogN)
+        O(1) for the rest
+        */
+        this.timestamp = 1
+        this.db = {
+            "tweets": {
+
+            },
+            "feeds": {
+
+            },
+            "followers": {
+
+            },
+            "following": {
+
+            }
+        }
+    }
+
+    /**
+     * @param {number} userId
+     * @param {number} tweetId
+     * @return {void}
+     */
+    postTweet(userId, tweetId) {
+        if (!(userId in this.db["tweets"])){
+            this.db["tweets"][userId] = []
+        }
+        this.db["tweets"][userId].push([tweetId, this.timestamp])
+        this.timestamp++
+    }
+
+    /**
+     * @param {number} userId
+     * @return {number[]}
+     */
+    getNewsFeed(userId) {
+        let posts = []
+        // get all tweets that were posted by the users' following list
+        if (userId in this.db["following"]){
+            for (let followeeId of this.db["following"][userId]){
+                if (followeeId in this.db["tweets"]){
+                    posts = [...posts, ...this.db["tweets"][followeeId]]
+                }
+            }
+        }
+        // get user's own posts
+        if (userId in this.db["tweets"]){
+            posts = [...posts, ...this.db["tweets"][userId]]
+        }
+        posts.sort((a,b) => {
+            if (a[1] < b[1]){
+                return 1
+            }
+            else if (a[1] > b[1]){
+                return -1
+            }
+            return 0
+        })
+        return posts.slice(0, 10).map((post) => post[0])
+    }
+    /**
+     * @param {number} followerId
+     * @param {number} followeeId
+     * @return {void}
+     */
+    follow(followerId, followeeId) {
+        if (!(followerId in this.db["following"])){
+            this.db["following"][followerId] = new Set()
+        }
+        if (!(followeeId in this.db["followers"])){
+            this.db["followers"][followeeId] = new Set()
+        }
+        this.db["following"][followerId].add(followeeId)
+        this.db["followers"][followeeId].add(followerId)
+    }
+
+    /**
+     * @param {number} followerId
+     * @param {number} followeeId
+     * @return {void}
+     */
+    unfollow(followerId, followeeId) {
+        if ((followerId in this.db["following"])){
+            if (this.db["following"][followerId].has(followeeId)){
+                this.db["following"][followerId].delete(followeeId)
+            }
+        }
+        if ((followeeId) in this.db["followers"]){
+            if (this.db["followers"][followeeId].has(followerId)){
+                this.db["followers"][followeeId].delete(followerId)
+            }
+        }
+    }
+}
+
 /*
 Approach:
 Keep a DB that contains userIds as keys, and values as {feed: MaxPriorityQueue, followers: set(), following: set()}
