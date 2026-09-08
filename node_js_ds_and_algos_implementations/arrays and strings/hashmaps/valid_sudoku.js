@@ -1,3 +1,55 @@
+class Solution {
+    /**
+     * @param {character[][]} board
+     * @return {boolean}
+     */
+    isValidSudoku(board) {
+        /* check all rows */
+        let M = 9
+        let N = 9
+        for (let i = 0; i < M; ++i){
+            let rowSet = new Set()
+            for (let j = 0; j < N; ++j){
+                if (board[i][j] !== "." && rowSet.has(board[i][j])){
+                    return false
+                }
+                rowSet.add(board[i][j])
+            }
+        }
+        /* check all columns */
+        for (let i = 0; i < M; ++i){
+            let colSet = new Set()
+            for (let j = 0; j < N; ++j){
+                if (board[j][i] !== "." && colSet.has(board[j][i])){
+                    return false
+                }
+                colSet.add(board[j][i])
+            }
+        }
+        // iterate each 3x3 quadrant using the property:
+        // boxRow * 3 + r (where r is 0,1,2)
+        // boxCol * 3 + c (where c is 0,1,2)
+        for (let boxRow = 0; boxRow < 3; ++boxRow){
+            for (let boxCol = 0; boxCol < 3; ++boxCol){
+                let boxSet = new Set()
+                for (let r = 0; r < 3; ++r){
+                    for (let c = 0; c < 3; ++c){
+                        // translate the 3x3 quadrant cells to their 
+                        // 9x9 version
+                        let row = boxRow * 3 + r
+                        let col = boxCol * 3 + c
+                        if (board[row][col] !== "." && boxSet.has(board[row][col])){
+                            return false
+                        }
+                        boxSet.add(board[row][col])
+                    }
+                }
+            }
+        }
+        return true
+    }
+}
+
 // re-visited on 9/24/2024
 class Solution {
     /**
