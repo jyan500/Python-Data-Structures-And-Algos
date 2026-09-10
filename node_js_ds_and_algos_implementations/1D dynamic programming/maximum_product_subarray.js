@@ -1,3 +1,68 @@
+class Solution {
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    maxProduct(nums) {
+        /* 
+        9/10/2026
+        Samuel Yu's solution:
+        https://neetcode.io/problems/maximum-product-subarray/discuss/qrPlODVjWMumaBKFkVIf
+
+        Two pass by getting the running product from left to right and finding the max
+        so far, resetting whenever we get nums[i] = 0 to avoid making the rest of the 
+        product 0
+        and then comparing it to the running product from right to left
+
+        Reason for comparing both:
+        If there are an odd count of negative numbers, this ensures that we handle the case
+        when we multiply two negatives and it becomes positive
+        for example:
+        [1,-2,-3,-4]
+        1 * -2 = -2, -2 * -3 = 6, 6 * -4 = -24
+        whereas
+        -4 * -3 = 12, 12 * -2 = -24, -24 * 1 = -24
+
+        You can see from left to right, the max product is 6
+        but from right to left, the max product is actually 12
+
+        Example edge case with 0
+        [1,2,0,4] 
+        1 * 2 = 2
+        2 * 0 = 0, but instead of resetting to 0, we reset to 1,
+        otherwise, every remaining product will also be 0
+        1 * 4 = 4, so we get a max product of 4
+        */
+
+        let res = nums[0]
+        let prod = 1
+        for (let i = 0; i < nums.length; ++i){
+            prod = prod * nums[i]
+            // catch edge case in JS where if you multiply a negative number with 0,
+            // you get -0, so you need to turn it back to 0
+            if (prod === -0){
+                prod = 0 
+            }
+            res = Math.max(res, prod)
+            if (nums[i] === 0){
+                prod = 1   
+            }
+        }
+        prod = 1
+        for (let i = nums.length - 1; i >= 0; --i){
+            prod = prod * nums[i]
+            if (prod === -0){
+                prod = 0 
+            }
+            res = Math.max(res, prod)
+            if (nums[i] === 0){
+                prod = 1
+            }
+        }
+        return res
+    }
+}
+
 /**
  * @param {number[]} nums
  * @return {number}
