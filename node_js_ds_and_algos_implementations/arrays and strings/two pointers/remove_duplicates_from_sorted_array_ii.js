@@ -1,3 +1,46 @@
+class Solution {
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    removeDuplicates(nums) {
+        /* 
+        Revisited 9/14/2026 using Neetcode solution
+        1) Use a map() to keep the insertion order, map the count of each number to the number
+        2) Loop through the number and count in the map, we are overwriting the original nums array with the numbers
+        3) Keep a separate index to track the current index that we're overwriting
+            The key logic is that if an element appears more than once, you write it again (also incrementing i)
+            since we know that we're accounting only for at most 2 of that element
+
+        O(N) Time
+        O(N) Space
+
+        */
+        let counter = new Map()
+        for (let i = 0; i < nums.length; ++i){
+            counter.set(nums[i], (counter.get(nums[i]) || 0) + 1)
+        }
+        let i = 0
+        // using the Map() retains the order of insertion, so
+        // we know that the elements will be placed back into the array 
+        // in the proper, non-decreasing order
+        for (let [num, count] of counter){
+            nums[i] = num
+            ++i
+            counter.set(num, count-1)
+            // if the element still has at least one more appearance,
+            // write it again
+            if (counter.get(num) >= 1){
+                nums[i] = num
+                ++i
+                counter.set(num, counter.get(num)-1)
+            }
+        }
+        // return the final index of the last written element
+        return i
+    }
+}
+
 /**
  * @param {number[]} nums
  * @return {number}
