@@ -1,3 +1,32 @@
+class Solution {
+    /**
+     * @param {number[]} stones
+     * @return {number}
+     */
+    lastStoneWeight(stones) {
+        /* 
+        Revisited 9/22/2026
+        max heap
+        pop two from the front and applying the logic
+        pushing back in if the stone isn't destroyed
+        */
+
+        let maxHeap = new MaxPriorityQueue()
+        for (let i = 0; i < stones.length; ++i){
+            maxHeap.enqueue(stones[i])
+        }
+        while (maxHeap.size() > 1){
+            let first = maxHeap.dequeue()
+            let second = maxHeap.dequeue()
+            if (first !== second){
+                let difference = Math.abs(first-second)
+                maxHeap.enqueue(difference)
+            }
+        }
+        return maxHeap.size() > 0 ? maxHeap.front() : 0
+    }
+}
+
 /**
  * @param {number[]} stones
  * @return {number}
