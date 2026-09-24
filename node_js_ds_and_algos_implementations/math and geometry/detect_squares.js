@@ -1,3 +1,74 @@
+class CountSquares {
+    /* 
+    Revisited 9/24/2026
+    Key insight:
+    Keep a hashmap of all x,y points where the x,y is the key and the frequency is the value
+
+    Given the point in the count() function below, (px, py)
+    Check the other points that were added into this.pts (x, y)
+
+    The rule is that given the points x,y and our set point (px, py),
+    if abs(px - x) === abs(py, y) exists AND px !== x AND py !== y, this means
+    this is a valid diagonal for a square. 
+
+    For example
+    (1, 2)     (2, 2) 
+
+    (1, 1)     (2, 1)
+
+    If given px, py as (2,1),
+    then we are searching if (1,2 ) exists by checking
+    abs(2-1) === abs(1-2) = 1, and px, x and py, y can't be equal to each other (since that
+    would mean all the points are stacked on top of each other, which is not a square)
+
+    If that exists, then we can search for the "other diagonal" of the square by simply taking 
+    the "reflection" point and searching it in our hashmap, which is
+    (x, py) and (px, y), which in this case, is
+    (1,1) and (2,2)
+
+    We then multiply the results together which tells us the amount of squares that can be made,
+    since we have to take into account that there could be different amounts of each point.
+    For example, if (2,2) exists twice,
+    we would do count(1,1) * count(2,2) which equals two, which makes sense since you can make
+    two squares if you have 2 counts of (2,2)
+
+    */
+    constructor() {
+        this.pts = []
+        this.ptsCount = {}
+    }
+
+    /**
+     * @param {number[]} point
+     * @return {void}
+     */
+    add(point) {
+        let [x,y] = point
+        let rep = `${x},${y}`
+        this.ptsCount[rep] = (this.ptsCount[rep] || 0) + 1
+        this.pts.push(point)
+    }
+
+    /**
+     * @param {number[]} point
+     * @return {number}
+     */
+    count(point) {
+        let [px, py] = point
+        let res = 0
+        for (let [x,y] of this.pts){
+            // ensure we apply logic on valid diagonals only
+            if (Math.abs(px-x) !== Math.abs(py-y) || y === py || x === px){
+                continue
+            }
+            let otherDiag1= `${x},${py}`
+            let otherDiag2 = `${px},${y}`
+            res += (this.ptsCount[otherDiag1] || 0) * (this.ptsCount[otherDiag2] || 0)
+        }
+        return res
+    }
+}
+
 /*
 https://www.youtube.com/watch?v=bahebearrDc
 Approach:
