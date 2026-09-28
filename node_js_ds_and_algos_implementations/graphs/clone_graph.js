@@ -1,5 +1,54 @@
 /**
  * // Definition for a Node.
+ * class Node {
+ *     constructor(val = 0, neighbors = []) {
+ *       this.val = val;
+ *       this.neighbors = neighbors;
+ *     }
+ * }
+ */
+
+class Solution {
+    /**
+     * @param {Node} node
+     * @return {Node}
+     */
+    cloneGraph(node) {
+        /* 
+        Revisited 9/26/2026
+        DFS
+        hashmap to map the old to new node
+        */
+        if (!node){
+            return node
+        }
+        const hashmap = {}
+        const clone = (node) => {
+            let cur;
+            // if we've already seen this node,
+            // return its copy
+            if (node.val in hashmap){
+                return hashmap[node.val]
+            }
+            // map the old to the copy
+            else {
+                cur = new Node(node.val)
+                hashmap[node.val] = cur
+            }
+            for (let neighbor of node.neighbors){
+                // push the result of the DFS, which should
+                // be the "copy" node version of the neighbor
+                cur.neighbors.push(clone(neighbor))
+            }
+            return cur
+        }
+
+        return clone(node)
+    }
+}
+
+/**
+ * // Definition for a Node.
  * function Node(val, neighbors) {
  *    this.val = val === undefined ? 0 : val;
  *    this.neighbors = neighbors === undefined ? [] : neighbors;
