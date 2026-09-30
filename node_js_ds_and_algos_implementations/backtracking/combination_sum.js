@@ -1,3 +1,39 @@
+class Solution {
+    /**
+     * @param {number[]} nums
+     * @param {number} target
+     * @returns {number[][]}
+     */
+    combinationSum(nums, target) {
+        /* 
+        Revisited 9/30/2026
+        Time complexity is roughly 2^N
+        can actually save both time and memory by pushing and popping off the "cur" array once
+        we're doing exploring, so that we undo the previous recursive state and can explore another path without that side effect
+        of the array push from the previous state
+        and then when copying into the combinations, we just slice the "cur" to create a copy of it
+        */
+        let combinations = []
+        let N = nums.length
+        const search = (i, cur, curSum) => {
+            if (curSum === target || i === N){
+                if (curSum === target){
+                    combinations.push([...cur])
+                }
+                return
+            }
+            if (curSum + nums[i] <= target){
+                cur.push(nums[i])
+                search(i, cur, curSum + nums[i])
+                cur.pop()
+            }
+            search(i+1, cur, curSum)
+        }
+        search(0, [], 0)
+        return combinations
+    }
+}
+
 /**
  * @param {number[]} candidates
  * @param {number} target
