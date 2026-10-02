@@ -1,4 +1,5 @@
 /*
+Revisited 10/2/2026
 Review this video by Knapsack for the explanation
 https://www.youtube.com/watch?v=6poxiip7sBY
 
@@ -52,6 +53,8 @@ O(N) Space
  * @return {number}
  */
 var subarraySum = function(nums, k) {
+    // account for the case when the currentSum creates a subarray that equals k
+    // i.e where currentSum - k is 0
     let occur = {
         0: 1
     }
