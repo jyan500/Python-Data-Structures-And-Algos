@@ -1,5 +1,61 @@
 /**
  * Definition for singly-linked list.
+ * class ListNode {
+ *     constructor(val = 0, next = null) {
+ *         this.val = val;
+ *         this.next = next;
+ *     }
+ * }
+ */
+
+class Solution {
+    /**
+     * @param {ListNode} list1
+     * @param {ListNode} list2
+     * @return {ListNode}
+     */
+    mergeTwoLists(list1, list2) {
+        /* 
+        iterate through both lists simultaneously while keeping a dummy node to store
+        the merged version to avoid
+        empty list edge cases
+
+        if list1.val < list2.val
+            we include the smaller element first, and only advance
+            the pointer on that side
+        else
+            (even if both are the same value, it's fine to just advance the other side only)
+        
+        If there's still a remaining list, we can just directly set the cur.next = the remaining list
+        
+        O(N) Time
+        O(N) Space
+        */
+        let dummy = new ListNode()
+        let cur = dummy
+        while (list1 && list2){
+            if (list1.val < list2.val){
+                cur.next = new ListNode(list1.val)
+                list1 = list1.next
+            }
+            else {
+                cur.next = new ListNode(list2.val)
+                list2 = list2.next
+            }
+            cur = cur.next
+        }
+        if (list1){
+            cur.next = list1
+        }
+        else if (list2){
+            cur.next = list2
+        }
+        return dummy.next
+    }
+}
+
+/**
+ * Definition for singly-linked list.
  * function ListNode(val, next) {
  *     this.val = (val===undefined ? 0 : val)
  *     this.next = (next===undefined ? null : next)
