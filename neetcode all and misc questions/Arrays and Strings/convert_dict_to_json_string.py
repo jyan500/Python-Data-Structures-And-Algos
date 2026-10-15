@@ -19,11 +19,24 @@
 	For objects, the order of keys in the output should match the order returned by Object.keys()
 	The function should recursively handle nested structures (arrays within objects, objects within arrays, etc.)
 """
+def escape_string(value: str) -> str:
+	out = []
+	for char in value:
+		# if double quote, show the actual backslash and double quote
+		if char == '"':
+			out.append('\\"')
+		# if backslash, escape the backslash with another backslash
+		elif char == '\\':
+			out.append('\\\\')
+		else:
+			out.append(char)
+	return '"' + "".join(out) + '"'
+
 def stringify(value) -> str:
     if value is None:
         return "null"
     if isinstance(value, str):
-        return f'"{value}"'
+        return escape_string(value)
     if isinstance(value, bool):
     	return "true" if value else "false"
     if isinstance(value, (int, float)):
@@ -43,6 +56,7 @@ def stringify(value) -> str:
 if __name__ == "__main__":
 	assert stringify(None) == "null" 
 	assert stringify("Test") == '"Test"'
+	assert stringify('Hi is "Hello"') == r'"Hi is \"Hello\""'
 	assert stringify(8) == "8"
 	assert stringify(True) == "true"
 	assert stringify(["a", 8, ["a", 8]]) == '["a",8,["a",8]]'
