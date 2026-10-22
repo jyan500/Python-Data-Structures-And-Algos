@@ -1,3 +1,58 @@
+class Solution {
+    /**
+     * @param {number[][]} matrix
+     * @return {void}
+     */
+    rotate(matrix) {
+        /* 
+        two steps:
+        mirror every element to the opposite diagonal
+        reverse each row
+
+        1 2 
+        3 4 
+        mirror becomes
+        1 3
+        2 4
+
+        reverse
+        3 1
+        4 2
+
+        Note that a much simpler way to represent this is in two for loops (rather than
+        the inner while loops like below)
+
+        for (let i = 0; i < M; ++i){
+            for (let j = i; j < N; ++j){
+                // swap i,j with j,i
+                // i = 1
+            }
+        }
+
+        [1 2 3 4]
+         5 [6 7 8]
+         9 10 [11 12]
+         13 14 15 [16]
+        
+        the way this works is that you do 
+        0 ... N - 1, and at the same time, swap the diagonals i,j and j,i
+        then 1 ... N - 1
+        and so on
+        */
+        let M = matrix.length
+        let N = matrix[0].length
+        for (let i = 0; i < matrix.length; ++i){
+            for (let j = i; j < N; ++j){
+                // shorthand for swapping: similar to python except it's destructuring the array
+                [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]]
+            }
+        }
+        for (let i = 0; i < M; ++i){
+            matrix[i].reverse()
+        }
+    }
+}
+
 /**
  * @param {number[][]} matrix
  * @return {void} Do not return anything, modify matrix in-place instead.

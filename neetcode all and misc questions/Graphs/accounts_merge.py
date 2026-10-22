@@ -1,3 +1,66 @@
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        """ 
+        Revisited 10/22/2026
+        graph + DFS
+        build adjacency list based on the email
+        so a given email is connected to every other email in that list,
+        like a node and its edges. So we need to build the adjacency list like that,
+        taking a given email as a key and appending every other email to its value list
+
+         we also need a hashmap to map the email back to the name
+
+        bidirectional graph
+        use DFS to identify connected components
+        O(N·K² + N·K·log(N·K)) in the worst case, where N is the number of accounts and K is the max emails per account. Total emails E ≤ N·K.
+
+        The N*K^2 is the adjacency list building (due to the list slicing to get every other email)
+        The N*K is for the DFS
+        The log(N*K) accounts for the sorting of the emails
+        Space: O(N * K^2), since each email stores all of its other emails
+        """
+        adjacency = {}
+        emails_to_names = {}
+        for account in accounts:
+            name = account[0]
+            emails = account[1:]
+            for i in range(len(emails)):
+                email = emails[i]
+                emails_to_names[email] = name
+                # for this email, get every other email in the list as values
+                if email in adjacency:
+                    adjacency[email].extend(emails[0:i] + emails[i+1:])
+                else:
+                    adjacency[email] = emails[0:i] + emails[i+1:]
+        
+        global_visited = set()
+        def dfs(node: str, visited: set) -> None:
+            global_visited.add(node)
+            for neighbor in adjacency[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    dfs(neighbor, visited)
+        res = [] 
+        for email in adjacency:
+            # visited should contain the connected component, which is all connected emails
+            # always default to visiting its own email in case it has no other connections
+            visited = set()
+            visited.add(email)
+            # if we already saw a portion of the connected component, don't repeat the DFS
+            # for it
+            if email not in global_visited:
+                global_visited.add(email)
+                dfs(email, visited)
+                # link the emails back to their account, since they are all connected, the problem
+                # states they should belong to the same name, so we sort
+                # and just take the first instance
+                visited_list = sorted(list(visited))
+                res.append([emails_to_names[visited_list[0]]] + visited_list)
+        return res
+            
+
+
+
 """
 https://leetcode.com/problems/accounts-merge/
 Key Concepts:
