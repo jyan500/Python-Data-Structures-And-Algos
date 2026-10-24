@@ -41,6 +41,42 @@ to loop through each word within the words list, but the good news is that it on
 And an additional O(N) space for the lookup and words2 temp variable
 '''
 
+class Solution:
+    def isAlienSorted(self, words: List[str], order: str) -> bool:
+        """
+        Revisited 10/23/2026
+        Map each character in order with its index,
+        so the smaller index is considered less than the bigger, so it will come first in the ordering
+
+        In order for a word to come before another word, each character in it
+        must have a order value that is less than the next
+
+        We can compare the words by taking the current and the next, and then comparing
+        each character with the other's characters
+
+        Time: O(N*M), where N is the length of the words list, and M is the average length of each individual word
+        Space: O(26)
+        """
+        order_index = {}
+        for i in range(len(order)):
+            order_index[order[i]] = i
+        for i in range(len(words)-1):
+            word1 = words[i]
+            word2 = words[i+1]
+            for j in range(len(word1)):
+                # j == len(word2) would mean that word1 actually exceed length of word2
+                if j == len(word2):
+                    return False
+                # note that we only need to find the first character where this property is not true
+                # if it is true once, then we can just break since we know that the rest of the 
+                # characters should follow the same property
+                if word1[j] != word2[j]:
+                    if order_index[word1[j]] > order_index[word2[j]]:
+                        return False
+                    break
+        return True
+            
+        
 # Revisited this on 1/8/2024
 class Solution:
     def isAlienSorted(self, words: List[str], order: str) -> bool:
