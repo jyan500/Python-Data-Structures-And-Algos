@@ -1,9 +1,10 @@
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
         """
+        Revisited 10/29/2026
         2 7 11 15
         Because the input array is already sorted,
-        we can assume a greedy solution, where
+        we can assume a two pointer solution, where
         we set the left pointer to be the 1st number,
         which is also the smallest number
         and then set the right pointer to be the last
