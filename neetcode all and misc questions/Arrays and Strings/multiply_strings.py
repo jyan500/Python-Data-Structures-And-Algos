@@ -40,6 +40,50 @@ the result even if it's greater than 10
 """
 class Solution:
     def multiply(self, num1: str, num2: str) -> str:
+        """
+        start from the back of both strings
+        111
+        222
+        ---
+        222
+        calculate the product between the last digit and every other digit as a sum
+        for each subsequent product, you want to multiply that sum by product of 11 depending
+        on the row, so the first row, you'd multiply by 10, 2nd row, by 100, and so on
+
+        account for carryover by taking the first digit of the product between 2 digits
+        by doing integer division by 10, and then take the last digit as the total by doing mod 10
+
+        account for two strings of different lengths by pre-pending the amount zeroes necessary onto the shorter
+        string so that the two strings are of equal length
+
+        store each "level" in levels list and sum them up and return as a string
+        """
+        shorter = num1 if len(num1) <= len(num2) else num2
+        longer = num1 if len(num1) > len(num2) else num2
+        shorter = ((len(longer) - len(shorter)) * "0") + shorter
+        digit_placement = 0
+        levels = []
+        for i in range(len(shorter)-1, -1, -1):
+            carryover = 0
+            level = ""
+            for j in range(len(longer)-1,-1,-1):
+                total = carryover + (int(shorter[i]) * int(longer[j]))
+                if total >= 10:
+                    carryover = total // 10
+                    level = str(total % 10) + level
+                else:
+                    carryover = 0
+                    level = str(total) + level
+            if carryover > 0:
+                level = str(carryover) + level
+            if digit_placement > 0:
+                level += ("0" * digit_placement)
+            digit_placement += 1
+            levels.append(int(level))
+        return str(sum(levels))
+
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
         def helper(top, bottom):
             carryover = 0
             levels = []
