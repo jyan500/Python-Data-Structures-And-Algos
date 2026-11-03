@@ -1,5 +1,51 @@
 class Solution:
     def makesquare(self, matchsticks: List[int]) -> bool:
+        """ 
+        Four sides as variables type solution:
+
+        In order to make a square, all sides must be the same length,
+        meaning if you add up all the numbers, and they're not divisible by 4,
+        we can automatically return false
+
+        calculate the length of each side: (sum(matchsticks) / 4)
+
+        sorting the sticks in reverse  can help since we pick the larger ones first
+
+        backtracking, keep track of all 4 sides. While incrementing i,
+        place one of the sticks on one of the sides,
+        until we reach i == N and check to see if all sides == the length
+            
+        Time Complexity: O(NLogN) + O(4^N), since you have 4 options on a given choice, up to N, although on average,
+        the sorting in reverse would prune out most cases, although it doesn't strictly prevent the worst case
+        Space: O(N), recursive stack
+        """
+        if sum(matchsticks) % 4 != 0:
+            return False
+        # sort in reverse so that the larger numbers are placed first, which eliminates
+        # more choices compared to sorting ascending and placing smaller numbers first
+        matchsticks.sort(reverse=True)
+        length = sum(matchsticks) // 4
+        N = len(matchsticks)
+        def dfs(i, left, right, top, down):
+            # if we reached the end, that means all four sides should be equal to the length at this point
+            if i == N:
+                return True
+            # to prevent overflowing a side, check to make sure the current matchstick value doesn't exceed the length before adding it
+            # and if it doesn't fit in one side, try to fit in another by moving onto the next if statement
+            if left + matchsticks[i] <= length and dfs(i+1, left + matchsticks[i], right, top, down):
+                return True
+            if right + matchsticks[i] <= length and dfs(i+1, left, right + matchsticks[i], top, down):
+                return True
+            if top + matchsticks[i] <= length and dfs(i+1, left, right, top + matchsticks[i], down):
+                return True
+            if down + matchsticks[i] <= length and dfs(i+1, left, right, top, down + matchsticks[i]):
+                return True
+            return False
+
+        return dfs(0, 0, 0, 0, 0)
+
+class Solution:
+    def makesquare(self, matchsticks: List[int]) -> bool:
         """
         Note: revisited on 2/6/2025 with the same solution as below
         
