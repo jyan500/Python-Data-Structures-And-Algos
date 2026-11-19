@@ -4,6 +4,7 @@ https://leetcode.com/problems/trapping-rain-water/
 class Solution:
     def trap(self, height: List[int]) -> int:
         """
+        Revisited 11/19/2026
         Revisited 4/23/2025
         prefix and suffix sums
         1) When looking at the bars, the amount of water is bounded by the minimum between the max height on the left
