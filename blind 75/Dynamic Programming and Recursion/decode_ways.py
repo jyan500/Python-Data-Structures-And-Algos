@@ -2,6 +2,47 @@
 https://leetcode.com/problems/decode-ways/
 https://www.youtube.com/watch?v=W4rYz-kd-cY&list=PLQdWvigIOnscYtuD1UesE2IazI1erKh-W&index=48&ab_channel=Knapsak
 '''
+
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        """ 
+        Revisited 11/24/2026 with a simpler solution
+        At each position, you can either evaluate one element (i), or two elements (i and i + 1)
+        they must both be valid to be evaluated though.
+
+        base case:
+        reaching the end means we've determined one valid configuration, so return 1
+
+        Time Complexity: O(N)
+        Space: O(N)
+        """
+        decodings = {}
+        k = 1
+        for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            decodings[str(k)] = char
+            k += 1
+        N = len(s)
+        memo = {}
+        def dfs(i):
+            # can either take two elements into consideration
+            # or only one element, as long as its valid
+
+            # if we reached the end, return 1 since this is one valid configuration
+            if i >= N:
+                return 1
+            if i in memo:
+                return memo[i]
+            # take one element
+            res = 0
+            if s[i] in decodings:
+                res += dfs(i+1)
+            # take two elements
+            if i + 1 < N and s[i:i+2] in decodings:
+                res += dfs(i+2)
+            memo[i] = res
+            return res
+        return dfs(0)
+
 class Solution:
     def numDecodings(self, s: str) -> int:
         """
